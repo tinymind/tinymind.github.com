@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Octopress | 浮生列趣]]></title>
+  <link href="http://tinymind.github.io/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://tinymind.github.io/"/>
+  <updated>2013-12-01T17:47:54+08:00</updated>
+  <id>http://tinymind.github.io/</id>
+  <author>
+    <name><![CDATA[lslin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[用Octopress在Github搭建博客，并绑定独立域名]]></title>
+    <link href="http://tinymind.github.io/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/"/>
+    <updated>2013-11-27T01:45:36+08:00</updated>
+    <id>http://tinymind.github.io/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain</id>
+    <content type="html"><![CDATA[<p>11月中旬在Godaddy购买了一个域名，一直没派上用场，想到经常在各个个人博客找到各种问题的解决方案，于是决定先成立一个博客，记录并分享一些浮生小记、程序问题、解决方案，顺便在互联网上表示，“来过”。</p>
+
+<p>这是第一篇博文，记录一下使用Octopress搭建博客，发布到Github Pages免费空间，并绑定个人域名的步骤。</p>
+
+<h1>概述</h1>
+
+<h2>什么是Github Pages</h2>
+
+<p><a href="http://pages.github.com/">Github Pages</a> Github提供的一个免费空间，拥有一个独立的二级域名，允许开发者提交静态网页文件，用于介绍自己，或者自己的开源项目，可以看作是个人或项目主页。每个Pages有300M的存储空间，于是很多人就当作个人博客来发布博文。</p>
+
+<p>特点：</p>
+
+<ul>
+<li>轻量级，配置简单</li>
+<li>无需自己提供空间</li>
+<li>使用标记语言，如Markdown</li>
+<li>可以绑定独立域名</li>
+</ul>
+
+
+<h2>什么是Octopress</h2>
+
+<p>从<a href="http://octopress.org/">Octopress主页</a>上的标语“A blogging framework for hackers”就可以看出，这是一个比较Geek的博客系统，提供了一套自动化的工具和模板，帮助用户简便地创建一个博客。</p>
+
+<p>Octopress生成的博客可以很方便地部署到Github Pages上，网上已有很多教程介绍怎么利用Octopress在Github上搭建博客。不过，由于生成的博客都是静态文件，所以也可以部署到任何一个服务器上。随着Wordpress越来越臃肿庞大，相对而言更加方便快捷的Octopress则日渐流行。</p>
+
+<p>特点：</p>
+
+<ul>
+<li>以Ruby为运行环境，使用简单的命令生成静态页面</li>
+<li>默认使用Markdown语法</li>
+<li>可离线编写博文，方便备份、预览</li>
+<li>可从Wordpress迁移过来</li>
+</ul>
+
+
+<h1>安装</h1>
+
+<h2>安装Git</h2>
+
+<p>以Mac系统为例，安装Git的方法有很多，这里只说两种：</p>
+
+<ol>
+<li>下载<a href="https://code.google.com/p/git-osx-installer/">git-osx-installer</a>安装包，使用Gui安装。</li>
+<li>使用Homebrew的包管理工具，命令行安装。</li>
+</ol>
+
+
+<p>前者无需多说，后者的命令如下：</p>
+
+<pre><code>$ sudo brew install git
+</code></pre>
+
+<p>安装后，运行下面命令查看是否成功：</p>
+
+<pre><code>$ which git 
+</code></pre>
+
+<p>应该得到/usr/bin/git，说明已成功安装git。</p>
+
+<h2>安装Rvm和Ruby</h2>
+
+<p>安装Rvm：</p>
+
+<pre><code>curl -L https://get.rvm.io | bash -s stable --ruby
+</code></pre>
+
+<p>安装Ruby1.9.3(或更新版本)：</p>
+
+<pre><code>rvm install ruby-2.0.0-p353  &amp;&amp; rvm use ruby-2.0.0-p353
+rvm rubygems latest
+</code></pre>
+
+<p><a href="http://octopress.org/docs/setup/rvm/">官方文档</a>建议安装1.9.3版本，不过我安装的是2.0.0，一样可用。</p>
+
+<h2>安装Octopress</h2>
+
+<p>按官方文档<a href="http://octopress.org/docs/setup/">http://octopress.org/docs/setup/</a>操作即可，下面简述步骤，及可能会出现的问题。</p>
+
+<p>利用终端，或Finder在本地建立一个用于存放Octopress的文件夹，并在终端切换到该目录，然后按以下步骤操作。</p>
+
+<p>1)从Github将源码clong下来：</p>
+
+<pre><code>git clone git://github.com/imathis/octopress.git octopress
+cd octopress
+</code></pre>
+
+<p>2)安装依赖：</p>
+
+<pre><code>gem install bundler
+rbenv rehash    # If you use rbenv, rehash to be able to run the bundle command
+bundle install
+</code></pre>
+
+<p>这里可能会很慢，因为国内访问官方的ruby更新源速度奇慢……解决方法是，修改gem更新源地址。输入以下命令：</p>
+
+<pre><code>gem sources -a http://ruby.taobao.org/
+gem sources -r http://rubygems.org/
+gem sources -l
+</code></pre>
+
+<p>然后更改Octopress目录下的<code>Gemfile</code>文件，将<code>source "http://rubygems.org/"</code> 改为 <code>source "http://ruby.taobao.org/"</code>，保存，再运行<code>2)安装依赖</code>的命令就一气呵成了。</p>
+
+<p>3)安装默认主题</p>
+
+<pre><code>rake install
+</code></pre>
+
+<p>4)测试。
+这时已经安装成功了，下面两天命令可以生成本地静态页面并在4000端口启动预览：</p>
+
+<pre><code>rake generate
+rake preview
+</code></pre>
+
+<p>打开浏览器输入<a href="http://localhost:4000">http://localhost:4000</a>就可以看到预览页面了。</p>
+
+<h1>部署</h1>
+
+<p>下面介绍怎么将本地博客发布到Github Pages上。</p>
+
+<h2>创建Github Pages</h2>
+
+<h3>注册github账号</h3>
+
+<p>首先我们得注册一个github账号，如果不打算绑定独立域名的话，这个账号就是你github pages的域名，如：yourname.github.io，所以要考虑好账号名。注册地址：<a href="https://github.com/join">https://github.com/join</a></p>
+
+<h3>创建git repository</h3>
+
+<p>注册后，创建一个名为yourname.github.com的代码仓库，yourname是你的帐号名，不要省略后面的<code>.github.com</code>。</p>
+
+<h3>设置博客使用的git repository的路径</h3>
+
+<pre><code> $ rake setup_github_pages
+Enter the read/write url for your repository(For example, 'git@github.com:your_username/your_username.github.io.git) or 'https://github.com/your_username/your_username.github.io')
+$ Repository url: 
+</code></pre>
+
+<p>这里会提示让你输入刚才创建的代码仓库地址，请输入：<code>git@github.com:yourname/yourname.github.com.git</code></p>
+
+<p>这个步骤，rake会做以下事情：</p>
+
+<ol>
+<li>修改.git/config中的origin为你输入的repos，并把原来的origin写到Octopress中。</li>
+<li>创建source分支并切换到该分支。</li>
+<li>在生成的_deploy目录下初始化git repos</li>
+</ol>
+
+
+<h3>设置SSH key</h3>
+
+<p>1)终端输入：</p>
+
+<pre><code> ssh-keygen -t rsa -C "yourname@mail.com" #输入你的注册邮箱
+</code></pre>
+
+<p>2)按照提示输入两次短语：</p>
+
+<pre><code>Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/name/.ssh/id_rsa): 
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+</code></pre>
+
+<p>回车后，会看到：</p>
+
+<pre><code>Your public key has been saved in /Users/name/.ssh/id_rsa.pub.
+</code></pre>
+
+<p>3)打开id_ras.pub文件，复制里面的内容，等一下会用到。</p>
+
+<p>4)登录github，在右上角用户名旁找到“设置”图标，点击进入设置页面进入<code>SSH Public Keys</code>，</p>
+
+<p>5)点击右边的<code>Add another public key</code></p>
+
+<p>6)在Title输入名称，在Key粘贴刚才自己复制的公钥，点击<code>Add key</code>即可。</p>
+
+<p>7)输入以下命令测试ssh：</p>
+
+<pre><code>ssh -T git@github.com
+</code></pre>
+
+<p>将会看到下面输出：
+he authenticity of host &lsquo;github.com (192.30.252.128)&rsquo; can&rsquo;t be established.
+RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
+Are you sure you want to continue connecting (yes/no)?
+输入yes，回车，就会看到：
+Hi yourname! You&rsquo;ve successfully authenticated, but GitHub does not provide shell access.</p>
+
+<p>8)设置个人信息</p>
+
+<pre><code>$ git config --global user.name "yourname"
+$ git config --global user.email "yourname@mail.com"
+</code></pre>
+
+<p>创建好yourname.github.io项目之后，提交一个index.html文件，然后push到Github的master分支。第一次页面生效需要大概10分钟左右。生效之后，访问yourname.github.io就可以看到你上传的页面了。</p>
+
+<h2>配置Octopress</h2>
+
+<h3>标题与副标题</h3>
+
+<p>打开_config.yml，按照注释，修改主页的配置。</p>
+
+<p>如果需要每次更改后都重新生成，添加一行：</p>
+
+<pre><code>auto: true
+</code></pre>
+
+<p>可以参考唐巧的博文《<a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">象写程序一样写博客：搭建基于github的博客</a>》,删除Twitter相关的配置和会拖慢访问速度的Google字体。</p>
+
+<h3>修改主题</h3>
+
+<p>比如，想要使用<a href="https://github.com/amelandri/darkstripes">darkstripes</a>主题，切换到Octopress目录，使用如下命令：</p>
+
+<pre><code>$ git clone git://github.com/amelandri/darkstripes.git .themes/darkstripes
+$ rake install['darkstripes']
+$ rake generate
+</code></pre>
+
+<h1>撰写并发布博文</h1>
+
+<p>1)创建第一篇博文</p>
+
+<p>这时候我们的部署已经完成，可以创建自己的第一篇博文了：</p>
+
+<pre><code>$ rake new_post["My first blog"]
+</code></pre>
+
+<p>这会在source/_posts下创建一个以时间和标题为名称的markdown文件，这就是创建的第一篇博文。</p>
+
+<p>2)编辑文章</p>
+
+<p>也就是修改source/_posts下的.markdown文件。可以使用自己喜欢的编辑器，比如Vim，或者Mou，和Sublime text2之类。</p>
+
+<p>3)预览和发布
+输入以下命令，访问<a href="http://localhost:4000">访问 http://localhost:4000</a>查看预览。</p>
+
+<pre><code>$ rake preview
+</code></pre>
+
+<p>觉得没有问题之后，发布：</p>
+
+<pre><code>$ rake gen_deploy
+</code></pre>
+
+<p>这个命令会生成页面到_deploy并提交代码到repos，如果一切顺利，十分钟左右就可以在<a href="http://yourname.github.com">http://yourname.github.com</a> 或<a href="http://yourname.github.io">http://yourname.github.io</a> 访问你的博客主页了。</p>
+
+<p>4)保存更改，提交source</p>
+
+<pre><code>$ git add .
+$ git commit -m "Source code of my blog"
+$ git push origin source
+</code></pre>
+
+<p>5)总结一下写博客的流程：</p>
+
+<ul>
+<li>rake new_post[&ldquo;Title&rdquo;]，生成博文模板，修改生成的Markdown文件。</li>
+<li>rake generate，生成静态文件</li>
+<li>rake preview，在本机4000端口生成预览</li>
+<li>rake deploy，发布</li>
+</ul>
+
+
+<h1>绑定域名</h1>
+
+<p>要想让username.github.io能通过你自己的域名来访问，需要在项目的根目录下新建一个名为CNAME的文件，文件内容形如：yourdomain.com
+你也可以绑定在二级域名上：blog.yourdomain.com</p>
+
+<pre><code>$ echo 'blog.yourdomain.com' &gt;&gt; source/CNAME
+</code></pre>
+
+<p>如果你使用形如yourdomain.com这样的一级域名的话，需要在DNS处设置A记录到207.97.227.245（地址可以在<a href="https://help.github.com/articles/my-custom-domain-isn-t-working">这里</a>查看），而不是在DNS处设置为CNAME的形式。设置成功后，等待生效即可。</p>
+
+<p>详见：<a href="http://octopress.org/docs/deploying/github/#custom_domains">http://octopress.org/docs/deploying/github/#custom_domains</a></p>
+
+<hr />
+
+<h1>第三方插件</h1>
+
+<h2>添加多说评论插件</h2>
+
+<p>首先我们需要有一个多说网的short_name，在后面的配置中需要用到。于是我们就得先注册一个多说网的账号。</p>
+
+<h3>注册多说short_name</h3>
+
+<p>这里顺便吐槽一下多说网的交互。它不提供注册功能，只能绑定微博、豆瓣等现有账号，好吧，我绑定了微博，然后登录，发现坑爹了!</p>
+
+<p><a href="http://dev.duoshuo.com/threads/4ff28d95552860f21f000010">官方文档</a>说<code>修改您的多说二级域名：（在多说后台设置中找到）</code>，但是我在设置页面转了一圈，根本没找到可以设置或者创建short_name的地方！！！找遍了各个可以点击的链接，硬是没发现什么后台管理、域名设置的地方。</p>
+
+<p>无奈之下，用了万能的Google，然后找到了<a href="http://blog.puhao.me/%E5%90%90%E6%A7%BD/%E4%BD%BF%E7%94%A8%E5%A4%9A%E8%AF%B4/">这个博客</a>，他也在吐槽不断地点击后，才找到了设置页面：<a href="http://duoshuo.com/create-site/">获取多说通用代码</a>，按照要求设置即可，复制它生成的通用代码。</p>
+
+<h3>添加多说模块到Octopress模板</h3>
+
+<p>1)在<code>source/_inludes/post/</code>下创建duoshuo.html:
+粘贴生成的通用代码：</p>
+
+<pre><code>&lt;!-- Duoshuo Comment BEGIN --&gt;
+&lt;div class="ds-thread"&gt;&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
+var duoshuoQuery = {short_name:"your_short_name"};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+&lt;/script&gt;
+&lt;!-- Duoshuo Comment END --&gt;
+</code></pre>
+
+<p>2)在<code>source/_layouts/post.html</code>，在disqus代码下方添加：</p>
+
+<pre><code>
+</code></pre>
+
+<p>3)修改<code>source/_includes/article.html</code>文件，在disqus代码下方添加：</p>
+
+<pre><code>
+      | &lt;a href="#comments"&gt;Comments&lt;/a&gt;
+     
+</code></pre>
+
+<p>4)在<code>_config.yml</code>中添加：</p>
+
+<pre><code># duoshuo comments
+duoshuo_comments: true
+duoshuo_short_name: yourname
+</code></pre>
+
+<p>这时候应该就成功添加了多说模块了。</p>
+
+<h3>首页侧边栏显示最新评论</h3>
+
+<p>1)在<code>_config.yml</code>中再插入如下代码</p>
+
+<pre><code>duoshuo_asides_num: 10      # 侧边栏评论显示条目数
+duoshuo_asides_avatars: 0   # 侧边栏评论是否显示头像
+duoshuo_asides_time: 0      # 侧边栏评论是否显示时间
+duoshuo_asides_title: 0     # 侧边栏评论是否显示标题
+duoshuo_asides_admin: 0     # 侧边栏评论是否显示作者评论
+duoshuo_asides_length: 18   # 侧边栏评论截取的长度
+</code></pre>
+
+<p>2)再创建<code>source/_includes/custom/asides/recent_comments.html</code>:</p>
+
+<pre><code>&lt;section&gt;
+&lt;h1&gt;最近评论&lt;/h1&gt;
+&lt;ul class="ds-recent-comments" data-num-items="10"&gt;
+&lt;/ul&gt;
+&lt;!--多说js加载开始，一个页面只需要加载一次 --&gt;
+&lt;script type="text/javascript"&gt;
+var duoshuoQuery = {short_name:"your_duoshuo_name"};
+(function() {
+var ds = document.createElement('script');
+ds.type = 'text/javascript';
+ds.async = true;ds.src = 'http://static.duoshuo.com/embed.js';
+ds.charset = 'UTF-8';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body') [0]).appendChild(ds);
+})();
+&lt;/script&gt;
+&lt;!--多说js加载结束，一个页面只需要加载一次 --&gt;
+&lt;/section&gt;
+</code></pre>
+
+<p>3)打开<code>_config.yml</code>将custom/asides/recent_comment.html添加:</p>
+
+<pre><code>post_asides: [custom/asides/recent_comment.html]
+</code></pre>
+
+<h1>参考</h1>
+
+<ol>
+<li>Mac下的Markdown文件编辑器：<a href="http://mouapp.com">Mou</a></li>
+<li>唐巧的博客：<a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">象写程序一样写博客：搭建基于github的博客</a></li>
+<li>觅珠人：<a href="http://tchen.me/posts/2012-12-16-first-blog.html">第一篇博文：用Octopress搭建博客系统</a></li>
+<li>破船之家：<a href="http://beyondvincent.com/blog/2013/07/27/107-hello-page-of-github/">你好！github页面</a></li>
+<li>opoo.org：<a href="http://opoo.org/octopress/">Octopress 博客系统 —— a Blogging Framework for Hackers</a></li>
+<li><a href="http://octopress.org/docs/">Octopress Documentation</a></li>
+<li><a href="http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html">为 Octopress 添加多说评论系统</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

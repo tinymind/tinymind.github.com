@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
+    <url>
+        <loc>
+            http://tinymind.github.io/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/
+        </loc>
+        <lastmod>2013-12-01T17:35:21+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://tinymind.github.io/blog/archives/</loc>
+        <lastmod>2013-12-01T17:35:21+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://tinymind.github.io/</loc>
+        <lastmod>2013-12-01T17:35:21+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://tinymind.github.io/robots.txt</loc>
+        <lastmod>2013-11-26T21:07:43+08:00</lastmod>
+    </url>
+</urlset>
