@@ -242,11 +242,11 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 
 	$ echo 'blog.yourdomain.com' >> source/CNAME
 	
+然后在你的DNS服务商，添加相应的CNAME指向yourname.github.com。
 如果你使用形如yourdomain.com这样的一级域名的话，需要在DNS处设置A记录到207.97.227.245（地址可以在[这里](https://help.github.com/articles/my-custom-domain-isn-t-working)查看），而不是在DNS处设置为CNAME的形式。设置成功后，等待生效即可。
 
 详见：[http://octopress.org/docs/deploying/github/#custom_domains](http://octopress.org/docs/deploying/github/#custom_domains)
 
----
 
 #第三方插件
 
