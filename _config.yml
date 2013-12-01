@@ -3,9 +3,9 @@
 # ----------------------- #
 
 url: http://tinymind.github.io
-title: My Octopress Blog
-subtitle: A blogging framework for hackers.
-author: Your Name
+title: 浮生列趣
+subtitle: ls *.fun -> 罗列一切乐趣
+author: lslin
 simple_search: http://google.com/search
 description:
 
@@ -33,6 +33,7 @@ destination: public
 plugins: plugins
 code_dir: downloads/code
 category_dir: blog/categories
+auto: true # update site if file was changed
 markdown: rdiscount
 rdiscount:
   extensions:
@@ -55,7 +56,7 @@ default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.
 # Each layout uses the default asides, but they can have their own asides instead. Simply uncomment the lines below
 # and add an array with the asides you want to use.
 # blog_index_asides:
-# post_asides:
+post_asides: [custom/asides/recent_comments.html]
 # page_asides:
 
 # ----------------------- #
@@ -70,7 +71,7 @@ github_skip_forks: true
 
 # Twitter
 twitter_user:
-twitter_tweet_button: true
+twitter_tweet_button: false
 
 # Google +1
 google_plus_one: false
@@ -92,6 +93,18 @@ delicious_count: 3
 # Disqus Comments
 disqus_short_name:
 disqus_show_comment_count: false
+
+# duoshuo comments
+duoshuo_comments: true
+duoshuo_short_name: lsfun
+
+# duoshuo comments in aside
+duoshuo_asides_num: 10
+duoshuo_asides_avatars: 0
+duoshuo_asides_time: 0
+duoshuo_asides_title: 0
+duoshuo_asides_admin: 0
+duoshuo_asides_length: 18
 
 # Google Analytics
 google_analytics_tracking_id:
