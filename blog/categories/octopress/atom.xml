@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Octopress | 浮生列趣]]></title>
+  <title><![CDATA[Category: Octopress | 浮生猎趣]]></title>
   <link href="http://tinymind.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://tinymind.github.io/"/>
-  <updated>2013-12-01T19:47:45+08:00</updated>
+  <updated>2013-12-01T23:05:23+08:00</updated>
   <id>http://tinymind.github.io/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -317,6 +317,8 @@ $ git push origin source
 <p>1)在<code>source/_inludes/post/</code>下创建duoshuo.html:
 粘贴生成的通用代码：</p>
 
+<p>``` html</p>
+
 <pre><code>&lt;!-- Duoshuo Comment BEGIN --&gt;
 &lt;div class="ds-thread"&gt;&lt;/div&gt;
 &lt;script type="text/javascript"&gt;
@@ -333,21 +335,43 @@ var duoshuoQuery = {short_name:"your_short_name"};
 &lt;!-- Duoshuo Comment END --&gt;
 </code></pre>
 
+<p>```</p>
+
 <p>2)在<code>source/_layouts/post.html</code>，在disqus代码下方添加：</p>
 
-<pre><code>{ % if site.duoshuo_short_name and site.duoshuo_comments == true and page.comments == true % }
-&lt;section&gt;
-&lt;h1&gt;Comments&lt;/h1&gt;
-&lt;div id="comments" aria-live="polite"&gt;{ % include post/duoshuo.html % }&lt;/div&gt;
-&lt;/section&gt;
-{ % endif % }
-</code></pre>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span>{ % if site.duoshuo_short_name and site.duoshuo_comments == true and page.comments == true %}
+</span><span class='line'><span class="ni">&amp;lt;</span>section<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>h1<span class="ni">&amp;gt;</span>Comments<span class="ni">&amp;lt;</span>/h1<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>div id=&quot;comments&quot; aria-live=&quot;polite&quot;<span class="ni">&amp;gt;</span>{ % include post/duoshuo.html %}<span class="ni">&amp;lt;</span>/div<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/section<span class="ni">&amp;gt;</span>
+</span><span class='line'>{ % endif %}
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>3)修改<code>source/_includes/article.html</code>文件，在disqus代码下方添加：</p>
 
-<pre><code>{ % if site.duoshuo_short_name and page.comments != false and post.comments != false and site.duoshuo_comments == true % }| &lt;a href="{ % if index % }{ % endif % }#comments"&gt;Comments&lt;/a&gt;
-{ % endif % }
+<p>``` html</p>
+
+<pre><code>{ % if site.duoshuo_short_name and page.comments != false and post.comments != false and site.duoshuo_comments == true %}| &lt;a href="{ % if index % }{ % endif %}#comments"&gt;Comments&lt;/a&gt;
+{ % endif %}
 </code></pre>
+
+<p>```</p>
 
 <p>4)在<code>_config.yml</code>中添加：</p>
 
@@ -356,21 +380,23 @@ duoshuo_comments: true
 duoshuo_short_name: yourname
 </code></pre>
 
-<p>这时候应该就成功添加了多说模块了。</p>
+<p>这时候应该就成功添加多说模块了。</p>
 
 <h3>首页侧边栏显示最新评论</h3>
 
-<p>1)在<code>_config.yml</code>中再插入如下代码</p>
+<p>1)在<code>_config.yml</code>中插入如下代码</p>
 
 <pre><code>duoshuo_asides_num: 10      # 侧边栏评论显示条目数
 duoshuo_asides_avatars: 0   # 侧边栏评论是否显示头像
-duoshuo_asides_time: 0      # 侧边栏评论是否显示时间
-duoshuo_asides_title: 0     # 侧边栏评论是否显示标题
+duoshuo_asides_time: 1      # 侧边栏评论是否显示时间
+duoshuo_asides_title: 1     # 侧边栏评论是否显示标题
 duoshuo_asides_admin: 0     # 侧边栏评论是否显示作者评论
-duoshuo_asides_length: 18   # 侧边栏评论截取的长度
+duoshuo_asides_length: 20   # 侧边栏评论截取的长度
 </code></pre>
 
 <p>2)再创建<code>source/_includes/custom/asides/recent_comments.html</code>:</p>
+
+<p>``` html</p>
 
 <pre><code>&lt;section&gt;
 &lt;h1&gt;最近评论&lt;/h1&gt;
@@ -391,10 +417,20 @@ ds.charset = 'UTF-8';
 &lt;/section&gt;
 </code></pre>
 
+<p>```</p>
+
 <p>3)打开<code>_config.yml</code>将custom/asides/recent_comments.html添加到<code>default_asides</code>:</p>
 
 <pre><code>[custom/asides/recent_comments.html]
 </code></pre>
+
+<h3>给网站添加访问分析 Google Analytics</h3>
+
+<p>1)到<a href="https://www.google.com/analytics">Google Analytics</a>注册GA账户，登记网站名字、地址，获得自己的Track ID，格式如：US-1234XXXX-X</p>
+
+<p>2)修改<code>_config.xml</code>，将ID写到<code>google_analytics_tracking_id:</code>后。</p>
+
+<p>3)rake发布。然后就可以到Google Analytics看报告了。</p>
 
 <h1>参考</h1>
 
@@ -404,8 +440,8 @@ ds.charset = 'UTF-8';
 <li>觅珠人：<a href="http://tchen.me/posts/2012-12-16-first-blog.html">第一篇博文：用Octopress搭建博客系统</a></li>
 <li>破船之家：<a href="http://beyondvincent.com/blog/2013/07/27/107-hello-page-of-github/">你好！github页面</a></li>
 <li>opoo.org：<a href="http://opoo.org/octopress/">Octopress 博客系统 —— a Blogging Framework for Hackers</a></li>
-<li><a href="http://octopress.org/docs/">Octopress Documentation</a></li>
-<li><a href="http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html">为 Octopress 添加多说评论系统</a></li>
+<li>Ocotpress: <a href="http://octopress.org/docs/">Octopress Documentation</a></li>
+<li>Havee&rsquo;s Space: <a href="http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html">为 Octopress 添加多说评论系统</a></li>
 </ol>
 
 

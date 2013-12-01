@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>用Octopress在Github搭建博客，并绑定独立域名 - 浮生列趣</title>
+  <title>用Octopress在Github搭建博客，并绑定独立域名 - 浮生猎趣</title>
   <meta name="author" content="lslin">
 
   
@@ -21,7 +21,7 @@
   <link rel="canonical" href="http://tinymind.github.io/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="浮生列趣" type="application/atom+xml">
+  <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
@@ -31,12 +31,24 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
   
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-46115267-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
 
 </head>
 
 <body   >
   <header role="banner"><hgroup>
-  <h1><a href="/">浮生列趣</a></h1>
+  <h1><a href="/">浮生猎趣</a></h1>
   
     <h2>ls *.fun -> 罗列一切乐趣</h2>
   
@@ -393,37 +405,62 @@ $ git push origin source
 <p>1)在<code>source/_inludes/post/</code>下创建duoshuo.html:
 粘贴生成的通用代码：</p>
 
-<pre><code>&lt;!-- Duoshuo Comment BEGIN --&gt;
-&lt;div class="ds-thread"&gt;&lt;/div&gt;
-&lt;script type="text/javascript"&gt;
-var duoshuoQuery = {short_name:"your_short_name"};
-(function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = 'http://static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-})();
-&lt;/script&gt;
-&lt;!-- Duoshuo Comment END --&gt;
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="c">&lt;!-- Duoshuo Comment BEGIN --&gt;</span>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;ds-thread&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">duoshuoQuery</span> <span class="o">=</span> <span class="p">{</span><span class="nx">short_name</span><span class="o">:</span><span class="s2">&quot;your_short_name&quot;</span><span class="p">};</span>
+</span><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">ds</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">ds</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span><span class="nx">ds</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">ds</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;http://static.duoshuo.com/embed.js&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">ds</span><span class="p">.</span><span class="nx">charset</span> <span class="o">=</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</span><span class='line'>  <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">ds</span><span class="p">);</span>
+</span><span class='line'><span class="p">})();</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span><span class='line'><span class="c">&lt;!-- Duoshuo Comment END --&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>2)在<code>source/_layouts/post.html</code>，在disqus代码下方添加：</p>
 
-<pre><code>{ % if site.duoshuo_short_name and site.duoshuo_comments == true and page.comments == true % }
-&lt;section&gt;
-&lt;h1&gt;Comments&lt;/h1&gt;
-&lt;div id="comments" aria-live="polite"&gt;{ % include post/duoshuo.html % }&lt;/div&gt;
-&lt;/section&gt;
-{ % endif % }
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>    { % if site.duoshuo_short_name and site.duoshuo_comments == true and page.comments == true %}
+</span><span class='line'>  <span class="nt">&lt;section&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;h1&gt;</span>Comments<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;comments&quot;</span> <span class="na">aria-live=</span><span class="s">&quot;polite&quot;</span><span class="nt">&gt;</span>{ % include post/duoshuo.html %}<span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/section&gt;</span>
+</span><span class='line'>    { % endif %}
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>3)修改<code>source/_includes/article.html</code>文件，在disqus代码下方添加：</p>
 
-<pre><code>{ % if site.duoshuo_short_name and page.comments != false and post.comments != false and site.duoshuo_comments == true % }| &lt;a href="{ % if index % }{ % endif % }#comments"&gt;Comments&lt;/a&gt;
-{ % endif % }
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{ % if site.duoshuo_short_name and page.comments != false and post.comments != false and site.duoshuo_comments == true %}| <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{ % if index % }{ % endif %}#comments&quot;</span><span class="nt">&gt;</span>Comments<span class="nt">&lt;/a&gt;</span>
+</span><span class='line'>{ % endif %}
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>4)在<code>_config.yml</code>中添加：</p>
 
@@ -432,45 +469,71 @@ duoshuo_comments: true
 duoshuo_short_name: yourname
 </code></pre>
 
-<p>这时候应该就成功添加了多说模块了。</p>
+<p>这时候应该就成功添加多说模块了。</p>
 
 <h3>首页侧边栏显示最新评论</h3>
 
-<p>1)在<code>_config.yml</code>中再插入如下代码</p>
+<p>1)在<code>_config.yml</code>中插入如下代码</p>
 
 <pre><code>duoshuo_asides_num: 10      # 侧边栏评论显示条目数
 duoshuo_asides_avatars: 0   # 侧边栏评论是否显示头像
-duoshuo_asides_time: 0      # 侧边栏评论是否显示时间
-duoshuo_asides_title: 0     # 侧边栏评论是否显示标题
+duoshuo_asides_time: 1      # 侧边栏评论是否显示时间
+duoshuo_asides_title: 1     # 侧边栏评论是否显示标题
 duoshuo_asides_admin: 0     # 侧边栏评论是否显示作者评论
-duoshuo_asides_length: 18   # 侧边栏评论截取的长度
+duoshuo_asides_length: 20   # 侧边栏评论截取的长度
 </code></pre>
 
 <p>2)再创建<code>source/_includes/custom/asides/recent_comments.html</code>:</p>
 
-<pre><code>&lt;section&gt;
-&lt;h1&gt;最近评论&lt;/h1&gt;
-&lt;ul class="ds-recent-comments" data-num-items="10"&gt;
-&lt;/ul&gt;
-&lt;!--多说js加载开始，一个页面只需要加载一次 --&gt;
-&lt;script type="text/javascript"&gt;
-var duoshuoQuery = {short_name:"your_duoshuo_name"};
-(function() {
-var ds = document.createElement('script');
-ds.type = 'text/javascript';
-ds.async = true;ds.src = 'http://static.duoshuo.com/embed.js';
-ds.charset = 'UTF-8';
-(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body') [0]).appendChild(ds);
-})();
-&lt;/script&gt;
-&lt;!--多说js加载结束，一个页面只需要加载一次 --&gt;
-&lt;/section&gt;
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;section&gt;</span>
+</span><span class='line'><span class="nt">&lt;h1&gt;</span>最近评论<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;ds-recent-comments&quot;</span> <span class="na">data-num-items=</span><span class="s">&quot;10&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'><span class="c">&lt;!--多说js加载开始，一个页面只需要加载一次 --&gt;</span>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">duoshuoQuery</span> <span class="o">=</span> <span class="p">{</span><span class="nx">short_name</span><span class="o">:</span><span class="s2">&quot;your_duoshuo_name&quot;</span><span class="p">};</span>
+</span><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">ds</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">ds</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">ds</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span><span class="nx">ds</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;http://static.duoshuo.com/embed.js&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">ds</span><span class="p">.</span><span class="nx">charset</span> <span class="o">=</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span> <span class="p">[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">ds</span><span class="p">);</span>
+</span><span class='line'><span class="p">})();</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span><span class='line'><span class="c">&lt;!--多说js加载结束，一个页面只需要加载一次 --&gt;</span>
+</span><span class='line'><span class="nt">&lt;/section&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>3)打开<code>_config.yml</code>将custom/asides/recent_comments.html添加到<code>default_asides</code>:</p>
 
 <pre><code>[custom/asides/recent_comments.html]
 </code></pre>
+
+<h3>给网站添加访问分析 Google Analytics</h3>
+
+<p>1)到<a href="https://www.google.com/analytics">Google Analytics</a>注册GA账户，登记网站名字、地址，获得自己的Track ID，格式如：US-1234XXXX-X</p>
+
+<p>2)修改<code>_config.xml</code>，将ID写到<code>google_analytics_tracking_id:</code>后。</p>
+
+<p>3)rake发布。然后就可以到Google Analytics看报告了。</p>
 
 <h1>参考</h1>
 
@@ -480,8 +543,8 @@ ds.charset = 'UTF-8';
 <li>觅珠人：<a href="http://tchen.me/posts/2012-12-16-first-blog.html">第一篇博文：用Octopress搭建博客系统</a></li>
 <li>破船之家：<a href="http://beyondvincent.com/blog/2013/07/27/107-hello-page-of-github/">你好！github页面</a></li>
 <li>opoo.org：<a href="http://opoo.org/octopress/">Octopress 博客系统 —— a Blogging Framework for Hackers</a></li>
-<li><a href="http://octopress.org/docs/">Octopress Documentation</a></li>
-<li><a href="http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html">为 Octopress 添加多说评论系统</a></li>
+<li>Ocotpress: <a href="http://octopress.org/docs/">Octopress Documentation</a></li>
+<li>Havee&rsquo;s Space: <a href="http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html">为 Octopress 添加多说评论系统</a></li>
 </ol>
 
 

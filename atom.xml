@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[浮生列趣]]></title>
+  <title><![CDATA[浮生猎趣]]></title>
   <link href="http://tinymind.github.io/atom.xml" rel="self"/>
   <link href="http://tinymind.github.io/"/>
-  <updated>2013-12-01T19:47:45+08:00</updated>
+  <updated>2013-12-01T23:05:23+08:00</updated>
   <id>http://tinymind.github.io/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -19,6 +19,79 @@
     <updated>2013-12-01T19:12:20+08:00</updated>
     <id>http://tinymind.github.io/blog/2013/12/01/get-free-bitcoin</id>
     <content type="html"><![CDATA[<p>随着比特币价格的不断升高，可以免费获得比特币的网站也越来越少，或者获得的比特币数量少得可怜。不过，天无绝人之路，目前还是有少数网站提供免费的比特币的。</p>
+
+<h2>1.注册网站，赠送比特币</h2>
+
+<ul>
+<li><a href="https://www.chbtc.com/a/71688">比特币中国</a>：注册，完成邮箱验证，可以获得0.0005BTC；完成手机验证，可获得0.0005BTC。0.01BTC可提现。</li>
+<li><a href="http://www.huanle95.com/btc?r=1552">欢乐95</a>：注册赠送800积分，每天登录有100积分，在通过欢乐95在各大网上商城购买商品，还可以获得大量积分，适合网购达人。13积分=1uBTC。</li>
+<li><a href="https://www.huobi.com/?a=regist_gift&amp;utm_source=273899">火币网</a>：注册并且完善个人信息后，可以参与抽奖，中奖数额为0.001-1个比特币。0.01BTC可提现。</li>
+<li><a href="http://www.okcoin.com/?invite=3266148">OKCoin</a>：注册并绑定手机、设定交易密码即可获得0.001BTC。</li>
+</ul>
+
+
+<p>注意：比特币中国和OKCoin的最新公告显示，由于最近虚假注册用户数太多，暂停送币活动%>_&lt;%。</p>
+
+<h2>2.点击广告，获得比特币</h2>
+
+<p>只推荐比较靠谱大方的两个：</p>
+
+<ul>
+<li><a href="https://coinad.com/?r=RYVGMPXZ0EPO313">Coinad</a>：注册一个账号，设定自己的比特币地址，在<code>View ads</code>页面可以看到可点击的广告以及点击一个广告可以获得多少比特币。每天的广告数量有限。比特币累积到0.0003后可以提现。</li>
+<li><a href="http://btcclicks.com/?r=54820e59">BtcClicks</a>：注册一个账号，设定自己的比特币地址，在<code>Surf Ads</code>查看可点击的广告。0.001BTC可提现。</li>
+</ul>
+
+
+<h2>3.添加广告，点击量转换为比特币</h2>
+
+<p>如果你有个人网站，可以到下面地址注册一个账号，获取广告地址，然后复制到你的个人网站，别人点击一次你就会获得0.00000157BTC，好吧，小数点后面的0真是让人绝望！！！</p>
+
+<p>值得一提的是，注册即赠送0.01BTC，不过要0.2个才能提现…</p>
+
+<ul>
+<li><a href="http://aff.4bc.co/1475.html">http://aff.4bc.co</a></li>
+</ul>
+
+
+<h2>4.挂网页，或者摇号中奖</h2>
+
+<ul>
+<li><a href="http://www.landofbitcoin.com/?r=G0aNDpMAGoOx0GjV">LandOfBitcoin</a>：打开网页即可，右上角可以看到不断增加的余额，半分钟左右增加0.00000001BTC，聊胜于无。</li>
+<li><a href="http://freebitco.in/?op=home">FreeBitcoin</a>：每个小时输一次验证码，得到多少比特币看运气，一般都有0.0000015-0.0000025个。</li>
+</ul>
+
+
+<h2>5.输验证码，累积比特币</h2>
+
+<p>以下网站每半个小时可以输入验证码和比特币地址，获取的比特币汇总到coinbox.me，可以通过<a href="http://www.coinbox.me/?a=your_bitcoin_address">http://www.coinbox.me/?a=your_bitcoin_address</a> 查看你已经累积了多少比特币，0.000055个后会自动发送到你的比特币钱包。</p>
+
+<p>这个实在是体力活，请注意保护眼睛：</p>
+
+<ul>
+<li><a href="http://www.btc4you.com/index.php">http://www.btc4you.com/index.php</a></li>
+<li><a href="http://www.greencoins.org/">http://www.greencoins.org/</a></li>
+<li><a href="http://www.rawbitcoins.com/">http://www.rawbitcoins.com/</a></li>
+<li><a href="http://www.thefreebitcoins.com/">http://www.thefreebitcoins.com/</a></li>
+<li><a href="http://www.faucetbtc.com/">http://www.faucetbtc.com/</a></li>
+<li><a href="http://www.freebtc4all.com/">http://www.freebtc4all.com/</a></li>
+<li><a href="http://www.btcmine.net/">http://www.btcmine.net/</a></li>
+<li><a href="http://www.srbitcoin.com/">http://www.srbitcoin.com/</a></li>
+<li><a href="http://www.freebitcoins.me/">http://www.freebitcoins.me/</a></li>
+<li><a href="http://btcflow.net/">http://btcflow.net/</a></li>
+<li><a href="http://www.bitcoinspain.net/">http://www.bitcoinspain.net/</a></li>
+<li><a href="http://bitcoins4free.me/">http://bitcoins4free.me/</a></li>
+<li><a href="http://www.freebitcoins4u.com/">http://www.freebitcoins4u.com/</a></li>
+<li><a href="http://www.fr33bitcoins.com/">http://www.fr33bitcoins.com/</a></li>
+<li><a href="http://www.elbitcoingratis.es/">http://www.elbitcoingratis.es/</a></li>
+<li><a href="http://www.virtualfaucet.com/">http://www.virtualfaucet.com/</a></li>
+<li><a href="http://www.bitcats.net/">http://www.bitcats.net/</a></li>
+<li><a href="http://www.nioctib.net/">http://www.nioctib.net/</a></li>
+<li><a href="http://www.thebitcoin.me/">http://www.thebitcoin.me/</a></li>
+<li><a href="http://bitcointree.net/">http://bitcointree.net/</a></li>
+<li><a href="http://hotswap.co/faucet/">http://hotswap.co/faucet/</a></li>
+<li><a href="http://www.bithits.info/">http://www.bithits.info/</a></li>
+</ul>
+
 ]]></content>
   </entry>
   
@@ -326,37 +399,62 @@ $ git push origin source
 <p>1)在<code>source/_inludes/post/</code>下创建duoshuo.html:
 粘贴生成的通用代码：</p>
 
-<pre><code>&lt;!-- Duoshuo Comment BEGIN --&gt;
-&lt;div class="ds-thread"&gt;&lt;/div&gt;
-&lt;script type="text/javascript"&gt;
-var duoshuoQuery = {short_name:"your_short_name"};
-(function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = 'http://static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-})();
-&lt;/script&gt;
-&lt;!-- Duoshuo Comment END --&gt;
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="c">&lt;!-- Duoshuo Comment BEGIN --&gt;</span>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;ds-thread&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">duoshuoQuery</span> <span class="o">=</span> <span class="p">{</span><span class="nx">short_name</span><span class="o">:</span><span class="s2">&quot;your_short_name&quot;</span><span class="p">};</span>
+</span><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">ds</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">ds</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span><span class="nx">ds</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">ds</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;http://static.duoshuo.com/embed.js&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">ds</span><span class="p">.</span><span class="nx">charset</span> <span class="o">=</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</span><span class='line'>  <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">ds</span><span class="p">);</span>
+</span><span class='line'><span class="p">})();</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span><span class='line'><span class="c">&lt;!-- Duoshuo Comment END --&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>2)在<code>source/_layouts/post.html</code>，在disqus代码下方添加：</p>
 
-<pre><code>{ % if site.duoshuo_short_name and site.duoshuo_comments == true and page.comments == true % }
-&lt;section&gt;
-&lt;h1&gt;Comments&lt;/h1&gt;
-&lt;div id="comments" aria-live="polite"&gt;{ % include post/duoshuo.html % }&lt;/div&gt;
-&lt;/section&gt;
-{ % endif % }
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>    { % if site.duoshuo_short_name and site.duoshuo_comments == true and page.comments == true %}
+</span><span class='line'>  <span class="nt">&lt;section&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;h1&gt;</span>Comments<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;comments&quot;</span> <span class="na">aria-live=</span><span class="s">&quot;polite&quot;</span><span class="nt">&gt;</span>{ % include post/duoshuo.html %}<span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/section&gt;</span>
+</span><span class='line'>    { % endif %}
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>3)修改<code>source/_includes/article.html</code>文件，在disqus代码下方添加：</p>
 
-<pre><code>{ % if site.duoshuo_short_name and page.comments != false and post.comments != false and site.duoshuo_comments == true % }| &lt;a href="{ % if index % }{ % endif % }#comments"&gt;Comments&lt;/a&gt;
-{ % endif % }
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{ % if site.duoshuo_short_name and page.comments != false and post.comments != false and site.duoshuo_comments == true %}| <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{ % if index % }{ % endif %}#comments&quot;</span><span class="nt">&gt;</span>Comments<span class="nt">&lt;/a&gt;</span>
+</span><span class='line'>{ % endif %}
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>4)在<code>_config.yml</code>中添加：</p>
 
@@ -365,45 +463,71 @@ duoshuo_comments: true
 duoshuo_short_name: yourname
 </code></pre>
 
-<p>这时候应该就成功添加了多说模块了。</p>
+<p>这时候应该就成功添加多说模块了。</p>
 
 <h3>首页侧边栏显示最新评论</h3>
 
-<p>1)在<code>_config.yml</code>中再插入如下代码</p>
+<p>1)在<code>_config.yml</code>中插入如下代码</p>
 
 <pre><code>duoshuo_asides_num: 10      # 侧边栏评论显示条目数
 duoshuo_asides_avatars: 0   # 侧边栏评论是否显示头像
-duoshuo_asides_time: 0      # 侧边栏评论是否显示时间
-duoshuo_asides_title: 0     # 侧边栏评论是否显示标题
+duoshuo_asides_time: 1      # 侧边栏评论是否显示时间
+duoshuo_asides_title: 1     # 侧边栏评论是否显示标题
 duoshuo_asides_admin: 0     # 侧边栏评论是否显示作者评论
-duoshuo_asides_length: 18   # 侧边栏评论截取的长度
+duoshuo_asides_length: 20   # 侧边栏评论截取的长度
 </code></pre>
 
 <p>2)再创建<code>source/_includes/custom/asides/recent_comments.html</code>:</p>
 
-<pre><code>&lt;section&gt;
-&lt;h1&gt;最近评论&lt;/h1&gt;
-&lt;ul class="ds-recent-comments" data-num-items="10"&gt;
-&lt;/ul&gt;
-&lt;!--多说js加载开始，一个页面只需要加载一次 --&gt;
-&lt;script type="text/javascript"&gt;
-var duoshuoQuery = {short_name:"your_duoshuo_name"};
-(function() {
-var ds = document.createElement('script');
-ds.type = 'text/javascript';
-ds.async = true;ds.src = 'http://static.duoshuo.com/embed.js';
-ds.charset = 'UTF-8';
-(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body') [0]).appendChild(ds);
-})();
-&lt;/script&gt;
-&lt;!--多说js加载结束，一个页面只需要加载一次 --&gt;
-&lt;/section&gt;
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;section&gt;</span>
+</span><span class='line'><span class="nt">&lt;h1&gt;</span>最近评论<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;ds-recent-comments&quot;</span> <span class="na">data-num-items=</span><span class="s">&quot;10&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'><span class="c">&lt;!--多说js加载开始，一个页面只需要加载一次 --&gt;</span>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">duoshuoQuery</span> <span class="o">=</span> <span class="p">{</span><span class="nx">short_name</span><span class="o">:</span><span class="s2">&quot;your_duoshuo_name&quot;</span><span class="p">};</span>
+</span><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">ds</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">ds</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">ds</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span><span class="nx">ds</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;http://static.duoshuo.com/embed.js&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">ds</span><span class="p">.</span><span class="nx">charset</span> <span class="o">=</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span> <span class="p">[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">ds</span><span class="p">);</span>
+</span><span class='line'><span class="p">})();</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span><span class='line'><span class="c">&lt;!--多说js加载结束，一个页面只需要加载一次 --&gt;</span>
+</span><span class='line'><span class="nt">&lt;/section&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>3)打开<code>_config.yml</code>将custom/asides/recent_comments.html添加到<code>default_asides</code>:</p>
 
 <pre><code>[custom/asides/recent_comments.html]
 </code></pre>
+
+<h3>给网站添加访问分析 Google Analytics</h3>
+
+<p>1)到<a href="https://www.google.com/analytics">Google Analytics</a>注册GA账户，登记网站名字、地址，获得自己的Track ID，格式如：US-1234XXXX-X</p>
+
+<p>2)修改<code>_config.xml</code>，将ID写到<code>google_analytics_tracking_id:</code>后。</p>
+
+<p>3)rake发布。然后就可以到Google Analytics看报告了。</p>
 
 <h1>参考</h1>
 
@@ -413,8 +537,8 @@ ds.charset = 'UTF-8';
 <li>觅珠人：<a href="http://tchen.me/posts/2012-12-16-first-blog.html">第一篇博文：用Octopress搭建博客系统</a></li>
 <li>破船之家：<a href="http://beyondvincent.com/blog/2013/07/27/107-hello-page-of-github/">你好！github页面</a></li>
 <li>opoo.org：<a href="http://opoo.org/octopress/">Octopress 博客系统 —— a Blogging Framework for Hackers</a></li>
-<li><a href="http://octopress.org/docs/">Octopress Documentation</a></li>
-<li><a href="http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html">为 Octopress 添加多说评论系统</a></li>
+<li>Ocotpress: <a href="http://octopress.org/docs/">Octopress Documentation</a></li>
+<li>Havee&rsquo;s Space: <a href="http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html">为 Octopress 添加多说评论系统</a></li>
 </ol>
 
 
