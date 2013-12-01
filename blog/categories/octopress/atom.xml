@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 浮生猎趣]]></title>
   <link href="http://tinymind.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://tinymind.github.io/"/>
-  <updated>2013-12-01T23:59:25+08:00</updated>
+  <updated>2013-12-02T00:28:32+08:00</updated>
   <id>http://tinymind.github.io/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -499,16 +499,33 @@ ds.charset = 'UTF-8';
 
 <p>3)rake发布。然后就可以到Google Analytics看报告了。</p>
 
+<h3>添加About Me到侧边栏</h3>
+
+<p>1)修改<code>source/_includes/custom/asides</code>里面的<code>about.html</code>，内容如下：</p>
+
+<p>``` html</p>
+
+<pre><code>&lt;section&gt;
+&lt;h1&gt;About Me&lt;/h1&gt;
+&lt;p&gt;Your Introduce&lt;/p&gt;
+&lt;/section&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>2)修改<code>_config.yml</code>，在<code>default_asides</code>加入<code>custom/asides/about.html</code></p>
+
 <h1>参考</h1>
 
 <ol>
-<li>Mac下的Markdown文件编辑器：<a href="http://mouapp.com">Mou</a></li>
-<li>唐巧的博客：<a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">象写程序一样写博客：搭建基于github的博客</a></li>
-<li>觅珠人：<a href="http://tchen.me/posts/2012-12-16-first-blog.html">第一篇博文：用Octopress搭建博客系统</a></li>
-<li>破船之家：<a href="http://beyondvincent.com/blog/2013/07/27/107-hello-page-of-github/">你好！github页面</a></li>
-<li>opoo.org：<a href="http://opoo.org/octopress/">Octopress 博客系统 —— a Blogging Framework for Hackers</a></li>
+<li>Mac下的Markdown文件编辑器: <a href="http://mouapp.com">Mou</a></li>
+<li>唐巧的博客: <a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">象写程序一样写博客：搭建基于github的博客</a></li>
+<li>觅珠人: <a href="http://tchen.me/posts/2012-12-16-first-blog.html">第一篇博文：用Octopress搭建博客系统</a></li>
+<li>破船之家: <a href="http://beyondvincent.com/blog/2013/07/27/107-hello-page-of-github/">你好！github页面</a></li>
+<li>opoo.org: <a href="http://opoo.org/octopress/">Octopress 博客系统 —— a Blogging Framework for Hackers</a></li>
 <li>Ocotpress: <a href="http://octopress.org/docs/">Octopress Documentation</a></li>
 <li>Havee&rsquo;s Space: <a href="http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html">为 Octopress 添加多说评论系统</a></li>
+<li>colors4.us: <a href="http://colors4.us/blog/2012/01/08/octopressbo-ke-cong-ling-kai-shi-iii/">Octopress博客从零开始 III</a></li>
 </ol>
 
 
