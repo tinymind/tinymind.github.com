@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 浮生列趣]]></title>
   <link href="http://tinymind.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://tinymind.github.io/"/>
-  <updated>2013-12-01T17:47:54+08:00</updated>
+  <updated>2013-12-01T18:31:32+08:00</updated>
   <id>http://tinymind.github.io/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -290,11 +290,10 @@ $ git push origin source
 <pre><code>$ echo 'blog.yourdomain.com' &gt;&gt; source/CNAME
 </code></pre>
 
-<p>如果你使用形如yourdomain.com这样的一级域名的话，需要在DNS处设置A记录到207.97.227.245（地址可以在<a href="https://help.github.com/articles/my-custom-domain-isn-t-working">这里</a>查看），而不是在DNS处设置为CNAME的形式。设置成功后，等待生效即可。</p>
+<p>然后在你的DNS服务商，添加相应的CNAME指向yourname.github.com。
+如果你使用形如yourdomain.com这样的一级域名的话，需要在DNS处设置A记录到207.97.227.245（地址可以在<a href="https://help.github.com/articles/my-custom-domain-isn-t-working">这里</a>查看），而不是在DNS处设置为CNAME的形式。设置成功后，等待生效即可。</p>
 
 <p>详见：<a href="http://octopress.org/docs/deploying/github/#custom_domains">http://octopress.org/docs/deploying/github/#custom_domains</a></p>
-
-<hr />
 
 <h1>第三方插件</h1>
 
