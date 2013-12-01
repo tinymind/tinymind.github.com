@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[浮生列趣]]></title>
-  <link href="http://tinymind.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Octopress | 浮生列趣]]></title>
+  <link href="http://tinymind.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://tinymind.github.io/"/>
   <updated>2013-12-01T17:47:54+08:00</updated>
   <id>http://tinymind.github.io/</id>
@@ -333,36 +333,14 @@ var duoshuoQuery = {short_name:"your_short_name"};
 
 <p>2)在<code>source/_layouts/post.html</code>，在disqus代码下方添加：</p>
 
-<pre><code>&lt;section&gt;
-&lt;h1&gt;Comments&lt;/h1&gt;
-&lt;div id="comments" aria-live="polite"&gt;&lt;!-- Duoshuo Comment BEGIN --&gt;
-&lt;div class="ds-thread"&gt;&lt;/div&gt;
-</code></pre>
-
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"lsfun"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = 'http://static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-        || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-    </script>
-
-
-<!-- Duoshuo Comment END -->
-
-
-<p></div></p>
-
-<pre><code>&lt;/section&gt;
+<pre><code>
 </code></pre>
 
 <p>3)修改<code>source/_includes/article.html</code>文件，在disqus代码下方添加：</p>
 
-<pre><code>      | &lt;a href="#comments"&gt;Comments&lt;/a&gt;
+<pre><code>
+      | &lt;a href="#comments"&gt;Comments&lt;/a&gt;
+     
 </code></pre>
 
 <p>4)在<code>_config.yml</code>中添加：</p>
