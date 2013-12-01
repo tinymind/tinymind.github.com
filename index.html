@@ -9,7 +9,8 @@
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="11月中旬在Godaddy购买了一个域名，一直没派上用场，想到经常在各个个人博客找到各种问题的解决方案，于是决定先成立一个博客，记录并分享一些浮生小记、程序问题、解决方案，顺便在互联网上表示，“来过”。 这是第一篇博文，记录一下使用Octopress搭建博客，发布到Github Pages免费空间 &hellip;">
+  <meta name="description" content="随着比特币价格的不断升高，可以免费获得比特币的网站也越来越少，或者获得的比特币数量少得可怜。不过，天无绝人之路，目前还是有少数网站提供免费的比特币的。
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,45 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/01/get-free-bitcoin/">免费获得比特币的方法汇总</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-01T19:12:20+08:00" pubdate data-updated="true">Dec 1<span>st</span>, 2013</time>
+        
+		
+          | <a href="/blog/2013/12/01/get-free-bitcoin/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>随着比特币价格的不断升高，可以免费获得比特币的网站也越来越少，或者获得的比特币数量少得可怜。不过，天无绝人之路，目前还是有少数网站提供免费的比特币的。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -279,12 +319,15 @@ Enter same passphrase again:
 <pre><code>ssh -T git@github.com
 </code></pre>
 
-<p>将会看到下面输出：
-he authenticity of host &lsquo;github.com (192.30.252.128)&rsquo; can&rsquo;t be established.
+<p>将会看到下面输出：</p>
+
+<p>he authenticity of host &lsquo;github.com (192.30.252.128)&rsquo; can&rsquo;t be established.
 RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
-Are you sure you want to continue connecting (yes/no)?
-输入yes，回车，就会看到：
-Hi yourname! You&rsquo;ve successfully authenticated, but GitHub does not provide shell access.</p>
+Are you sure you want to continue connecting (yes/no)?</p>
+
+<p>输入yes，回车，就会看到：</p>
+
+<p>Hi yourname! You&rsquo;ve successfully authenticated, but GitHub does not provide shell access.</p>
 
 <p>8)设置个人信息</p>
 
@@ -411,36 +454,18 @@ var duoshuoQuery = {short_name:"your_short_name"};
 
 <p>2)在<code>source/_layouts/post.html</code>，在disqus代码下方添加：</p>
 
-<pre><code>&lt;section&gt;
+<pre><code>{ % if site.duoshuo_short_name and site.duoshuo_comments == true and page.comments == true % }
+&lt;section&gt;
 &lt;h1&gt;Comments&lt;/h1&gt;
-&lt;div id="comments" aria-live="polite"&gt;&lt;!-- Duoshuo Comment BEGIN --&gt;
-&lt;div class="ds-thread"&gt;&lt;/div&gt;
-</code></pre>
-
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"lsfun"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = 'http://static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-        || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-    </script>
-
-
-<!-- Duoshuo Comment END -->
-
-
-<p></div></p>
-
-<pre><code>&lt;/section&gt;
+&lt;div id="comments" aria-live="polite"&gt;{ % include post/duoshuo.html % }&lt;/div&gt;
+&lt;/section&gt;
+{ % endif % }
 </code></pre>
 
 <p>3)修改<code>source/_includes/article.html</code>文件，在disqus代码下方添加：</p>
 
-<pre><code>      | &lt;a href="#comments"&gt;Comments&lt;/a&gt;
+<pre><code>{ % if site.duoshuo_short_name and page.comments != false and post.comments != false and site.duoshuo_comments == true % }| &lt;a href="{ % if index % }{ % endif % }#comments"&gt;Comments&lt;/a&gt;
+{ % endif % }
 </code></pre>
 
 <p>4)在<code>_config.yml</code>中添加：</p>
@@ -485,9 +510,9 @@ ds.charset = 'UTF-8';
 &lt;/section&gt;
 </code></pre>
 
-<p>3)打开<code>_config.yml</code>将custom/asides/recent_comment.html添加:</p>
+<p>3)打开<code>_config.yml</code>将custom/asides/recent_comments.html添加到<code>default_asides</code>:</p>
 
-<pre><code>post_asides: [custom/asides/recent_comment.html]
+<pre><code>[custom/asides/recent_comments.html]
 </code></pre>
 
 <h1>参考</h1>
@@ -502,6 +527,8 @@ ds.charset = 'UTF-8';
 <li><a href="http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html">为 Octopress 添加多说评论系统</a></li>
 </ol>
 
+
+<p>(全文完)</p>
 </div>
   
   
@@ -522,6 +549,10 @@ ds.charset = 'UTF-8';
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/12/01/get-free-bitcoin/">免费获得比特币的方法汇总</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/">用Octopress在Github搭建博客，并绑定独立域名</a>
       </li>
     
@@ -531,6 +562,23 @@ ds.charset = 'UTF-8';
 
 
 
+<section>
+<h1>最近评论</h1>
+<ul class="ds-recent-comments" data-num-items="10">
+</ul>
+<!--多说js加载开始，一个页面只需要加载一次 -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lsfun"};
+(function() {
+var ds = document.createElement('script');
+ds.type = 'text/javascript';
+ds.async = true;ds.src = 'http://static.duoshuo.com/embed.js';
+ds.charset = 'UTF-8';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
+<!--多说js加载结束，一个页面只需要加载一次 -->
+</section>
 
   
 </aside>

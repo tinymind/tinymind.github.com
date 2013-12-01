@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Bitcoin | 浮生列趣]]></title>
+  <link href="http://tinymind.github.io/blog/categories/bitcoin/atom.xml" rel="self"/>
+  <link href="http://tinymind.github.io/"/>
+  <updated>2013-12-01T19:47:45+08:00</updated>
+  <id>http://tinymind.github.io/</id>
+  <author>
+    <name><![CDATA[lslin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[免费获得比特币的方法汇总]]></title>
+    <link href="http://tinymind.github.io/blog/2013/12/01/get-free-bitcoin/"/>
+    <updated>2013-12-01T19:12:20+08:00</updated>
+    <id>http://tinymind.github.io/blog/2013/12/01/get-free-bitcoin</id>
+    <content type="html"><![CDATA[<p>随着比特币价格的不断升高，可以免费获得比特币的网站也越来越少，或者获得的比特币数量少得可怜。不过，天无绝人之路，目前还是有少数网站提供免费的比特币的。</p>
+]]></content>
+  </entry>
+  
+</feed>

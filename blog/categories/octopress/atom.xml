@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 浮生列趣]]></title>
   <link href="http://tinymind.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://tinymind.github.io/"/>
-  <updated>2013-12-01T18:31:32+08:00</updated>
+  <updated>2013-12-01T19:47:45+08:00</updated>
   <id>http://tinymind.github.io/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -200,12 +200,15 @@ Enter same passphrase again:
 <pre><code>ssh -T git@github.com
 </code></pre>
 
-<p>将会看到下面输出：
-he authenticity of host &lsquo;github.com (192.30.252.128)&rsquo; can&rsquo;t be established.
+<p>将会看到下面输出：</p>
+
+<p>he authenticity of host &lsquo;github.com (192.30.252.128)&rsquo; can&rsquo;t be established.
 RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
-Are you sure you want to continue connecting (yes/no)?
-输入yes，回车，就会看到：
-Hi yourname! You&rsquo;ve successfully authenticated, but GitHub does not provide shell access.</p>
+Are you sure you want to continue connecting (yes/no)?</p>
+
+<p>输入yes，回车，就会看到：</p>
+
+<p>Hi yourname! You&rsquo;ve successfully authenticated, but GitHub does not provide shell access.</p>
 
 <p>8)设置个人信息</p>
 
@@ -332,14 +335,18 @@ var duoshuoQuery = {short_name:"your_short_name"};
 
 <p>2)在<code>source/_layouts/post.html</code>，在disqus代码下方添加：</p>
 
-<pre><code>
+<pre><code>{ % if site.duoshuo_short_name and site.duoshuo_comments == true and page.comments == true % }
+&lt;section&gt;
+&lt;h1&gt;Comments&lt;/h1&gt;
+&lt;div id="comments" aria-live="polite"&gt;{ % include post/duoshuo.html % }&lt;/div&gt;
+&lt;/section&gt;
+{ % endif % }
 </code></pre>
 
 <p>3)修改<code>source/_includes/article.html</code>文件，在disqus代码下方添加：</p>
 
-<pre><code>
-      | &lt;a href="#comments"&gt;Comments&lt;/a&gt;
-     
+<pre><code>{ % if site.duoshuo_short_name and page.comments != false and post.comments != false and site.duoshuo_comments == true % }| &lt;a href="{ % if index % }{ % endif % }#comments"&gt;Comments&lt;/a&gt;
+{ % endif % }
 </code></pre>
 
 <p>4)在<code>_config.yml</code>中添加：</p>
@@ -384,9 +391,9 @@ ds.charset = 'UTF-8';
 &lt;/section&gt;
 </code></pre>
 
-<p>3)打开<code>_config.yml</code>将custom/asides/recent_comment.html添加:</p>
+<p>3)打开<code>_config.yml</code>将custom/asides/recent_comments.html添加到<code>default_asides</code>:</p>
 
-<pre><code>post_asides: [custom/asides/recent_comment.html]
+<pre><code>[custom/asides/recent_comments.html]
 </code></pre>
 
 <h1>参考</h1>
@@ -401,6 +408,8 @@ ds.charset = 'UTF-8';
 <li><a href="http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html">为 Octopress 添加多说评论系统</a></li>
 </ol>
 
+
+<p>(全文完)</p>
 ]]></content>
   </entry>
   
