@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 浮生猎趣]]></title>
   <link href="http://tinymind.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://tinymind.github.io/"/>
-  <updated>2013-12-01T23:05:23+08:00</updated>
+  <updated>2013-12-01T23:48:59+08:00</updated>
   <id>http://tinymind.github.io/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -68,13 +68,21 @@
 
 <p>前者无需多说，后者的命令如下：</p>
 
+<p>``` sh</p>
+
 <pre><code>$ sudo brew install git
 </code></pre>
 
+<p>```</p>
+
 <p>安装后，运行下面命令查看是否成功：</p>
+
+<p>``` sh</p>
 
 <pre><code>$ which git 
 </code></pre>
+
+<p>```</p>
 
 <p>应该得到/usr/bin/git，说明已成功安装git。</p>
 
@@ -82,14 +90,22 @@
 
 <p>安装Rvm：</p>
 
+<p>``` sh</p>
+
 <pre><code>curl -L https://get.rvm.io | bash -s stable --ruby
 </code></pre>
 
+<p>```</p>
+
 <p>安装Ruby1.9.3(或更新版本)：</p>
+
+<p>``` sh</p>
 
 <pre><code>rvm install ruby-2.0.0-p353  &amp;&amp; rvm use ruby-2.0.0-p353
 rvm rubygems latest
 </code></pre>
+
+<p>```</p>
 
 <p><a href="http://octopress.org/docs/setup/rvm/">官方文档</a>建议安装1.9.3版本，不过我安装的是2.0.0，一样可用。</p>
 
@@ -101,37 +117,57 @@ rvm rubygems latest
 
 <p>1)从Github将源码clong下来：</p>
 
+<p>``` sh</p>
+
 <pre><code>git clone git://github.com/imathis/octopress.git octopress
 cd octopress
 </code></pre>
 
+<p>```</p>
+
 <p>2)安装依赖：</p>
+
+<p>``` sh</p>
 
 <pre><code>gem install bundler
 rbenv rehash    # If you use rbenv, rehash to be able to run the bundle command
 bundle install
 </code></pre>
 
+<p>```</p>
+
 <p>这里可能会很慢，因为国内访问官方的ruby更新源速度奇慢……解决方法是，修改gem更新源地址。输入以下命令：</p>
+
+<p>``` sh</p>
 
 <pre><code>gem sources -a http://ruby.taobao.org/
 gem sources -r http://rubygems.org/
 gem sources -l
 </code></pre>
 
+<p>```</p>
+
 <p>然后更改Octopress目录下的<code>Gemfile</code>文件，将<code>source "http://rubygems.org/"</code> 改为 <code>source "http://ruby.taobao.org/"</code>，保存，再运行<code>2)安装依赖</code>的命令就一气呵成了。</p>
 
 <p>3)安装默认主题</p>
 
+<p>``` sh</p>
+
 <pre><code>rake install
 </code></pre>
+
+<p>```</p>
 
 <p>4)测试。
 这时已经安装成功了，下面两天命令可以生成本地静态页面并在4000端口启动预览：</p>
 
+<p>``` sh</p>
+
 <pre><code>rake generate
 rake preview
 </code></pre>
+
+<p>```</p>
 
 <p>打开浏览器输入<a href="http://localhost:4000">http://localhost:4000</a>就可以看到预览页面了。</p>
 
@@ -151,10 +187,14 @@ rake preview
 
 <h3>设置博客使用的git repository的路径</h3>
 
+<p>``` sh</p>
+
 <pre><code> $ rake setup_github_pages
 Enter the read/write url for your repository(For example, 'git@github.com:your_username/your_username.github.io.git) or 'https://github.com/your_username/your_username.github.io')
 $ Repository url: 
 </code></pre>
+
+<p>```</p>
 
 <p>这里会提示让你输入刚才创建的代码仓库地址，请输入：<code>git@github.com:yourname/yourname.github.com.git</code></p>
 
@@ -197,8 +237,12 @@ Enter same passphrase again:
 
 <p>7)输入以下命令测试ssh：</p>
 
+<p>``` sh</p>
+
 <pre><code>ssh -T git@github.com
 </code></pre>
+
+<p>```</p>
 
 <p>将会看到下面输出：</p>
 
@@ -235,10 +279,14 @@ $ git config --global user.email "yourname@mail.com"
 
 <p>比如，想要使用<a href="https://github.com/amelandri/darkstripes">darkstripes</a>主题，切换到Octopress目录，使用如下命令：</p>
 
+<p>``` sh</p>
+
 <pre><code>$ git clone git://github.com/amelandri/darkstripes.git .themes/darkstripes
 $ rake install['darkstripes']
 $ rake generate
 </code></pre>
+
+<p>```</p>
 
 <h1>撰写并发布博文</h1>
 
@@ -246,8 +294,12 @@ $ rake generate
 
 <p>这时候我们的部署已经完成，可以创建自己的第一篇博文了：</p>
 
+<p>``` sh</p>
+
 <pre><code>$ rake new_post["My first blog"]
 </code></pre>
+
+<p>```</p>
 
 <p>这会在source/_posts下创建一个以时间和标题为名称的markdown文件，这就是创建的第一篇博文。</p>
 
@@ -258,22 +310,34 @@ $ rake generate
 <p>3)预览和发布
 输入以下命令，访问<a href="http://localhost:4000">访问 http://localhost:4000</a>查看预览。</p>
 
+<p>``` sh</p>
+
 <pre><code>$ rake preview
 </code></pre>
 
+<p>```</p>
+
 <p>觉得没有问题之后，发布：</p>
+
+<p>``` sh</p>
 
 <pre><code>$ rake gen_deploy
 </code></pre>
+
+<p>```</p>
 
 <p>这个命令会生成页面到_deploy并提交代码到repos，如果一切顺利，十分钟左右就可以在<a href="http://yourname.github.com">http://yourname.github.com</a> 或<a href="http://yourname.github.io">http://yourname.github.io</a> 访问你的博客主页了。</p>
 
 <p>4)保存更改，提交source</p>
 
+<p>``` sh</p>
+
 <pre><code>$ git add .
 $ git commit -m "Source code of my blog"
 $ git push origin source
 </code></pre>
+
+<p>```</p>
 
 <p>5)总结一下写博客的流程：</p>
 
@@ -290,8 +354,12 @@ $ git push origin source
 <p>要想让username.github.io能通过你自己的域名来访问，需要在项目的根目录下新建一个名为CNAME的文件，文件内容形如：yourdomain.com
 你也可以绑定在二级域名上：blog.yourdomain.com</p>
 
+<p>``` sh</p>
+
 <pre><code>$ echo 'blog.yourdomain.com' &gt;&gt; source/CNAME
 </code></pre>
+
+<p>```</p>
 
 <p>然后在你的DNS服务商，添加相应的CNAME指向yourname.github.com。
 如果你使用形如yourdomain.com这样的一级域名的话，需要在DNS处设置A记录到207.97.227.245（地址可以在<a href="https://help.github.com/articles/my-custom-domain-isn-t-working">这里</a>查看），而不是在DNS处设置为CNAME的形式。设置成功后，等待生效即可。</p>
