@@ -3,7 +3,7 @@
 # ----------------------- #
 
 url: http://tinymind.github.io
-title: 浮生列趣
+title: 浮生猎趣
 subtitle: ls *.fun -> 罗列一切乐趣
 author: lslin
 simple_search: http://google.com/search
@@ -51,12 +51,12 @@ titlecase: true       # Converts page and post titles to titlecase
 
 # list each of the sidebar modules you want to include, in the order you want them to appear.
 # To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
-default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]
+default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html, custom/asides/recent_comments.html]
 
 # Each layout uses the default asides, but they can have their own asides instead. Simply uncomment the lines below
 # and add an array with the asides you want to use.
 # blog_index_asides:
-post_asides: [custom/asides/recent_comments.html]
+#post_asides: [custom/asides/recent_comments.html]
 # page_asides:
 
 # ----------------------- #
@@ -101,13 +101,13 @@ duoshuo_short_name: lsfun
 # duoshuo comments in aside
 duoshuo_asides_num: 10
 duoshuo_asides_avatars: 0
-duoshuo_asides_time: 0
-duoshuo_asides_title: 0
+duoshuo_asides_time: 1
+duoshuo_asides_title: 1
 duoshuo_asides_admin: 0
 duoshuo_asides_length: 18
 
 # Google Analytics
-google_analytics_tracking_id:
+google_analytics_tracking_id: UA-46115267-1
 
 # Facebook Like
 facebook_like: false

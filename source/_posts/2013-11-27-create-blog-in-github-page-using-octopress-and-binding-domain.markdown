@@ -164,10 +164,13 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 	ssh -T git@github.com
 	
 将会看到下面输出：
+
 he authenticity of host 'github.com (192.30.252.128)' can't be established.
 RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
 Are you sure you want to continue connecting (yes/no)?
+
 输入yes，回车，就会看到：
+
 Hi yourname! You've successfully authenticated, but GitHub does not provide shell access.
 
 8)设置个人信息
@@ -267,6 +270,7 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 1)在`source/_inludes/post/`下创建duoshuo.html:
 粘贴生成的通用代码：
 
+``` html
 	<!-- Duoshuo Comment BEGIN -->
 	<div class="ds-thread"></div>
 	<script type="text/javascript">
@@ -281,21 +285,25 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 	})();
 	</script>
 	<!-- Duoshuo Comment END -->
+```
 	
 2)在`source/_layouts/post.html`，在disqus代码下方添加：
 
-	{% if site.duoshuo_short_name and site.duoshuo_comments == true and page.comments == true %}
-    <section>
-    <h1>Comments</h1>
-    <div id="comments" aria-live="polite">{% include post/duoshuo.html %}</div>
+{% codeblock lang:html %}
+    { % if site.duoshuo_short_name and site.duoshuo_comments == true and page.comments == true %}
+	<section>
+	<h1>Comments</h1>
+    <div id="comments" aria-live="polite">{ % include post/duoshuo.html %}</div>
     </section>
-    {% endif %}
+    { % endif %}
+{% endcodeblock %}
 
 3)修改`source/_includes/article.html`文件，在disqus代码下方添加：
 
-	{% if site.duoshuo_short_name and page.comments != false and post.comments != false and site.duoshuo_comments == true %}
-          | <a href="{% if index %}{{ root_url }}{{ post.url }}{% endif %}#comments">Comments</a>
-         {% endif %}
+``` html
+	{ % if site.duoshuo_short_name and page.comments != false and post.comments != false and site.duoshuo_comments == true %}| <a href="{ % if index % }{{ root_url }}{{ post.url }}{ % endif %}#comments">Comments</a>
+	{ % endif %}
+```
 
 4)在`_config.yml`中添加：
 	
@@ -303,21 +311,22 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 	duoshuo_comments: true
 	duoshuo_short_name: yourname
 	
-这时候应该就成功添加了多说模块了。
+这时候应该就成功添加多说模块了。
 
 ###首页侧边栏显示最新评论
 
-1)在`_config.yml`中再插入如下代码
+1)在`_config.yml`中插入如下代码
 
 	duoshuo_asides_num: 10      # 侧边栏评论显示条目数
 	duoshuo_asides_avatars: 0   # 侧边栏评论是否显示头像
-	duoshuo_asides_time: 0      # 侧边栏评论是否显示时间
-	duoshuo_asides_title: 0     # 侧边栏评论是否显示标题
+	duoshuo_asides_time: 1      # 侧边栏评论是否显示时间
+	duoshuo_asides_title: 1     # 侧边栏评论是否显示标题
 	duoshuo_asides_admin: 0     # 侧边栏评论是否显示作者评论
-	duoshuo_asides_length: 18   # 侧边栏评论截取的长度
+	duoshuo_asides_length: 20   # 侧边栏评论截取的长度
 
 2)再创建`source/_includes/custom/asides/recent_comments.html`:
 
+``` html
 	<section>
 	<h1>最近评论</h1>
 	<ul class="ds-recent-comments" data-num-items="10">
@@ -335,11 +344,19 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 	</script>
 	<!--多说js加载结束，一个页面只需要加载一次 -->
 	</section>
-	
-3)打开`_config.yml`将custom/asides/recent_comment.html添加:
+```
 
-    post_asides: [custom/asides/recent_comment.html]
+3)打开`_config.yml`将custom/asides/recent_comments.html添加到`default_asides`:
 
+    [custom/asides/recent_comments.html]
+
+###给网站添加访问分析 Google Analytics
+
+1)到[Google Analytics](https://www.google.com/analytics)注册GA账户，登记网站名字、地址，获得自己的Track ID，格式如：US-1234XXXX-X
+
+2)修改`_config.xml`，将ID写到`google_analytics_tracking_id:`后。
+
+3)rake发布。然后就可以到Google Analytics看报告了。
 
 #参考
 
@@ -348,5 +365,7 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 3. 觅珠人：[第一篇博文：用Octopress搭建博客系统](http://tchen.me/posts/2012-12-16-first-blog.html)
 4. 破船之家：[你好！github页面](http://beyondvincent.com/blog/2013/07/27/107-hello-page-of-github/)
 5. opoo.org：[Octopress 博客系统 —— a Blogging Framework for Hackers](http://opoo.org/octopress/)
-6. [Octopress Documentation](http://octopress.org/docs/)
-7. [为 Octopress 添加多说评论系统](http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html)
+6. Ocotpress: [Octopress Documentation](http://octopress.org/docs/)
+7. Havee's Space: [为 Octopress 添加多说评论系统](http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html)
+
+(全文完)
