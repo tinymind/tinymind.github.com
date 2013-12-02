@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Octopress | 浮生猎趣]]></title>
-  <link href="http://tinymind.github.io/blog/categories/octopress/atom.xml" rel="self"/>
-  <link href="http://tinymind.github.io/"/>
-  <updated>2013-12-02T12:57:00+08:00</updated>
-  <id>http://tinymind.github.io/</id>
+  <link href="http://blog.lessfun.com/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://blog.lessfun.com/"/>
+  <updated>2013-12-02T14:57:24+08:00</updated>
+  <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[用Octopress在Github搭建博客，并绑定独立域名]]></title>
-    <link href="http://tinymind.github.io/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/"/>
+    <link href="http://blog.lessfun.com/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/"/>
     <updated>2013-11-27T01:45:36+08:00</updated>
-    <id>http://tinymind.github.io/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain</id>
+    <id>http://blog.lessfun.com/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain</id>
     <content type="html"><![CDATA[<p>11月中旬在Godaddy购买了一个域名，一直没派上用场，想到经常在各个个人博客找到各种问题的解决方案，于是决定先成立一个博客，记录并分享一些浮生小记、程序问题、解决方案，顺便在互联网上表示，“来过”。</p>
 
 <p>这是第一篇博文，记录一下使用Octopress搭建博客，发布到Github Pages免费空间，并绑定个人域名的步骤。</p>
@@ -467,7 +467,7 @@ duoshuo_asides_length: 20   # 侧边栏评论截取的长度
 
 <pre><code>&lt;section&gt;
 &lt;h1&gt;最近评论&lt;/h1&gt;
-&lt;ul class="ds-recent-comments" data-num-items="10"&gt;
+&lt;ul class="ds-recent-comments" data-num-items="10" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="20"&gt;
 &lt;/ul&gt;
 &lt;!--多说js加载开始，一个页面只需要加载一次 --&gt;
 &lt;script type="text/javascript"&gt;
@@ -495,9 +495,11 @@ ds.charset = 'UTF-8';
 
 <p>1)到<a href="https://www.google.com/analytics">Google Analytics</a>注册GA账户，登记网站名字、地址，获得自己的Track ID，格式如：US-1234XXXX-X</p>
 
+<p><strong>注册GA的网址应与你在<code>_config.yml</code>中url的设置一致。</strong></p>
+
 <p>2)修改<code>_config.xml</code>，将ID写到<code>google_analytics_tracking_id:</code>后。</p>
 
-<p>3)rake发布。然后就可以到Google Analytics看报告了。</p>
+<p>3)<code>rake deploy</code>。然后就可以到Google Analytics看报告了。</p>
 
 <h3>添加About Me到侧边栏</h3>
 
