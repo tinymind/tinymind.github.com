@@ -33,7 +33,7 @@ destination: public
 plugins: plugins
 code_dir: downloads/code
 category_dir: blog/categories
-auto: true # update site if file was changed
+# auto: true # update site if file was changed
 markdown: rdiscount
 rdiscount:
   extensions:
