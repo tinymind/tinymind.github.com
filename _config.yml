@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://tinymind.github.io
+url: http://blog.lessfun.com
 title: 浮生猎趣
 subtitle: ls *.fun >> 罗列一切乐趣
 author: lslin
@@ -100,10 +100,10 @@ duoshuo_short_name: lsfun
 
 # duoshuo comments in aside
 duoshuo_asides_num: 10
-duoshuo_asides_avatars: 0
+duoshuo_asides_avatars: 1
 duoshuo_asides_time: 1
 duoshuo_asides_title: 1
-duoshuo_asides_admin: 0
+duoshuo_asides_admin: 1
 duoshuo_asides_length: 20
 
 # Google Analytics

@@ -360,7 +360,7 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 ``` html
 	<section>
 	<h1>最近评论</h1>
-	<ul class="ds-recent-comments" data-num-items="10">
+	<ul class="ds-recent-comments" data-num-items="{{ site.duoshuo_asides_num }}" data-show-avatars="{{ site.duoshuo_asides_avatars }}" data-show-time="{{ site.duoshuo_asides_time }}" data-show-title="{{ site.duoshuo_asides_title }}" data-show-admin="{{ site.duoshuo_asides_admin }}" data-excerpt-length="{{ site.duoshuo_asides_length }}">
 	</ul>
 	<!--多说js加载开始，一个页面只需要加载一次 -->
 	<script type="text/javascript">
@@ -385,9 +385,11 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 
 1)到[Google Analytics](https://www.google.com/analytics)注册GA账户，登记网站名字、地址，获得自己的Track ID，格式如：US-1234XXXX-X
 
+**注册GA的网址应与你在`_config.yml`中url的设置一致。**
+
 2)修改`_config.xml`，将ID写到`google_analytics_tracking_id:`后。
 
-3)rake发布。然后就可以到Google Analytics看报告了。
+3)`rake deploy`。然后就可以到Google Analytics看报告了。
 
 ###添加About Me到侧边栏
 
