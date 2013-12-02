@@ -17,9 +17,7 @@ tags: [octopress, github]
 
 ##什么是Github Pages
 
-[Github Pages](http://pages.github.com/) Github提供的一个免费空间，拥有一个独立的二级域名，允许开发者提交静态网页文件，用于介绍自己，或者自己的开源项目，可以看作是个人或项目主页。每个Pages有300M的存储空间，于是很多人就当作个人博客来发布博文。
-
-特点：
+[Github Pages](http://pages.github.com/) Github提供的一个免费空间，拥有一个独立的二级域名，允许开发者提交静态网页文件，用于介绍自己，或者自己的开源项目，可以看作是个人或项目主页。每个Pages有300M的存储空间，于是很多人就当作个人博客来发布博文。特点：
 
 * 轻量级，配置简单
 * 无需自己提供空间
@@ -30,9 +28,7 @@ tags: [octopress, github]
 
 从[Octopress主页](http://octopress.org/)上的标语“A blogging framework for hackers”就可以看出，这是一个比较Geek的博客系统，提供了一套自动化的工具和模板，帮助用户简便地创建一个博客。
 
-Octopress生成的博客可以很方便地部署到Github Pages上，网上已有很多教程介绍怎么利用Octopress在Github上搭建博客。不过，由于生成的博客都是静态文件，所以也可以部署到任何一个服务器上。随着Wordpress越来越臃肿庞大，相对而言更加方便快捷的Octopress则日渐流行。
-
-特点：
+Octopress生成的博客可以很方便地部署到Github Pages上，网上已有很多教程介绍怎么利用Octopress在Github上搭建博客。不过，由于生成的博客都是静态文件，所以也可以部署到任何一个服务器上。随着Wordpress越来越臃肿庞大，相对而言更加方便快捷的Octopress则日渐流行。特点：
 
 * 以Ruby为运行环境，使用简单的命令生成静态页面
 * 默认使用Markdown语法
@@ -41,6 +37,8 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 
 
 #安装
+
+<!--more-->
 
 ##安装Git
 
@@ -51,11 +49,15 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 
 前者无需多说，后者的命令如下：
 
+``` sh
 	$ sudo brew install git
-	
+```
+
 安装后，运行下面命令查看是否成功：
 
+``` sh
 	$ which git	
+```
 
 应该得到/usr/bin/git，说明已成功安装git。
 
@@ -63,12 +65,16 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 
 安装Rvm：
 
+``` sh
 	curl -L https://get.rvm.io | bash -s stable --ruby
+```
 
 安装Ruby1.9.3(或更新版本)：
 
+``` sh
 	rvm install ruby-2.0.0-p353  && rvm use ruby-2.0.0-p353
 	rvm rubygems latest
+```
 
 [官方文档](http://octopress.org/docs/setup/rvm/)建议安装1.9.3版本，不过我安装的是2.0.0，一样可用。
 
@@ -79,33 +85,43 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 
 1)从Github将源码clong下来：
 
+``` sh
 	git clone git://github.com/imathis/octopress.git octopress
 	cd octopress
+```
 
 2)安装依赖：
 
+``` sh
 	gem install bundler
 	rbenv rehash    # If you use rbenv, rehash to be able to run the bundle command
 	bundle install
-	
+```
+
 这里可能会很慢，因为国内访问官方的ruby更新源速度奇慢……解决方法是，修改gem更新源地址。输入以下命令：
 
+``` sh
 	gem sources -a http://ruby.taobao.org/
 	gem sources -r http://rubygems.org/
 	gem sources -l
-	
+```
+
 然后更改Octopress目录下的`Gemfile`文件，将`source "http://rubygems.org/"` 改为 `source "http://ruby.taobao.org/"`，保存，再运行`2)安装依赖`的命令就一气呵成了。
 
 3)安装默认主题
 
+``` sh
 	rake install
-	
+```
+
 4)测试。
 这时已经安装成功了，下面两天命令可以生成本地静态页面并在4000端口启动预览：
 
+``` sh
 	rake generate
 	rake preview
-	
+```
+
 打开浏览器输入[http://localhost:4000](http://localhost:4000)就可以看到预览页面了。
 
 
@@ -123,9 +139,11 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 
 ###设置博客使用的git repository的路径
 
+``` sh
 	 $ rake setup_github_pages
 	Enter the read/write url for your repository(For example, 'git@github.com:your_username/your_username.github.io.git) or 'https://github.com/your_username/your_username.github.io')
 	$ Repository url: 
+```
 
 这里会提示让你输入刚才创建的代码仓库地址，请输入：`git@github.com:yourname/yourname.github.com.git`
 
@@ -161,8 +179,10 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 
 7)输入以下命令测试ssh：
 
+``` sh
 	ssh -T git@github.com
-	
+```
+
 将会看到下面输出：
 
 he authenticity of host 'github.com (192.30.252.128)' can't be established.
@@ -194,10 +214,11 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 ###修改主题
 比如，想要使用[darkstripes](https://github.com/amelandri/darkstripes)主题，切换到Octopress目录，使用如下命令：
 
+``` sh
 	$ git clone git://github.com/amelandri/darkstripes.git .themes/darkstripes
 	$ rake install['darkstripes']
 	$ rake generate
-
+```
 
 #撰写并发布博文
 
@@ -205,8 +226,10 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 
 这时候我们的部署已经完成，可以创建自己的第一篇博文了：
 
+``` sh
 	$ rake new_post["My first blog"]
-	
+```
+
 这会在source/_posts下创建一个以时间和标题为名称的markdown文件，这就是创建的第一篇博文。
 
 2)编辑文章
@@ -216,19 +239,25 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 3)预览和发布
 输入以下命令，访问[访问 http://localhost:4000](http://localhost:4000)查看预览。
 
+``` sh
 	$ rake preview
-	
+```
+
 觉得没有问题之后，发布：
-	
+
+``` sh
 	$ rake gen_deploy
-	
+```
+
 这个命令会生成页面到_deploy并提交代码到repos，如果一切顺利，十分钟左右就可以在http://yourname.github.com 或http://yourname.github.io 访问你的博客主页了。
 
 4)保存更改，提交source
 
+``` sh
 	$ git add .
 	$ git commit -m "Source code of my blog"
 	$ git push origin source
+```
 
 5)总结一下写博客的流程：
 
@@ -243,8 +272,10 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 要想让username.github.io能通过你自己的域名来访问，需要在项目的根目录下新建一个名为CNAME的文件，文件内容形如：yourdomain.com
 你也可以绑定在二级域名上：blog.yourdomain.com
 
+``` sh
 	$ echo 'blog.yourdomain.com' >> source/CNAME
-	
+```
+
 然后在你的DNS服务商，添加相应的CNAME指向yourname.github.com。
 如果你使用形如yourdomain.com这样的一级域名的话，需要在DNS处设置A记录到207.97.227.245（地址可以在[这里](https://help.github.com/articles/my-custom-domain-isn-t-working)查看），而不是在DNS处设置为CNAME的形式。设置成功后，等待生效即可。
 
@@ -358,14 +389,28 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 
 3)rake发布。然后就可以到Google Analytics看报告了。
 
+###添加About Me到侧边栏
+
+1)修改`source/_includes/custom/asides`里面的`about.html`，内容如下：
+
+``` html
+    <section>
+    <h1>About Me</h1>
+    <p>Your Introduce</p>
+    </section>
+```
+
+2)修改`_config.yml`，在`default_asides`加入`custom/asides/about.html`
+
 #参考
 
-1. Mac下的Markdown文件编辑器：[Mou](http://mouapp.com)
-2. 唐巧的博客：[象写程序一样写博客：搭建基于github的博客](http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/)
-3. 觅珠人：[第一篇博文：用Octopress搭建博客系统](http://tchen.me/posts/2012-12-16-first-blog.html)
-4. 破船之家：[你好！github页面](http://beyondvincent.com/blog/2013/07/27/107-hello-page-of-github/)
-5. opoo.org：[Octopress 博客系统 —— a Blogging Framework for Hackers](http://opoo.org/octopress/)
+1. Mac下的Markdown文件编辑器: [Mou](http://mouapp.com)
+2. 唐巧的博客: [象写程序一样写博客：搭建基于github的博客](http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/)
+3. 觅珠人: [第一篇博文：用Octopress搭建博客系统](http://tchen.me/posts/2012-12-16-first-blog.html)
+4. 破船之家: [你好！github页面](http://beyondvincent.com/blog/2013/07/27/107-hello-page-of-github/)
+5. opoo.org: [Octopress 博客系统 —— a Blogging Framework for Hackers](http://opoo.org/octopress/)
 6. Ocotpress: [Octopress Documentation](http://octopress.org/docs/)
 7. Havee's Space: [为 Octopress 添加多说评论系统](http://havee.me/internet/2013-02/add-duoshuo-commemt-system-into-octopress.html)
+8. colors4.us: [Octopress博客从零开始 III](http://colors4.us/blog/2012/01/08/octopressbo-ke-cong-ling-kai-shi-iii/)
 
 (全文完)
