@@ -13,9 +13,9 @@ tags: [octopress, github]
 这是第一篇博文，记录一下使用Octopress搭建博客，发布到Github Pages免费空间，并绑定个人域名的步骤。
 
 
-#概述
+##概述
 
-##什么是Github Pages
+###什么是Github Pages
 
 [Github Pages](http://pages.github.com/) Github提供的一个免费空间，拥有一个独立的二级域名，允许开发者提交静态网页文件，用于介绍自己，或者自己的开源项目，可以看作是个人或项目主页。每个Pages有300M的存储空间，于是很多人就当作个人博客来发布博文。特点：
 
@@ -24,7 +24,7 @@ tags: [octopress, github]
 * 使用标记语言，如Markdown
 * 可以绑定独立域名
 
-##什么是Octopress
+###什么是Octopress
 
 从[Octopress主页](http://octopress.org/)上的标语“A blogging framework for hackers”就可以看出，这是一个比较Geek的博客系统，提供了一套自动化的工具和模板，帮助用户简便地创建一个博客。
 
@@ -36,11 +36,11 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 * 可从Wordpress迁移过来
 
 
-#安装
+##安装
 
 <!--more-->
 
-##安装Git
+###安装Git
 
 以Mac系统为例，安装Git的方法有很多，这里只说两种：
 
@@ -61,7 +61,7 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 
 应该得到/usr/bin/git，说明已成功安装git。
 
-##安装Rvm和Ruby
+###安装Rvm和Ruby
 
 安装Rvm：
 
@@ -78,7 +78,7 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 
 [官方文档](http://octopress.org/docs/setup/rvm/)建议安装1.9.3版本，不过我安装的是2.0.0，一样可用。
 
-##安装Octopress
+###安装Octopress
 按官方文档[http://octopress.org/docs/setup/](http://octopress.org/docs/setup/)操作即可，下面简述步骤，及可能会出现的问题。
 
 利用终端，或Finder在本地建立一个用于存放Octopress的文件夹，并在终端切换到该目录，然后按以下步骤操作。
@@ -125,19 +125,19 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 打开浏览器输入[http://localhost:4000](http://localhost:4000)就可以看到预览页面了。
 
 
-#部署
+##部署
 下面介绍怎么将本地博客发布到Github Pages上。
 
-##创建Github Pages
-###注册github账号
+###创建Github Pages
+####注册github账号
 
 首先我们得注册一个github账号，如果不打算绑定独立域名的话，这个账号就是你github pages的域名，如：yourname.github.io，所以要考虑好账号名。注册地址：[https://github.com/join](https://github.com/join)
 
-###创建git repository
+####创建git repository
 
 注册后，创建一个名为yourname.github.com的代码仓库，yourname是你的帐号名，不要省略后面的`.github.com`。
 
-###设置博客使用的git repository的路径
+####设置博客使用的git repository的路径
 
 ``` sh
 	 $ rake setup_github_pages
@@ -153,7 +153,7 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 2. 创建source分支并切换到该分支。
 3. 在生成的_deploy目录下初始化git repos
 	
-###设置SSH key
+####设置SSH key
 
 1)终端输入：
 	 ssh-keygen -t rsa -C "yourname@mail.com" #输入你的注册邮箱
@@ -200,9 +200,9 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 
 创建好yourname.github.io项目之后，提交一个index.html文件，然后push到Github的master分支。第一次页面生效需要大概10分钟左右。生效之后，访问yourname.github.io就可以看到你上传的页面了。
 
-##配置Octopress
+###配置Octopress
 
-###标题与副标题
+####标题与副标题
 打开_config.yml，按照注释，修改主页的配置。
 
 如果需要每次更改后都重新生成，添加一行：
@@ -211,7 +211,7 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 	
 可以参考唐巧的博文《[象写程序一样写博客：搭建基于github的博客](http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/)》,删除Twitter相关的配置和会拖慢访问速度的Google字体。
 
-###修改主题
+####修改主题
 比如，想要使用[darkstripes](https://github.com/amelandri/darkstripes)主题，切换到Octopress目录，使用如下命令：
 
 ``` sh
@@ -220,7 +220,7 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 	$ rake generate
 ```
 
-#撰写并发布博文
+##撰写并发布博文
 
 1)创建第一篇博文
 
@@ -267,7 +267,7 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 * rake deploy，发布
 
 
-#绑定域名
+##绑定域名
 
 要想让username.github.io能通过你自己的域名来访问，需要在项目的根目录下新建一个名为CNAME的文件，文件内容形如：yourdomain.com
 你也可以绑定在二级域名上：blog.yourdomain.com
@@ -282,13 +282,13 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 详见：[http://octopress.org/docs/deploying/github/#custom_domains](http://octopress.org/docs/deploying/github/#custom_domains)
 
 
-#第三方插件
+##第三方插件
 
-##添加多说评论插件
+###添加多说评论插件
 
 首先我们需要有一个多说网的short_name，在后面的配置中需要用到。于是我们就得先注册一个多说网的账号。
 
-###注册多说short_name
+####注册多说short_name
 
 这里顺便吐槽一下多说网的交互。它不提供注册功能，只能绑定微博、豆瓣等现有账号，好吧，我绑定了微博，然后登录，发现坑爹了!
 
@@ -296,7 +296,7 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 
 无奈之下，用了万能的Google，然后找到了[这个博客](http://blog.puhao.me/%E5%90%90%E6%A7%BD/%E4%BD%BF%E7%94%A8%E5%A4%9A%E8%AF%B4/)，他也在吐槽不断地点击后，才找到了设置页面：[获取多说通用代码](http://duoshuo.com/create-site/)，按照要求设置即可，复制它生成的通用代码。
 
-###添加多说模块到Octopress模板
+####添加多说模块到Octopress模板
 
 1)在`source/_inludes/post/`下创建duoshuo.html:
 粘贴生成的通用代码：
@@ -344,7 +344,7 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 	
 这时候应该就成功添加多说模块了。
 
-###首页侧边栏显示最新评论
+####首页侧边栏显示最新评论
 
 1)在`_config.yml`中插入如下代码
 
@@ -381,7 +381,7 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 
     [custom/asides/recent_comments.html]
 
-###给网站添加访问分析 Google Analytics
+####给网站添加访问分析 Google Analytics
 
 1)到[Google Analytics](https://www.google.com/analytics)注册GA账户，登记网站名字、地址，获得自己的Track ID，格式如：US-1234XXXX-X
 
@@ -391,7 +391,7 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 
 3)`rake deploy`。然后就可以到Google Analytics看报告了。
 
-###添加About Me到侧边栏
+####添加About Me到侧边栏
 
 1)修改`source/_includes/custom/asides`里面的`about.html`，内容如下：
 
@@ -404,7 +404,7 @@ Hi yourname! You've successfully authenticated, but GitHub does not provide shel
 
 2)修改`_config.yml`，在`default_asides`加入`custom/asides/about.html`
 
-#参考
+##参考
 
 1. Mac下的Markdown文件编辑器: [Mou](http://mouapp.com)
 2. 唐巧的博客: [象写程序一样写博客：搭建基于github的博客](http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/)
