@@ -9,7 +9,7 @@
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="随着比特币价格的不断升高，可以免费获得比特币的网站也越来越少，或者获得的比特币数量少得可怜。不过，天无绝人之路，目前还是有少数网站提供免费的比特币的。 1.注册网站，赠送比特币 比特币中国：注册，完成邮箱验证，可以获得0.0005BTC；完成手机验证，可获得0.0005BTC。0.01BTC可提现 &hellip;">
+  <meta name="description" content="基本配置 修改_config.yml，格式为：配置项: + 空格 + 参数，空格不能少。 标题、副标题、作者、侧边栏等 编辑_config.yml，修改url:、title、sub_title、author, default_asides的对应参数。 修改日期格式 编辑_config. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -83,6 +83,69 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/12/05/config-the-octopress-blog-after-deployed/">Octopress博客发布后的基本配置、继续阅读、自动打开、代码高亮、插入图片、分类标签、修改样式</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-05T02:41:00+08:00" pubdate data-updated="true">2013-12-05, Thu</time>
+        
+		
+          | <a href="/blog/2013/12/05/config-the-octopress-blog-after-deployed/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>基本配置</h2>
+
+<p>修改_config.yml，格式为：<code>配置项: + 空格 + 参数</code>，空格不能少。</p>
+
+<h3>标题、副标题、作者、侧边栏等</h3>
+
+<p>编辑<code>_config.yml</code>，修改<code>url:</code>、<code>title</code>、<code>sub_title</code>、<code>author</code>, <code>default_asides</code>的对应参数。</p>
+
+<h3>修改日期格式</h3>
+
+<p>编辑<code>_config.yml</code>的<code>date_format</code>，格式定义见<a href="http://www.ruby-doc.org/core-1.9.2/Time.html#method-i-strftime">这里</a></p>
+
+<p>如想显示为：<code>2013-12-02, Mon</code>，则改为：</p>
+
+<pre><code>date_format: "%F, %a"
+</code></pre>
+
+<h2>继续阅读</h2>
+
+<p>如果正文太长，不希望在首页直接显示完整内容，可以在适当的位置加上一句<code>&lt;!--more--&gt;</code>，后面的内容就会被按钮<code>Read on→</code>所替代，点击继续阅读。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/12/05/config-the-octopress-blog-after-deployed/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/12/01/get-free-bitcoin/">免费获得比特币的方法汇总</a></h1>
     
     
@@ -99,7 +162,7 @@
   
 
 
-<time datetime="2013-12-01T19:12:20+08:00" pubdate data-updated="true">Dec 1<span>st</span>, 2013</time>
+<time datetime="2013-12-01T19:12:20+08:00" pubdate data-updated="true">2013-12-01, Sun</time>
         
 		
           | <a href="/blog/2013/12/01/get-free-bitcoin/#comments">Comments</a>
@@ -165,7 +228,7 @@
   
 
 
-<time datetime="2013-11-27T01:45:36+08:00" pubdate data-updated="true">Nov 27<span>th</span>, 2013</time>
+<time datetime="2013-11-27T01:45:36+08:00" pubdate data-updated="true">2013-11-27, Wed</time>
         
 		
           | <a href="/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/#comments">Comments</a>
@@ -179,9 +242,9 @@
 
 <p>这是第一篇博文，记录一下使用Octopress搭建博客，发布到Github Pages免费空间，并绑定个人域名的步骤。</p>
 
-<h1>概述</h1>
+<h2>概述</h2>
 
-<h2>什么是Github Pages</h2>
+<h3>什么是Github Pages</h3>
 
 <p><a href="http://pages.github.com/">Github Pages</a> Github提供的一个免费空间，拥有一个独立的二级域名，允许开发者提交静态网页文件，用于介绍自己，或者自己的开源项目，可以看作是个人或项目主页。每个Pages有300M的存储空间，于是很多人就当作个人博客来发布博文。特点：</p>
 
@@ -193,7 +256,7 @@
 </ul>
 
 
-<h2>什么是Octopress</h2>
+<h3>什么是Octopress</h3>
 
 <p>从<a href="http://octopress.org/">Octopress主页</a>上的标语“A blogging framework for hackers”就可以看出，这是一个比较Geek的博客系统，提供了一套自动化的工具和模板，帮助用户简便地创建一个博客。</p>
 
@@ -207,7 +270,7 @@
 </ul>
 
 
-<h1>安装</h1>
+<h2>安装</h2>
 
 </div>
   
@@ -230,11 +293,23 @@
   
     <section>
 <h1>About Me</h1>
-<p>一个程序员只会写代码是不够的，他还应该拥有一个分享的博客。——王小波</p>
+<p>一个程序员只会写代码是不够的，他还应该拥有一个分享的博客。<br>——王小波</br></p>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/bitcoin/'>Bitcoin (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+
+  </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/12/05/config-the-octopress-blog-after-deployed/">Octopress博客发布后的基本配置、继续阅读、自动打开、代码高亮、插入图片、分类标签、修改样式</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/12/01/get-free-bitcoin/">免费获得比特币的方法汇总</a>

@@ -96,7 +96,7 @@
   
 
 
-<time datetime="2013-11-27T01:45:36+08:00" pubdate data-updated="true">Nov 27<span>th</span>, 2013</time>
+<time datetime="2013-11-27T01:45:36+08:00" pubdate data-updated="true">2013-11-27, Wed</time>
         
 		
           | <a href="#comments">Comments</a>
@@ -110,9 +110,9 @@
 
 <p>这是第一篇博文，记录一下使用Octopress搭建博客，发布到Github Pages免费空间，并绑定个人域名的步骤。</p>
 
-<h1>概述</h1>
+<h2>概述</h2>
 
-<h2>什么是Github Pages</h2>
+<h3>什么是Github Pages</h3>
 
 <p><a href="http://pages.github.com/">Github Pages</a> Github提供的一个免费空间，拥有一个独立的二级域名，允许开发者提交静态网页文件，用于介绍自己，或者自己的开源项目，可以看作是个人或项目主页。每个Pages有300M的存储空间，于是很多人就当作个人博客来发布博文。特点：</p>
 
@@ -124,7 +124,7 @@
 </ul>
 
 
-<h2>什么是Octopress</h2>
+<h3>什么是Octopress</h3>
 
 <p>从<a href="http://octopress.org/">Octopress主页</a>上的标语“A blogging framework for hackers”就可以看出，这是一个比较Geek的博客系统，提供了一套自动化的工具和模板，帮助用户简便地创建一个博客。</p>
 
@@ -138,12 +138,12 @@
 </ul>
 
 
-<h1>安装</h1>
+<h2>安装</h2>
 
 <!--more-->
 
 
-<h2>安装Git</h2>
+<h3>安装Git</h3>
 
 <p>以Mac系统为例，安装Git的方法有很多，这里只说两种：</p>
 
@@ -169,7 +169,7 @@
 
 <p>应该得到/usr/bin/git，说明已成功安装git。</p>
 
-<h2>安装Rvm和Ruby</h2>
+<h3>安装Rvm和Ruby</h3>
 
 <p>安装Rvm：</p>
 
@@ -189,7 +189,7 @@
 
 <p><a href="http://octopress.org/docs/setup/rvm/">官方文档</a>建议安装1.9.3版本，不过我安装的是2.0.0，一样可用。</p>
 
-<h2>安装Octopress</h2>
+<h3>安装Octopress</h3>
 
 <p>按官方文档<a href="http://octopress.org/docs/setup/">http://octopress.org/docs/setup/</a>操作即可，下面简述步骤，及可能会出现的问题。</p>
 
@@ -247,21 +247,21 @@
 
 <p>打开浏览器输入<a href="http://localhost:4000">http://localhost:4000</a>就可以看到预览页面了。</p>
 
-<h1>部署</h1>
+<h2>部署</h2>
 
 <p>下面介绍怎么将本地博客发布到Github Pages上。</p>
 
-<h2>创建Github Pages</h2>
+<h3>创建Github Pages</h3>
 
-<h3>注册github账号</h3>
+<h4>注册github账号</h4>
 
 <p>首先我们得注册一个github账号，如果不打算绑定独立域名的话，这个账号就是你github pages的域名，如：yourname.github.io，所以要考虑好账号名。注册地址：<a href="https://github.com/join">https://github.com/join</a></p>
 
-<h3>创建git repository</h3>
+<h4>创建git repository</h4>
 
 <p>注册后，创建一个名为yourname.github.com的代码仓库，yourname是你的帐号名，不要省略后面的<code>.github.com</code>。</p>
 
-<h3>设置博客使用的git repository的路径</h3>
+<h4>设置博客使用的git repository的路径</h4>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -283,7 +283,7 @@
 </ol>
 
 
-<h3>设置SSH key</h3>
+<h4>设置SSH key</h4>
 
 <p>1)终端输入：</p>
 
@@ -336,9 +336,9 @@ $ git config --global user.email "yourname@mail.com"
 
 <p>创建好yourname.github.io项目之后，提交一个index.html文件，然后push到Github的master分支。第一次页面生效需要大概10分钟左右。生效之后，访问yourname.github.io就可以看到你上传的页面了。</p>
 
-<h2>配置Octopress</h2>
+<h3>配置Octopress</h3>
 
-<h3>标题与副标题</h3>
+<h4>标题与副标题</h4>
 
 <p>打开_config.yml，按照注释，修改主页的配置。</p>
 
@@ -349,7 +349,7 @@ $ git config --global user.email "yourname@mail.com"
 
 <p>可以参考唐巧的博文《<a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">象写程序一样写博客：搭建基于github的博客</a>》,删除Twitter相关的配置和会拖慢访问速度的Google字体。</p>
 
-<h3>修改主题</h3>
+<h4>修改主题</h4>
 
 <p>比如，想要使用<a href="https://github.com/amelandri/darkstripes">darkstripes</a>主题，切换到Octopress目录，使用如下命令：</p>
 
@@ -362,7 +362,7 @@ $ git config --global user.email "yourname@mail.com"
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h1>撰写并发布博文</h1>
+<h2>撰写并发布博文</h2>
 
 <p>1)创建第一篇博文</p>
 
@@ -417,7 +417,7 @@ $ git config --global user.email "yourname@mail.com"
 </ul>
 
 
-<h1>绑定域名</h1>
+<h2>绑定域名</h2>
 
 <p>要想让username.github.io能通过你自己的域名来访问，需要在项目的根目录下新建一个名为CNAME的文件，文件内容形如：yourdomain.com
 你也可以绑定在二级域名上：blog.yourdomain.com</p>
@@ -432,13 +432,13 @@ $ git config --global user.email "yourname@mail.com"
 
 <p>详见：<a href="http://octopress.org/docs/deploying/github/#custom_domains">http://octopress.org/docs/deploying/github/#custom_domains</a></p>
 
-<h1>第三方插件</h1>
+<h2>第三方插件</h2>
 
-<h2>添加多说评论插件</h2>
+<h3>添加多说评论插件</h3>
 
 <p>首先我们需要有一个多说网的short_name，在后面的配置中需要用到。于是我们就得先注册一个多说网的账号。</p>
 
-<h3>注册多说short_name</h3>
+<h4>注册多说short_name</h4>
 
 <p>这里顺便吐槽一下多说网的交互。它不提供注册功能，只能绑定微博、豆瓣等现有账号，好吧，我绑定了微博，然后登录，发现坑爹了!</p>
 
@@ -446,7 +446,7 @@ $ git config --global user.email "yourname@mail.com"
 
 <p>无奈之下，用了万能的Google，然后找到了<a href="http://blog.puhao.me/%E5%90%90%E6%A7%BD/%E4%BD%BF%E7%94%A8%E5%A4%9A%E8%AF%B4/">这个博客</a>，他也在吐槽不断地点击后，才找到了设置页面：<a href="http://duoshuo.com/create-site/">获取多说通用代码</a>，按照要求设置即可，复制它生成的通用代码。</p>
 
-<h3>添加多说模块到Octopress模板</h3>
+<h4>添加多说模块到Octopress模板</h4>
 
 <p>1)在<code>source/_inludes/post/</code>下创建duoshuo.html:
 粘贴生成的通用代码：</p>
@@ -517,7 +517,7 @@ duoshuo_short_name: yourname
 
 <p>这时候应该就成功添加多说模块了。</p>
 
-<h3>首页侧边栏显示最新评论</h3>
+<h4>首页侧边栏显示最新评论</h4>
 
 <p>1)在<code>_config.yml</code>中插入如下代码</p>
 
@@ -573,7 +573,7 @@ duoshuo_asides_length: 20   # 侧边栏评论截取的长度
 <pre><code>[custom/asides/recent_comments.html]
 </code></pre>
 
-<h3>给网站添加访问分析 Google Analytics</h3>
+<h4>给网站添加访问分析 Google Analytics</h4>
 
 <p>1)到<a href="https://www.google.com/analytics">Google Analytics</a>注册GA账户，登记网站名字、地址，获得自己的Track ID，格式如：US-1234XXXX-X</p>
 
@@ -583,7 +583,7 @@ duoshuo_asides_length: 20   # 侧边栏评论截取的长度
 
 <p>3)<code>rake deploy</code>。然后就可以到Google Analytics看报告了。</p>
 
-<h3>添加About Me到侧边栏</h3>
+<h4>添加About Me到侧边栏</h4>
 
 <p>1)修改<code>source/_includes/custom/asides</code>里面的<code>about.html</code>，内容如下：</p>
 
@@ -600,7 +600,7 @@ duoshuo_asides_length: 20   # 侧边栏评论截取的长度
 
 <p>2)修改<code>_config.yml</code>，在<code>default_asides</code>加入<code>custom/asides/about.html</code></p>
 
-<h1>参考</h1>
+<h2>参考</h2>
 
 <ol>
 <li>Mac下的Markdown文件编辑器: <a href="http://mouapp.com">Mou</a></li>
@@ -637,7 +637,7 @@ duoshuo_asides_length: 20   # 侧边栏评论截取的长度
   
 
 
-<time datetime="2013-11-27T01:45:36+08:00" pubdate data-updated="true">Nov 27<span>th</span>, 2013</time>
+<time datetime="2013-11-27T01:45:36+08:00" pubdate data-updated="true">2013-11-27, Wed</time>
       
 
 <span class="categories">
@@ -691,11 +691,23 @@ var duoshuoQuery = {short_name:"lsfun"};
   
     <section>
 <h1>About Me</h1>
-<p>一个程序员只会写代码是不够的，他还应该拥有一个分享的博客。——王小波</p>
+<p>一个程序员只会写代码是不够的，他还应该拥有一个分享的博客。<br>——王小波</br></p>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/bitcoin/'>Bitcoin (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
+
+  </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/12/05/config-the-octopress-blog-after-deployed/">Octopress博客发布后的基本配置、继续阅读、自动打开、代码高亮、插入图片、分类标签、修改样式</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/12/01/get-free-bitcoin/">免费获得比特币的方法汇总</a>
