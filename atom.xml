@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2013-12-05T20:41:33+08:00</updated>
+  <updated>2013-12-06T09:44:45+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,87 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS中检测UIScrollView滚动动画是否结束]]></title>
+    <link href="http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/"/>
+    <updated>2013-12-06T00:34:00+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate</id>
+    <content type="html"><![CDATA[<p>在iOS中使用UITableView的时候，有时候需要检测UITableView的滚动动画是否结束，但是很遗憾，iOS没有直接提供这样的API。
+先看一下现有的几个方法是怎样的：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndDragging:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span> <span class="nl">willDecelerate:</span><span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="n">decelerate</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个方法表示手指离开了scrollview，第二个参数用于判断滚动速度是否慢慢下降。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndDecelerating:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span><span class="p">;</span>      <span class="c1">// called when scroll view grinds to a halt</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个方法看上去挺像我们要找的：停止减速。但是，从注释看，“嘎然而止”的时候才会被调用，很明显，我们要的是“自然停止”时被调的方法。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndScrollingAnimation:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span><span class="p">;</span> <span class="c1">// called when setContentOffset scrollRectVisible:animated: finishes. not called if not animating</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个是指scrollview停止滚动动画，嗯，这下是我们想要的了吧！</p>
+
+<p>抱歉，不是！！！
+试验一下就会发现，无论怎么滚动怎么停止，这个方法都不会被调！处分用代码的方式调用了<code>setContentOffset scrollRectVisible:animated: finishes</code>，但是，我们手指触发试图滚动是不会调该方法的……</p>
+
+<p>一堆似是而非的方法绕得头晕啊……</p>
+
+<h3>解决方法</h3>
+
+<p>我们自己主动去调<code>scrollViewDidEndScrollingAnimation</code>。</p>
+
+<p>原理：在<code>- (void)scrollViewDidScroll:(UIScrollView *)scrollView</code>内，创建一个异步调用，等待0.1秒后调<code>scrollViewDidEndScrollingAnimation</code>。由于<code>scrollViewDidScroll</code>会不断被调用，再次触发时取消上一次的异步请求。等到不再滚动时，最后一次的请求不会被取消，最终会跑到<code>scrollViewDidScroll</code>，然后，添加想要在滚动停止时调用的代码即可。</p>
+
+<p>代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidScroll:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">sender</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">NSObject</span> <span class="nl">cancelPreviousPerformRequestsWithTarget:</span><span class="n">self</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">performSelector:</span><span class="err">@</span><span class="n">selector</span><span class="p">(</span><span class="nl">scrollViewDidEndScrollingAnimation:</span><span class="p">)</span> <span class="nl">withObject:</span><span class="n">nil</span> <span class="nl">afterDelay:</span><span class="mf">0.1</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndScrollingAnimation:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">NSObject</span> <span class="nl">cancelPreviousPerformRequestsWithTarget:</span><span class="n">self</span><span class="p">];</span>
+</span><span class='line'>    <span class="c1">//这里添加你的逻辑，比如，触发上拉加载更多</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/'>http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/</a><br/>
+            原创文章，版权声明：自由转载-非商用-非衍生-保持署名
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>(Creative Commons BY-NC-ND 3.0)</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Octopress博客发布后的基本配置、继续阅读、自动打开、代码高亮、插入图片、分类标签、修改样式]]></title>
@@ -251,6 +332,16 @@ code snippet
 <li>侧边栏布局混乱，跑到博客底部。也是代码解析出错引起的，同上。定位出问题的代码很简单，用二分法剪切markdown文件，保存，查看预览，看看是不是还有问题，逐步缩小范围就可以看出是哪一句引起的了。</li>
 </ul>
 
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2013/12/05/config-the-octopress-blog-after-deployed/'>http://blog.lessfun.com/blog/2013/12/05/config-the-octopress-blog-after-deployed/</a><br/>
+            原创文章，版权声明：自由转载-非商用-非衍生-保持署名
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>(Creative Commons BY-NC-ND 3.0)</a>
+            </blockquote>
+
 ]]></content>
   </entry>
   
@@ -335,6 +426,16 @@ code snippet
 <li><a href="http://hotswap.co/faucet/">http://hotswap.co/faucet/</a></li>
 <li><a href="http://www.bithits.info/">http://www.bithits.info/</a></li>
 </ul>
+
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2013/12/01/get-free-bitcoin/'>http://blog.lessfun.com/blog/2013/12/01/get-free-bitcoin/</a><br/>
+            原创文章，版权声明：自由转载-非商用-非衍生-保持署名
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>(Creative Commons BY-NC-ND 3.0)</a>
+            </blockquote>
 
 ]]></content>
   </entry>
@@ -853,6 +954,16 @@ duoshuo_asides_length: 20   # 侧边栏评论截取的长度
 
 
 <p>(全文完)</p>
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/'>http://blog.lessfun.com/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/</a><br/>
+            原创文章，版权声明：自由转载-非商用-非衍生-保持署名
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>(Creative Commons BY-NC-ND 3.0)</a>
+            </blockquote>
+
 ]]></content>
   </entry>
   
