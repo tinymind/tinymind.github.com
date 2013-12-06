@@ -62,7 +62,7 @@ default_asides: [custom/asides/about.html, custom/asides/category_list.html, asi
 # Origina block settings
 original_block_prefix: "原文链接："
 original_block_author: "原文作者："
-original_block_copyright: "原创文章，版权声明：自由转载-非商用-非衍生-保持署名"
+original_block_copyright: "版权声明：自由转载-非商用-非衍生-保持署名 | "
 
 # ----------------------- #
 #   3rd Party Settings    #

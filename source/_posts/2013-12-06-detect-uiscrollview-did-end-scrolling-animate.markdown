@@ -35,6 +35,8 @@ tags: [ios]
 
 ###解决方法
 
+<!--more-->
+
 我们自己主动去调`scrollViewDidEndScrollingAnimation`。
 
 原理：在`- (void)scrollViewDidScroll:(UIScrollView *)scrollView`内，创建一个异步调用，等待0.1秒后调`scrollViewDidEndScrollingAnimation`。由于`scrollViewDidScroll`会不断被调用，再次触发时取消上一次的异步请求。等到不再滚动时，最后一次的请求不会被取消，最终会跑到`scrollViewDidScroll`，然后，添加想要在滚动停止时调用的代码即可。

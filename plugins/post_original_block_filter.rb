@@ -19,7 +19,7 @@ module AppendOriginBlockFilter
 		    #{ob_prefix or "Original link: "}
             <a href='#{post.full_url}'>#{post.full_url}</a><br/>
 			#{ob_copyright}
-			<a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>(Creative Commons BY-NC-ND 3.0)</a>
+			<a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>]
   end 
 end
