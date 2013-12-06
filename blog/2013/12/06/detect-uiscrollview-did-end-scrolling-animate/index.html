@@ -139,6 +139,9 @@
 
 <h3>解决方法</h3>
 
+<!--more-->
+
+
 <p>我们自己主动去调<code>scrollViewDidEndScrollingAnimation</code>。</p>
 
 <p>原理：在<code>- (void)scrollViewDidScroll:(UIScrollView *)scrollView</code>内，创建一个异步调用，等待0.1秒后调<code>scrollViewDidEndScrollingAnimation</code>。由于<code>scrollViewDidScroll</code>会不断被调用，再次触发时取消上一次的异步请求。等到不再滚动时，最后一次的请求不会被取消，最终会跑到<code>scrollViewDidScroll</code>，然后，添加想要在滚动停止时调用的代码即可。</p>

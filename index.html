@@ -142,50 +142,12 @@
 
 <h3>解决方法</h3>
 
-<p>我们自己主动去调<code>scrollViewDidEndScrollingAnimation</code>。</p>
-
-<p>原理：在<code>- (void)scrollViewDidScroll:(UIScrollView *)scrollView</code>内，创建一个异步调用，等待0.1秒后调<code>scrollViewDidEndScrollingAnimation</code>。由于<code>scrollViewDidScroll</code>会不断被调用，再次触发时取消上一次的异步请求。等到不再滚动时，最后一次的请求不会被取消，最终会跑到<code>scrollViewDidScroll</code>，然后，添加想要在滚动停止时调用的代码即可。</p>
-
-<p>代码如下：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidScroll:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">sender</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">NSObject</span> <span class="nl">cancelPreviousPerformRequestsWithTarget:</span><span class="n">self</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">performSelector:</span><span class="err">@</span><span class="n">selector</span><span class="p">(</span><span class="nl">scrollViewDidEndScrollingAnimation:</span><span class="p">)</span> <span class="nl">withObject:</span><span class="n">nil</span> <span class="nl">afterDelay:</span><span class="mf">0.1</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndScrollingAnimation:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">NSObject</span> <span class="nl">cancelPreviousPerformRequestsWithTarget:</span><span class="n">self</span><span class="p">];</span>
-</span><span class='line'>    <span class="c1">//这里添加你的逻辑，比如，触发上拉加载更多</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<blockquote class='post_original_block'>
-            原文作者：
-            <a href='http://blog.lessfun.com'>lslin</a><br/>
-            原文链接：
-            <a href='http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/'>http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/</a><br/>
-            原创文章，版权声明：自由转载-非商用-非衍生-保持署名
-            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>(Creative Commons BY-NC-ND 3.0)</a>
-            </blockquote>
-
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/">Read on &rarr;</a>
+    </footer>
   
 
 

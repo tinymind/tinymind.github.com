@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2013-12-06T09:44:45+08:00</updated>
+  <updated>2013-12-06T09:53:15+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -48,6 +48,9 @@
 <p>一堆似是而非的方法绕得头晕啊……</p>
 
 <h3>解决方法</h3>
+
+<!--more-->
+
 
 <p>我们自己主动去调<code>scrollViewDidEndScrollingAnimation</code>。</p>
 
