@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2013-12-06T14:42:26+08:00</updated>
+  <updated>2013-12-15T16:05:04+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,48 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[比特币交易的一点感想]]></title>
+    <link href="http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading/"/>
+    <updated>2013-12-13T10:14:00+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading</id>
+    <content type="html"><![CDATA[<p>我接触比特币比较晚，13年10月末才知道有比特币这个东西存在，当时是逛知乎，发现了这个问题：<a href="http://www.zhihu.com/question/19982269/answer/13554085">大三的学生，手头有6000元的钱，想要做些小投资赚点儿钱，有什么好建议么？</a></p>
+
+<p>该问题的答案如下：</p>
+
+<p><img src="http://blog.lessfun.com/images/2013/12/bitcoin_trading_answer.png" alt="关于小投资的回答" /></p>
+
+<!--more-->
+
+
+<p>事实上，我在知乎上遇见了几次这条答案，但没放在心上，因为我不知道比特币是什么东西。后来，我看到这条回答的评论有很多，于是点开了评论，看到“收益率简直太疯狂了”，开始觉得这是个靠谱的可以让人致富的回答，于是，开始搜索比特币的资料。</p>
+
+<p>然后就大概了解了比特币是什么东西，当然，对于其复杂的算法是不懂的，只知道，比特币是去中心化的总数量固定的可以无限分割的虚拟货币，本身无价值，靠众多持有者用现实货币交易而定价。</p>
+
+<p>由于本身无价值，导致它利润极高，如果在刚提出来的时候就开始了挖矿，成本几乎为零，等到交易价为现在的500+美元的时候卖出，收益翻了N倍。也由于本身无价值，靠交易者自由交易而定价，导致它风险极高，如果不是免费获得，而是通过现实货币买入，则很可能买入之后价格一路下降，血本无归……</p>
+
+<p>风险与收益并存而且都那么高，所以，刚开始我是不准备买入的，因为那时候单个比特币的价格已经是200+美元了。不过我也相信这是一个会增值的虚拟货币，所以我开始寻找免费获得比特币的方法。然后就找到了一些点击广告获得赠送的比特币的方法，刚开始还好，三四天就可以收到0.0003个比特币。后来，单价上涨之后，免费获得的比特币越来越少，我终于绝望了。同时想到如果当初200美元买入了，那么现在就涨了几倍……于是决定直接买入。</p>
+
+<p>我用了3000元人民币，在两个平台分别充值1500，以4600和4700的价格买入。本想着长期持有等待升值的，但是，事实证明情绪没那么容易稳定。买入之后，看到单价上升，就会内心窃喜，同时有卖出再买入的打算；看到单价下降，忍不住彷徨紧张，后悔买入太早。这样一折腾，终于沦为短线操作。短线操作也有问题，如果买入之后，价格继续下跌，就会后悔买入太早；如果卖出之后价格上涨，就会后悔卖出太早。总之，一入比特深似海，从此安宁是路人。</p>
+
+<p>不过，几手交易下来，总值还是有所增长的，只是，心态不稳，收益只有几十块。后来看到莱特币利润更大，就在一个平台卖出比特币，买入莱特币。</p>
+
+<p>现在的情况是，分别在5800买入了比特币、在213.5买入了莱特币。此时（2013.12.15 15:50）比特币价格是5111元人民币，莱特币是175.33元人民币，也就是说，我开始赚到的那几十块亏了，本金也缩水不少，总投3000元，现值2760元。</p>
+
+<p>也许过一段时间，价格还会涨回去。但是，实时关注价格走势，心情跟着一路起伏，严重影响身心健康。我开始怀疑是否值得进行虚拟货币交易。诚然，那么点钱，亏了也不是大问题，只是，赚了也不会发什么财。如论哪里，都是土豪的世界。</p>
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading/'>http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS中检测UIScrollView滚动动画是否结束]]></title>
@@ -90,7 +132,7 @@
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
             <a href='http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/'>http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>
 
@@ -341,7 +383,7 @@ code snippet
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
             <a href='http://blog.lessfun.com/blog/2013/12/05/config-the-octopress-blog-after-deployed/'>http://blog.lessfun.com/blog/2013/12/05/config-the-octopress-blog-after-deployed/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>
 
@@ -436,7 +478,7 @@ code snippet
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
             <a href='http://blog.lessfun.com/blog/2013/12/01/get-free-bitcoin/'>http://blog.lessfun.com/blog/2013/12/01/get-free-bitcoin/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>
 
@@ -963,7 +1005,7 @@ duoshuo_asides_length: 20   # 侧边栏评论截取的长度
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
             <a href='http://blog.lessfun.com/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/'>http://blog.lessfun.com/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>
 
