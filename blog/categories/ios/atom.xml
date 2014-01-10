@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-01-10T16:05:56+08:00</updated>
+  <updated>2014-01-10T16:27:49+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,80 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/"/>
-    <updated>2014-01-10T15:07:24+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7</id>
-    <content type="html"><![CDATA[<h3>设置view从导航栏下方开始布局</h3>
-
-<p>在iOS6及以前的版本中，UIViewController的高度和位置都是从导航栏下方开始的。但是在iOS7中，UIViewController不再提供wantsFullScreenLayout属性，UIViewController创建后默认就是Full Screen的，因此如果带导航栏的应用界面中的部分控件会与导航栏重叠在一起。</p>
-
-<p>我们的应用大都要兼容低于iOS7的版本，所以必须解决这种不兼容的现象。
-思路是，还是按照iOS6的布局方式，因为被导航栏覆盖部分界面实在看不出有什么好处。所以，我们需要判断iOS版本，如果是iOS6，一切照旧，如果是iOS7，则设置view从导航栏下方开始布局。</p>
-
-<p>简单的方法，在ViewDidLoad里面增加几句代码即可，如下：</p>
-
-<!--more-->
-
-
-<p>``` cpp</p>
-
-<p> #define SystemVersionLessThan(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)</p>
-
-<ul>
-<li><p>(void)viewDidLoad
-{
-[super viewDidLoad];</p>
-
-<p>if (!SystemVersionLessThan(@&ldquo;7.0&rdquo;)) {
-  self.edgesForExtendedLayout = UIRectEdgeNone;
-  self.extendedLayoutIncludesOpaqueBars = NO;
-}
-}
-```</p></li>
-</ul>
-
-
-<p>这样设置之后，可以看到在iOS7中布局跟iOS显示一样了。</p>
-
-<p>如果有很多个UIViewController，只需要新建一个UIViewController的子类，比如<code>MyUIViewController</code>，把上面代码放到MyUIViewController的<code>ViewDidLoad</code>中，然后修改所有的UIViewController为MyUIViewController即可。</p>
-
-<h3>修改iOS7中UITableViewCell的分隔线</h3>
-
-<p>只是还有一个问题，如果添加了UITableView，会发现cell的分隔线短了一小部分，还需设置如下：</p>
-
-<p><code>cpp
-  self.tableView.separatorInset = UIEdgeInsetsZero;
-</code></p>
-
-<p>修改后的效果如图：
-iOS6：<br/>
-<img src="/images/2014/01/ios_adjust_ios6.png" alt="ios_adjust_ios6" /></p>
-
-<p>iOS7:<br/>
-<img src="/images/2014/01/ios_adjust_ios7.png" alt="ios_adjust_ios6" /></p>
-
-<p>iOS7表格分隔线：<br/>
-<img src="/images/2014/01/ios_adjust_ios7_tabelviewcell.png" alt="ios_adjust_ios6" /></p>
-
-<p>搞定！</p>
-
-<h3>去掉iOS6中导航栏的阴影</h3>
-
-<p>iOS6的UINavigationBar默认加了一层阴影，而iOS7中则默认没有，我们可以通过下面的代码去掉iOS6的导航栏阴影：</p>
-
-<p>``` cpp
-  if (!SystemVersionLessThan(@&ldquo;6.0&rdquo;)) {</p>
-
-<pre><code>  [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-</code></pre>
-
-<p>  }
-```</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS中检测UIScrollView滚动动画是否结束]]></title>
