@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Bitcoin | 浮生猎趣]]></title>
+  <link href="http://blog.lessfun.com/blog/categories/bitcoin/atom.xml" rel="self"/>
+  <link href="http://blog.lessfun.com/"/>
+  <updated>2014-01-10T16:05:56+08:00</updated>
+  <id>http://blog.lessfun.com/</id>
+  <author>
+    <name><![CDATA[lslin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[比特币交易的一点感想]]></title>
+    <link href="http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading/"/>
+    <updated>2013-12-13T10:14:00+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading</id>
+    <content type="html"><![CDATA[<p>我接触比特币比较晚，13年10月末才知道有比特币这个东西存在，当时是逛知乎，发现了这个问题：<a href="http://www.zhihu.com/question/19982269/answer/13554085">大三的学生，手头有6000元的钱，想要做些小投资赚点儿钱，有什么好建议么？</a></p>
+
+<p>该问题的答案如下：</p>
+
+<p><img src="/images/2013/12/bitcoin_trading_answer.png" alt="关于小投资的回答" /></p>
+
+<!--more-->
+
+
+<p>事实上，我在知乎上遇见了几次这条答案，但没放在心上，因为我不知道比特币是什么东西。后来，我看到这条回答的评论有很多，于是点开了评论，看到“收益率简直太疯狂了”，开始觉得这是个靠谱的可以让人致富的回答，于是，开始搜索比特币的资料。</p>
+
+<p>然后就大概了解了比特币是什么东西，当然，对于其复杂的算法是不懂的，只知道，比特币是去中心化的总数量固定的可以无限分割的虚拟货币，本身无价值，靠众多持有者用现实货币交易而定价。</p>
+
+<p>由于本身无价值，导致它利润极高，如果在刚提出来的时候就开始了挖矿，成本几乎为零，等到交易价为现在的500+美元的时候卖出，收益翻了N倍。也由于本身无价值，靠交易者自由交易而定价，导致它风险极高，如果不是免费获得，而是通过现实货币买入，则很可能买入之后价格一路下降，血本无归……</p>
+
+<p>风险与收益并存而且都那么高，所以，刚开始我是不准备买入的，因为那时候单个比特币的价格已经是200+美元了。不过我也相信这是一个会增值的虚拟货币，所以我开始寻找免费获得比特币的方法。然后就找到了一些点击广告获得赠送的比特币的方法，刚开始还好，三四天就可以收到0.0003个比特币。后来，单价上涨之后，免费获得的比特币越来越少，我终于绝望了。同时想到如果当初200美元买入了，那么现在就涨了几倍……于是决定直接买入。</p>
+
+<p>我用了3000元人民币，在两个平台分别充值1500，以4600和4700的价格买入。本想着长期持有等待升值的，但是，事实证明情绪没那么容易稳定。买入之后，看到单价上升，就会内心窃喜，同时有卖出再买入的打算；看到单价下降，忍不住彷徨紧张，后悔买入太早。这样一折腾，终于沦为短线操作。短线操作也有问题，如果买入之后，价格继续下跌，就会后悔买入太早；如果卖出之后价格上涨，就会后悔卖出太早。总之，一入比特深似海，从此安宁是路人。</p>
+
+<p>不过，几手交易下来，总值还是有所增长的，只是，心态不稳，收益只有几十块。后来看到莱特币利润更大，就在一个平台卖出比特币，买入莱特币。</p>
+
+<p>现在的情况是，分别在5800买入了比特币、在213.5买入了莱特币。此时（2013.12.15 15:50）比特币价格是5111元人民币，莱特币是175.33元人民币，也就是说，我开始赚到的那几十块亏了，本金也缩水不少，总投3000元，现值2760元。</p>
+
+<p>也许过一段时间，价格还会涨回去。但是，实时关注价格走势，心情跟着一路起伏，严重影响身心健康。我开始怀疑是否值得进行虚拟货币交易。诚然，那么点钱，亏了也不是大问题，只是，赚了也不会发什么财。如论哪里，都是土豪的世界。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[免费获得比特币的方法汇总]]></title>
+    <link href="http://blog.lessfun.com/blog/2013/12/01/get-free-bitcoin/"/>
+    <updated>2013-12-01T19:12:20+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2013/12/01/get-free-bitcoin</id>
+    <content type="html"><![CDATA[<p>随着比特币价格的不断升高，可以免费获得比特币的网站也越来越少，或者获得的比特币数量少得可怜。不过，天无绝人之路，目前还是有少数网站提供免费的比特币的。</p>
+
+<h2>1.注册网站，赠送比特币</h2>
+
+<ul>
+<li><a href="https://www.chbtc.com/a/71688">比特币中国</a>：注册，完成邮箱验证，可以获得0.0005BTC；完成手机验证，可获得0.0005BTC。0.01BTC可提现。</li>
+<li><a href="http://www.huanle95.com/btc?r=1552">欢乐95</a>：注册赠送800积分，每天登录有100积分，在通过欢乐95在各大网上商城购买商品，还可以获得大量积分，适合网购达人。13积分=1uBTC。</li>
+<li><a href="https://www.huobi.com/?a=regist_gift&amp;utm_source=273899">火币网</a>：注册并且完善个人信息后，可以参与抽奖，中奖数额为0.001-1个比特币。0.01BTC可提现。</li>
+<li><a href="http://www.okcoin.com/?invite=3266148">OKCoin</a>：注册并绑定手机、设定交易密码即可获得0.001BTC。</li>
+</ul>
+
+
+<p>注意：比特币中国和OKCoin的最新公告显示，由于最近虚假注册用户数太多，暂停送币活动%>_&lt;%。</p>
+
+<h2>2.点击广告，获得比特币</h2>
+
+<p>只推荐比较靠谱大方的两个：</p>
+
+<ul>
+<li><a href="https://coinad.com/?r=RYVGMPXZ0EPO313">Coinad</a>：注册一个账号，设定自己的比特币地址，在<code>View ads</code>页面可以看到可点击的广告以及点击一个广告可以获得多少比特币。每天的广告数量有限。比特币累积到0.0003后可以提现。</li>
+<li><a href="http://btcclicks.com/?r=54820e59">BtcClicks</a>：注册一个账号，设定自己的比特币地址，在<code>Surf Ads</code>查看可点击的广告。0.001BTC可提现。</li>
+</ul>
+
+
+<!--more-->
+
+
+<h2>3.添加广告，点击量转换为比特币</h2>
+
+<p>如果你有个人网站，可以到下面地址注册一个账号，获取广告地址，然后复制到你的个人网站，别人点击一次你就会获得0.00000157BTC，好吧，小数点后面的0真是让人绝望！！！</p>
+
+<p>值得一提的是，注册即赠送0.01BTC，不过要0.2个才能提现…</p>
+
+<ul>
+<li><a href="http://aff.4bc.co/1475.html">http://aff.4bc.co</a></li>
+</ul>
+
+
+<h2>4.挂网页，或者摇号中奖</h2>
+
+<ul>
+<li><a href="http://www.landofbitcoin.com/?r=G0aNDpMAGoOx0GjV">LandOfBitcoin</a>：打开网页即可，右上角可以看到不断增加的余额，半分钟左右增加0.00000001BTC，聊胜于无。</li>
+<li><a href="http://freebitco.in/?op=home">FreeBitcoin</a>：每个小时输一次验证码，得到多少比特币看运气，一般都有0.0000015-0.0000025个。</li>
+</ul>
+
+
+<h2>5.输验证码，累积比特币</h2>
+
+<p>以下网站每半个小时可以输入验证码和比特币地址，获取的比特币汇总到coinbox.me，可以通过<a href="http://www.coinbox.me/?a=your_bitcoin_address">http://www.coinbox.me/?a=your_bitcoin_address</a> 查看你已经累积了多少比特币，0.000055个后会自动发送到你的比特币钱包。</p>
+
+<p>这个实在是体力活，请注意保护眼睛：</p>
+
+<ul>
+<li><a href="http://www.btc4you.com/index.php">http://www.btc4you.com/index.php</a></li>
+<li><a href="http://www.greencoins.org/">http://www.greencoins.org/</a></li>
+<li><a href="http://www.rawbitcoins.com/">http://www.rawbitcoins.com/</a></li>
+<li><a href="http://www.thefreebitcoins.com/">http://www.thefreebitcoins.com/</a></li>
+<li><a href="http://www.faucetbtc.com/">http://www.faucetbtc.com/</a></li>
+<li><a href="http://www.freebtc4all.com/">http://www.freebtc4all.com/</a></li>
+<li><a href="http://www.btcmine.net/">http://www.btcmine.net/</a></li>
+<li><a href="http://www.srbitcoin.com/">http://www.srbitcoin.com/</a></li>
+<li><a href="http://www.freebitcoins.me/">http://www.freebitcoins.me/</a></li>
+<li><a href="http://btcflow.net/">http://btcflow.net/</a></li>
+<li><a href="http://www.bitcoinspain.net/">http://www.bitcoinspain.net/</a></li>
+<li><a href="http://bitcoins4free.me/">http://bitcoins4free.me/</a></li>
+<li><a href="http://www.freebitcoins4u.com/">http://www.freebitcoins4u.com/</a></li>
+<li><a href="http://www.fr33bitcoins.com/">http://www.fr33bitcoins.com/</a></li>
+<li><a href="http://www.elbitcoingratis.es/">http://www.elbitcoingratis.es/</a></li>
+<li><a href="http://www.virtualfaucet.com/">http://www.virtualfaucet.com/</a></li>
+<li><a href="http://www.bitcats.net/">http://www.bitcats.net/</a></li>
+<li><a href="http://www.nioctib.net/">http://www.nioctib.net/</a></li>
+<li><a href="http://www.thebitcoin.me/">http://www.thebitcoin.me/</a></li>
+<li><a href="http://bitcointree.net/">http://bitcointree.net/</a></li>
+<li><a href="http://hotswap.co/faucet/">http://hotswap.co/faucet/</a></li>
+<li><a href="http://www.bithits.info/">http://www.bithits.info/</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

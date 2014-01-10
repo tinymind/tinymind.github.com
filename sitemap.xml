@@ -2,20 +2,46 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>
-            http://tinymind.github.io/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/
+            http://blog.lessfun.com/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/
         </loc>
-        <lastmod>2013-12-01T17:35:21+08:00</lastmod>
+        <lastmod>2013-12-05T20:41:32+08:00</lastmod>
     </url>
     <url>
-        <loc>http://tinymind.github.io/blog/archives/</loc>
-        <lastmod>2013-12-01T17:35:21+08:00</lastmod>
+        <loc>http://blog.lessfun.com/blog/2013/12/01/get-free-bitcoin/</loc>
+        <lastmod>2013-12-01T23:58:16+08:00</lastmod>
     </url>
     <url>
-        <loc>http://tinymind.github.io/</loc>
-        <lastmod>2013-12-01T17:35:21+08:00</lastmod>
+        <loc>
+            http://blog.lessfun.com/blog/2013/12/05/config-the-octopress-blog-after-deployed/
+        </loc>
+        <lastmod>2013-12-05T20:55:19+08:00</lastmod>
     </url>
     <url>
-        <loc>http://tinymind.github.io/robots.txt</loc>
+        <loc>
+            http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/
+        </loc>
+        <lastmod>2013-12-06T09:51:44+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading/</loc>
+        <lastmod>2013-12-15T16:05:04+08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/
+        </loc>
+        <lastmod>2014-01-10T16:02:30+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.lessfun.com/blog/archives/</loc>
+        <lastmod>2014-01-10T16:02:30+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.lessfun.com/</loc>
+        <lastmod>2014-01-10T16:02:30+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.lessfun.com/robots.txt</loc>
         <lastmod>2013-11-26T21:07:43+08:00</lastmod>
     </url>
 </urlset>
