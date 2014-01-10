@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-01-10T16:34:33+08:00</updated>
+  <updated>2014-01-10T16:42:08+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,100 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/"/>
+    <updated>2014-01-10T15:07:24+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7</id>
+    <content type="html"><![CDATA[<h3>设置view从导航栏下方开始布局</h3>
+
+<p>在iOS6及以前的版本中，UIViewController的高度和位置都是从导航栏下方开始的。但是在iOS7中，UIViewController不再提供wantsFullScreenLayout属性，UIViewController创建后默认就是Full Screen的，因此如果带导航栏的应用界面中的部分控件会与导航栏重叠在一起。</p>
+
+<p>我们的应用大都要兼容低于iOS7的版本，所以必须解决这种不兼容的现象。
+思路是，还是按照iOS6的布局方式，因为被导航栏覆盖部分界面实在看不出有什么好处。所以，我们需要判断iOS版本，如果是iOS6，一切照旧，如果是iOS7，则设置view从导航栏下方开始布局。</p>
+
+<p>简单的方法，在ViewDidLoad里面增加几句代码即可，如下：</p>
+
+<!--more-->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'> <span class="err">#</span><span class="n">define</span> <span class="n">SystemVersionLessThan</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="p">([[[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">]</span> <span class="n">systemVersion</span><span class="p">]</span> <span class="nl">compare:</span><span class="n">v</span> <span class="nl">options:</span><span class="n">NSNumericSearch</span><span class="p">]</span> <span class="o">==</span> <span class="n">NSOrderedAscending</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">SystemVersionLessThan</span><span class="p">(</span><span class="err">@</span><span class="s">&quot;7.0&quot;</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">self</span><span class="p">.</span><span class="n">edgesForExtendedLayout</span> <span class="o">=</span> <span class="n">UIRectEdgeNone</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">self</span><span class="p">.</span><span class="n">extendedLayoutIncludesOpaqueBars</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样设置之后，可以看到在iOS7中布局跟iOS显示一样了。</p>
+
+<p>如果有很多个UIViewController，只需要新建一个UIViewController的子类，比如<code>MyUIViewController</code>，把上面代码放到MyUIViewController的<code>ViewDidLoad</code>中，然后修改所有的UIViewController为MyUIViewController即可。</p>
+
+<h3>修改iOS7中UITableViewCell的分隔线</h3>
+
+<p>只是还有一个问题，如果添加了UITableView，会发现cell的分隔线短了一小部分，还需设置如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'>  <span class="n">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">separatorInset</span> <span class="o">=</span> <span class="n">UIEdgeInsetsZero</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>修改后的效果如图：
+iOS6：<br/>
+<img src="http://blog.lessfun.com/images/2014/01/ios_adjust_ios6.png" alt="ios_adjust_ios6" /></p>
+
+<p>iOS7:<br/>
+<img src="http://blog.lessfun.com/images/2014/01/ios_adjust_ios7.png" alt="ios_adjust_ios6" /></p>
+
+<p>iOS7表格分隔线：<br/>
+<img src="http://blog.lessfun.com/images/2014/01/ios_adjust_ios7_tableviewcell.png" alt="ios_adjust_ios6" /></p>
+
+<p>搞定！</p>
+
+<h3>去掉iOS6中导航栏的阴影</h3>
+
+<p>iOS6的UINavigationBar默认加了一层阴影，而iOS7中则默认没有，我们可以通过下面的代码去掉iOS6的导航栏阴影：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">SystemVersionLessThan</span><span class="p">(</span><span class="err">@</span><span class="s">&quot;6.0&quot;</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">[[</span><span class="n">UINavigationBar</span> <span class="n">appearance</span><span class="p">]</span> <span class="nl">setShadowImage:</span><span class="p">[[</span><span class="n">UIImage</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">]];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/'>http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[比特币交易的一点感想]]></title>

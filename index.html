@@ -9,7 +9,7 @@
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="我接触比特币比较晚，13年10月末才知道有比特币这个东西存在，当时是逛知乎，发现了这个问题：大三的学生，手头有6000元的钱，想要做些小投资赚点儿钱，有什么好建议么？ 该问题的答案如下： ">
+  <meta name="description" content="设置view从导航栏下方开始布局 在iOS6及以前的版本中，UIViewController的高度和位置都是从导航栏下方开始的。但是在iOS7中，UIViewController不再提供wantsFullScreenLayout属性，UIViewController创建后默认就是Full &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,57 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/">通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-10T15:07:24+08:00" pubdate data-updated="true">2014-01-10, Fri</time>
+        
+		
+          | <a href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>设置view从导航栏下方开始布局</h3>
+
+<p>在iOS6及以前的版本中，UIViewController的高度和位置都是从导航栏下方开始的。但是在iOS7中，UIViewController不再提供wantsFullScreenLayout属性，UIViewController创建后默认就是Full Screen的，因此如果带导航栏的应用界面中的部分控件会与导航栏重叠在一起。</p>
+
+<p>我们的应用大都要兼容低于iOS7的版本，所以必须解决这种不兼容的现象。
+思路是，还是按照iOS6的布局方式，因为被导航栏覆盖部分界面实在看不出有什么好处。所以，我们需要判断iOS版本，如果是iOS6，一切照旧，如果是iOS7，则设置view从导航栏下方开始布局。</p>
+
+<p>简单的方法，在ViewDidLoad里面增加几句代码即可，如下：</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -421,13 +472,17 @@
   <ul id="categories">
     <li class='category'><a href='/blog/categories/bitcoin/'>Bitcoin (2)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (1)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (2)</a></li>
 
   </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/">通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/12/13/some-feeling-about-bitcoin-trading/">比特币交易的一点感想</a>
@@ -443,10 +498,6 @@
     
       <li class="post">
         <a href="/blog/2013/12/01/get-free-bitcoin/">免费获得比特币的方法汇总</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/">用Octopress在Github搭建博客，并绑定独立域名</a>
       </li>
     
   </ul>
