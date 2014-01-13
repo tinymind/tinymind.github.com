@@ -9,7 +9,7 @@
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="设置view从导航栏下方开始布局 在iOS6及以前的版本中，UIViewController的高度和位置都是从导航栏下方开始的。但是在iOS7中，UIViewController不再提供wantsFullScreenLayout属性，UIViewController创建后默认就是Full &hellip;">
+  <meta name="description" content="iOS中的UIScrollView有一个属性scrollToTop，设置为YES之后，点击设备的状态栏(StatusBar)即可将滚动试图的内容滚动到最顶端，在滚动列表很长的时候，这个特性十分有用。 今日在使用这一属性的时候，发现部分情况下，一切正常；但是也有时候，点击状态栏，滚动条没反应！ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/">修复iOS中UIScrollView的scrollToTop设置后不生效的问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-13T15:15:04+08:00" pubdate data-updated="true">2014-01-13, Mon</time>
+        
+		
+          | <a href="/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>iOS中的<code>UIScrollView</code>有一个属性<code>scrollToTop</code>，设置为<code>YES</code>之后，点击设备的状态栏(StatusBar)即可将滚动试图的内容滚动到最顶端，在滚动列表很长的时候，这个特性十分有用。</p>
+
+<p>今日在使用这一属性的时候，发现部分情况下，一切正常；但是也有时候，点击状态栏，滚动条没反应！检查了代码，确定已经设置<code>scrollToTop = YES</code>，但是总是会有不起作用的情况。</p>
+
+<p>于是到万能的StackOverflow寻求答案，不失所望，找到了类似的问题：<a href="http://stackoverflow.com/questions/8951357/scroll-uitableview-to-top-when-tapping-top-of-the-screen">scroll UITableView to top when tapping top of the screen</a></p>
+
+<p>答案也解释得很清楚了，如下：</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -472,13 +522,17 @@
   <ul id="categories">
     <li class='category'><a href='/blog/categories/bitcoin/'>Bitcoin (2)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (2)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (3)</a></li>
 
   </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/">修复iOS中UIScrollView的scrollToTop设置后不生效的问题</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/">通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6</a>
@@ -494,10 +548,6 @@
     
       <li class="post">
         <a href="/blog/2013/12/05/config-the-octopress-blog-after-deployed/">Octopress博客发布后的基本配置、继续阅读、自动打开、代码高亮、插入图片、分类标签、修改样式</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/01/get-free-bitcoin/">免费获得比特币的方法汇总</a>
       </li>
     
   </ul>
