@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-01-13T15:33:26+08:00</updated>
+  <updated>2014-01-15T13:28:09+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[在UINavigationController中使用UITabBarControllier，处理报错]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller/"/>
+    <updated>2014-01-15T12:12:51+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller</id>
+    <content type="html"><![CDATA[<p>写iOS应用时，经常需要将UITabBarController嵌入到一个根UINavigationController中，如果处理不好，我们会遇到这样的错误：</p>
+
+<pre><code>Two-stage rotation animation is deprecated. This application should use the smoother single-stage animation.
+</code></pre>
+
+<p>网上找了一下，StackOverFlow的<a href="http://stackoverflow.com/a/6637554">这个答案</a>说，不应该将UITabBarControllier嵌入到UINavigationController中作为rootViewController，但是，我们的确想要这样做，所以只好寻找其它办法。不过，至少我们可以确定的是，问题出在rootViewController同时包含UITabBarControllier和UINavigationController。</p>
+
+<p>几经尝试，最后发现，在设置为<code>window.rootViewController</code>之前，先指定<code>tabBarController.selectedIndex = 0</code>，问题解决。</p>
+
+<p>可以得出，出现上述错误，是因为XCode不知道你需要push哪个子viewController，在加载navigationController的时候，不知道要载入哪一个controller，于是无脑的将tabBarController的viewControllers都动画载入了。</p>
+
+<p>完整代码如下：</p>
+
+<!--more-->
+
+
+<p>``` cpp
+&ndash; (BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary </em>)launchOptions
+{</p>
+
+<pre><code>self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
+UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+
+UINavigationController *navVC = [storyBoard instantiateInitialViewController];
+//MainViewController是UITabBarController的子类
+MainViewController *rootVC = (MainViewController *)navVC.visibleViewController;
+rootVC.delegate = self;
+rootVC.selectedIndex = 0;   //需要这样设置
+
+self.window.rootViewController = navVC;
+
+self.window.backgroundColor = [UIColor whiteColor];
+[self.window makeKeyAndVisible];
+return YES;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>StoryBoard：</p>
+
+<p><img src="/images/2014/01/ios_tabbar_storyboard.png" alt="ios_tabbar_storyboard" /></p>
+
+<p>运行效果：</p>
+
+<p><img src="/images/2014/01/ios_tabbar_running.png" alt="ios_tabbar_running" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[修复iOS中UIScrollView的scrollToTop设置后不生效的问题]]></title>
