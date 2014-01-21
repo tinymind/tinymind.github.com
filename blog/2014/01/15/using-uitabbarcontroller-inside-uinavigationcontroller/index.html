@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>在UINavigationController中使用UITabBarControllier，处理报错 - 浮生猎趣</title>
+  <title>在UINavigationController中使用UITabBarController，处理Two-stage Rotation错误 - 浮生猎趣</title>
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="写iOS应用时，经常需要将UITabBarController嵌入到一个根UINavigationController中，如果处理不好，我们会遇到这样的错误： Two-stage rotation animation is deprecated. This application should &hellip;">
-  
+  <meta name="description" content="在UINavigationController中使用UITabBarController，处理Two-stage rotation错误">
+  <meta name="keywords" content="ios, uinavigationcontroller, uitabbarcontroller, two-stage sotation">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -80,7 +80,7 @@
   
   <header>
     
-      <h1 class="entry-title">在UINavigationController中使用UITabBarControllier，处理报错</h1>
+      <h1 class="entry-title">在UINavigationController中使用UITabBarController，处理Two-stage Rotation错误</h1>
     
     
       <p class="meta">
@@ -111,18 +111,16 @@
 <pre><code>Two-stage rotation animation is deprecated. This application should use the smoother single-stage animation.
 </code></pre>
 
-<p>网上找了一下，StackOverFlow的<a href="http://stackoverflow.com/a/6637554">这个答案</a>说，不应该将UITabBarControllier嵌入到UINavigationController中作为rootViewController，但是，我们的确想要这样做，所以只好寻找其它办法。不过，至少我们可以确定的是，问题出在rootViewController同时包含UITabBarControllier和UINavigationController。</p>
+<p>网上找了一下，StackOverFlow的<a href="http://stackoverflow.com/a/6637554">这个答案</a>说，不应该将UITabBarControllier嵌入到UINavigationController中作为rootViewController，但是，我们的确想要这样做，所以只好寻找其它办法。不过，至少我们可以确定的是，问题出在rootViewController同时包含UITabBarController和UINavigationController。</p>
+
+<!--more-->
+
 
 <p>几经尝试，最后发现，在设置为<code>window.rootViewController</code>之前，先指定<code>tabBarController.selectedIndex = 0</code>，问题解决。</p>
 
 <p>可以得出，出现上述错误，是因为XCode不知道你需要push哪个子viewController，在加载navigationController的时候，不知道要载入哪一个controller，于是无脑的将tabBarController的viewControllers都动画载入了。</p>
 
 <p>完整代码如下：</p>
-
-<!--more-->
-
-
-
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -272,7 +270,7 @@ var duoshuoQuery = {short_name:"lsfun"};
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller/">在UINavigationController中使用UITabBarControllier，处理报错</a>
+        <a href="/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller/">在UINavigationController中使用UITabBarController，处理Two-stage Rotation错误</a>
       </li>
     
       <li class="post">
