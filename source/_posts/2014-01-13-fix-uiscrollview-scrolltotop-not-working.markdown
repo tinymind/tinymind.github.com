@@ -5,6 +5,8 @@ date: 2014-01-13 15:15:04 +0800
 comments: true
 categories: [iOS]
 tags: [ios]
+keywords: ios, uiscrollview, scrolltotop
+description: 修复iOS中UIScrollView的scrollToTop设置后不生效的问题
 ---
 
 iOS中的`UIScrollView`有一个属性`scrollToTop`，设置为`YES`之后，点击设备的状态栏(StatusBar)即可将滚动试图的内容滚动到最顶端，在滚动列表很长的时候，这个特性十分有用。

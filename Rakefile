@@ -116,6 +116,8 @@ task :new_post, :title do |t, args|
     post.puts "comments: true"
     post.puts "categories: "
     post.puts "tags: "
+    post.puts "keywords: "
+    post.puts "description: "
     post.puts "---"
   end
 
@@ -146,6 +148,8 @@ task :new_post_title, :title, :title_alias do |t, args|
     post.puts "comments: true"
     post.puts "categories: "
     post.puts "tags: "
+    post.puts "keywords: "
+    post.puts "description: "
     post.puts "---"
   end
 

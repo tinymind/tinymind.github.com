@@ -4,7 +4,9 @@ title: "比特币交易的一点感想"
 date: 2013-12-13 10:14
 comments: true
 categories: [Bitcoin]
-tags: 
+tags: [bitcoin]
+keywords: bitcoin, 比特币, 交易
+description: 比特币交易的一点感想，一入比特深似海，从此淡定是路人
 ---
 
 我接触比特币比较晚，13年10月末才知道有比特币这个东西存在，当时是逛知乎，发现了这个问题：[大三的学生，手头有6000元的钱，想要做些小投资赚点儿钱，有什么好建议么？](http://www.zhihu.com/question/19982269/answer/13554085)

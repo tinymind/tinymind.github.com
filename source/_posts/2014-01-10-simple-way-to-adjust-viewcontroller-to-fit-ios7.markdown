@@ -5,6 +5,8 @@ date: 2014-01-10 15:07:24 +0800
 comments: true
 categories: [iOS]
 tags: [ios]
+keywords: ios6, ios7, uiviewcontroller
+description: 通过简单的方法调整iOS7中的UIViewController，使其兼容iOS6
 ---
 
 ###设置view从导航栏下方开始布局

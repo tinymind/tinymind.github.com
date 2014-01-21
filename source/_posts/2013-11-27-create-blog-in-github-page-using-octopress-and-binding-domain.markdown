@@ -5,6 +5,8 @@ date: 2013-11-27 01:45:36 +0800
 comments: true
 categories: [Octopress]
 tags: [octopress, github]
+keywords: octopress, github
+description: 使用Octopress搭建个人博客，发布到Github Pages免费空间，并绑定独立域名的步骤
 ---
 
 

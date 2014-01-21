@@ -5,6 +5,8 @@ date: 2013-12-01 19:12:20 +0800
 comments: true
 categories: [Bitcoin]
 tags: [Bitcoin]
+keywords: bitcoin, 比特币, 免费
+description: 目前可用的可以免费获得比特币的方法汇总
 ---
 
 随着比特币价格的不断升高，可以免费获得比特币的网站也越来越少，或者获得的比特币数量少得可怜。不过，天无绝人之路，目前还是有少数网站提供免费的比特币的。

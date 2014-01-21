@@ -5,6 +5,8 @@ date: 2013-12-06 00:34
 comments: true
 categories: [iOS]
 tags: [ios]
+keywords: ios, uiscrollview, 动画
+description: 在iOS中使用UITableView的时候，检测UITableView的滚动动画是否结束的方法
 ---
 
 在iOS中使用UITableView的时候，有时候需要检测UITableView的滚动动画是否结束，但是很遗憾，iOS没有直接提供这样的API。

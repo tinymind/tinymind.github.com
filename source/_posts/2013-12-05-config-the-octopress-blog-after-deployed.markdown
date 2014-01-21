@@ -5,6 +5,8 @@ date: 2013-12-05 02:41
 comments: true
 categories: [Octopress]
 tags: [octopress]
+keywords: octopress, settings, highlight, style
+description: Octopress博客发布后的基本配置：继续阅读、自动打开、代码高亮、插入图片、分类标签、修改样式
 ---
 
 ##基本配置
