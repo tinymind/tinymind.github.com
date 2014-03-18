@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: C++ | 浮生猎趣]]></title>
+  <link href="http://blog.lessfun.com/blog/categories/c-plus-plus/atom.xml" rel="self"/>
+  <link href="http://blog.lessfun.com/"/>
+  <updated>2014-03-18T18:06:29+08:00</updated>
+  <id>http://blog.lessfun.com/</id>
+  <author>
+    <name><![CDATA[lslin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[在程序运行时获取被调用的DLL的本地文件路径]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime/"/>
+    <updated>2014-03-18T17:42:46+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime</id>
+    <content type="html"><![CDATA[<p>很多时候，DLL都是被别的进程所调用，所以在运行时，下面方法获取到的实际上是EXE所在的文件路径：</p>
+
+<p>``` c++</p>
+
+<pre><code>QCoreApplication::applicationFilePath();//Qt
+</code></pre>
+
+<p>```</p>
+
+<p>但是我们实际上想要获得的是DLL本身的路径，因为运行的EXE与被调用的DLL不一定在同一个目录，比如，当把abc.dll注入到notepad.exe进程，很明显abc.dll是不在notepad所在的目录的。在dll代码中调用上述语句，返回的实际上是notepad的EXE路径。</p>
+
+<p>那么，我们要获得abc.dll真实路径，有两个方法。</p>
+
+<!--more-->
+
+
+<h4>方法一：</h4>
+
+<p>在DLL的入口函数附近，声明以下变量，并定义函数：</p>
+
+<p>``` c++</p>
+
+<pre><code>EXTERN_C IMAGE_DOS_HEADER __ImageBase;  VOID CALLBACK abcAPCProc(ULONG_PTR dwParam) {       WCHAR path[MAX_PATH + 1] = {0};     ::GetModuleFileName((HINSTANCE)&amp;__ImageBase, path, MAX_PATH);       //path就是当前dll的文件路径    }
+</code></pre>
+
+<p>```</p>
+
+<p>然后，需要在导出函数里调用一下上面的函数：</p>
+
+<p>``` c++</p>
+
+<pre><code>extern "C" DWORD __declspec(dllexport) __stdcall showABC(void *)    {       HANDLE hThread = NULL;      DWORD dwRes = 0;        hThread = ::OpenThread(THREAD_SET_CONTEXT,          FALSE, getMainThreadId(0));     DW_ASSERT(NULL != hThread);     dwRes = ::QueueUserAPC(abcAPCProc,          hThread, 0);        ::CloseHandle(hThread);     hThread = NULL;     return dwRes;   }
+</code></pre>
+
+<p>```</p>
+
+<h4>方法二：</h4>
+
+<p>定义以下函数：</p>
+
+<p>``` c++</p>
+
+<pre><code>HMODULE GetCurrentModule()  { // NB: XP+ solution!      HMODULE hModule = NULL;     GetModuleHandleEx(          GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,         (LPCTSTR)GetCurrentModule,          &amp;hModule);          return hModule; }
+</code></pre>
+
+<p>```</p>
+
+<p>调用上面函数，获取当前局部，然后就可以使用<code>GetModuleFileName</code>方法获取DLL路径：</p>
+
+<p>``` c++</p>
+
+<pre><code>WCHAR path[MAX_PATH + 1] = {0}; HMODULE hm = GetCurrentModule();    ::GetModuleFileName(hm, path, MAX_PATH);
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+</feed>

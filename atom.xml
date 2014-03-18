@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-01-21T13:15:53+08:00</updated>
+  <updated>2014-03-18T18:06:29+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,129 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[在程序运行时获取被调用的DLL的本地文件路径]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime/"/>
+    <updated>2014-03-18T17:42:46+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime</id>
+    <content type="html"><![CDATA[<p>很多时候，DLL都是被别的进程所调用，所以在运行时，下面方法获取到的实际上是EXE所在的文件路径：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">QCoreApplication</span><span class="o">::</span><span class="n">applicationFilePath</span><span class="p">();</span><span class="c1">//Qt</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是我们实际上想要获得的是DLL本身的路径，因为运行的EXE与被调用的DLL不一定在同一个目录，比如，当把abc.dll注入到notepad.exe进程，很明显abc.dll是不在notepad所在的目录的。在dll代码中调用上述语句，返回的实际上是notepad的EXE路径。</p>
+
+<p>那么，我们要获得abc.dll真实路径，有两个方法。</p>
+
+<!--more-->
+
+
+<h4>方法一：</h4>
+
+<p>在DLL的入口函数附近，声明以下变量，并定义函数：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">EXTERN_C</span> <span class="n">IMAGE_DOS_HEADER</span> <span class="n">__ImageBase</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">VOID</span> <span class="n">CALLBACK</span> <span class="n">abcAPCProc</span><span class="p">(</span><span class="n">ULONG_PTR</span> <span class="n">dwParam</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">WCHAR</span> <span class="n">path</span><span class="p">[</span><span class="n">MAX_PATH</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</span><span class='line'>      <span class="o">::</span><span class="n">GetModuleFileName</span><span class="p">((</span><span class="n">HINSTANCE</span><span class="p">)</span><span class="o">&amp;</span><span class="n">__ImageBase</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">MAX_PATH</span><span class="p">);</span>
+</span><span class='line'>      <span class="c1">//path就是当前dll的文件路径</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后，需要在导出函数里调用一下上面的函数：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="n">DWORD</span> <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="kr">__stdcall</span> <span class="n">showABC</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">HANDLE</span> <span class="n">hThread</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">DWORD</span> <span class="n">dwRes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">hThread</span> <span class="o">=</span> <span class="o">::</span><span class="n">OpenThread</span><span class="p">(</span><span class="n">THREAD_SET_CONTEXT</span><span class="p">,</span>
+</span><span class='line'>          <span class="n">FALSE</span><span class="p">,</span> <span class="n">getMainThreadId</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+</span><span class='line'>      <span class="n">DW_ASSERT</span><span class="p">(</span><span class="nb">NULL</span> <span class="o">!=</span> <span class="n">hThread</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">dwRes</span> <span class="o">=</span> <span class="o">::</span><span class="n">QueueUserAPC</span><span class="p">(</span><span class="n">abcAPCProc</span><span class="p">,</span>
+</span><span class='line'>          <span class="n">hThread</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>      <span class="o">::</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">hThread</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">hThread</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">dwRes</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>方法二：</h4>
+
+<p>定义以下函数：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">HMODULE</span> <span class="n">GetCurrentModule</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">{</span> <span class="c1">// NB: XP+ solution!</span>
+</span><span class='line'>      <span class="n">HMODULE</span> <span class="n">hModule</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">GetModuleHandleEx</span><span class="p">(</span>
+</span><span class='line'>          <span class="n">GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS</span><span class="p">,</span>
+</span><span class='line'>          <span class="p">(</span><span class="n">LPCTSTR</span><span class="p">)</span><span class="n">GetCurrentModule</span><span class="p">,</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="n">hModule</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="k">return</span> <span class="n">hModule</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>调用上面函数，获取当前局部，然后就可以使用<code>GetModuleFileName</code>方法获取DLL路径：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">WCHAR</span> <span class="n">path</span><span class="p">[</span><span class="n">MAX_PATH</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</span><span class='line'>  <span class="n">HMODULE</span> <span class="n">hm</span> <span class="o">=</span> <span class="n">GetCurrentModule</span><span class="p">();</span>
+</span><span class='line'>  <span class="o">::</span><span class="n">GetModuleFileName</span><span class="p">(</span><span class="n">hm</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">MAX_PATH</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime/'>http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[在UINavigationController中使用UITabBarController，处理Two-stage Rotation错误]]></title>
