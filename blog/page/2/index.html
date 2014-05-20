@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - 浮生猎趣</title>
+  <title>浮生猎趣</title>
   <meta name="author" content="lslin">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.lessfun.com/blog/archives">
+  <link rel="canonical" href="http://blog.lessfun.com/blog/page/2">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
@@ -75,183 +75,93 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/">用Octopress在Github搭建博客，并绑定独立域名</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-27T01:45:36+08:00" pubdate data-updated="true">2013-11-27, Wed</time>
+        
+		
+          | <a href="/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/#comments">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives">
 
 
+  <div class="entry-content"><p>11月中旬在Godaddy购买了一个域名，一直没派上用场，想到经常在各个个人博客找到各种问题的解决方案，于是决定先成立一个博客，记录并分享一些浮生小记、程序问题、解决方案，顺便在互联网上表示，“来过”。</p>
 
-  
-  <h2>2014</h2>
+<p>这是第一篇博文，记录一下使用Octopress搭建博客，发布到Github Pages免费空间，并绑定个人域名的步骤。</p>
 
-<article>
-  
-<h1><a href="/blog/2014/05/20/clone-exists-octopress-blog-to-new-mac/">将已存在的Octopress博客部署到一台新机器(OSX)</a></h1>
-<time datetime="2014-05-20T18:45:00+08:00" pubdate><span class='month'>May</span> <span class='day'>20</span> <span class='year'>2014</span></time>
+<h2>概述</h2>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/octopress/'>Octopress</a></span>
-</footer>
+<h3>什么是Github Pages</h3>
 
+<p><a href="http://pages.github.com/">Github Pages</a> Github提供的一个免费空间，拥有一个独立的二级域名，允许开发者提交静态网页文件，用于介绍自己，或者自己的开源项目，可以看作是个人或项目主页。每个Pages有300M的存储空间，于是很多人就当作个人博客来发布博文。特点：</p>
 
-</article>
+<ul>
+<li>轻量级，配置简单</li>
+<li>无需自己提供空间</li>
+<li>使用标记语言，如Markdown</li>
+<li>可以绑定独立域名</li>
+</ul>
 
 
+<h3>什么是Octopress</h3>
 
-<article>
-  
-<h1><a href="/blog/2014/04/01/using-qiniu-c-sdk-in-cpp/">在C++中使用七牛C-SDK，给QINIU_ACCESS_KEY和QINIU_SECRET_KEY赋值失败的解决方法</a></h1>
-<time datetime="2014-04-01T10:14:00+08:00" pubdate><span class='month'>Apr</span> <span class='day'>01</span> <span class='year'>2014</span></time>
+<p>从<a href="http://octopress.org/">Octopress主页</a>上的标语“A blogging framework for hackers”就可以看出，这是一个比较Geek的博客系统，提供了一套自动化的工具和模板，帮助用户简便地创建一个博客。</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/c-plus-plus/'>C++</a></span>
-</footer>
+<p>Octopress生成的博客可以很方便地部署到Github Pages上，网上已有很多教程介绍怎么利用Octopress在Github上搭建博客。不过，由于生成的博客都是静态文件，所以也可以部署到任何一个服务器上。随着Wordpress越来越臃肿庞大，相对而言更加方便快捷的Octopress则日渐流行。特点：</p>
 
+<ul>
+<li>以Ruby为运行环境，使用简单的命令生成静态页面</li>
+<li>默认使用Markdown语法</li>
+<li>可离线编写博文，方便备份、预览</li>
+<li>可从Wordpress迁移过来</li>
+</ul>
 
-</article>
 
-
-
-<article>
-  
-<h1><a href="/blog/2014/03/18/get-dll-path-at-runtime/">在程序运行时获取被调用的DLL的本地文件路径</a></h1>
-<time datetime="2014-03-18T17:42:46+08:00" pubdate><span class='month'>Mar</span> <span class='day'>18</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/c-plus-plus/'>C++</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller/">在UINavigationController中使用UITabBarController，处理Two-stage Rotation错误</a></h1>
-<time datetime="2014-01-15T12:12:51+08:00" pubdate><span class='month'>Jan</span> <span class='day'>15</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ios/'>iOS</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/">修复iOS中UIScrollView的scrollToTop设置后不生效的问题</a></h1>
-<time datetime="2014-01-13T15:15:04+08:00" pubdate><span class='month'>Jan</span> <span class='day'>13</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ios/'>iOS</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/">通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6</a></h1>
-<time datetime="2014-01-10T15:07:24+08:00" pubdate><span class='month'>Jan</span> <span class='day'>10</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ios/'>iOS</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/12/13/some-feeling-about-bitcoin-trading/">比特币交易的一点感想</a></h1>
-<time datetime="2013-12-13T10:14:00+08:00" pubdate><span class='month'>Dec</span> <span class='day'>13</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/bitcoin/'>Bitcoin</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/">iOS中检测UIScrollView滚动动画是否结束</a></h1>
-<time datetime="2013-12-06T00:34:00+08:00" pubdate><span class='month'>Dec</span> <span class='day'>06</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ios/'>iOS</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/12/05/config-the-octopress-blog-after-deployed/">Octopress博客发布后的基本配置、继续阅读、自动打开、代码高亮、插入图片、分类标签、修改样式</a></h1>
-<time datetime="2013-12-05T02:41:00+08:00" pubdate><span class='month'>Dec</span> <span class='day'>05</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/octopress/'>Octopress</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/12/01/get-free-bitcoin/">免费获得比特币的方法汇总</a></h1>
-<time datetime="2013-12-01T19:12:20+08:00" pubdate><span class='month'>Dec</span> <span class='day'>01</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/bitcoin/'>Bitcoin</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/">用Octopress在Github搭建博客，并绑定独立域名</a></h1>
-<time datetime="2013-11-27T01:45:36+08:00" pubdate><span class='month'>Nov</span> <span class='day'>27</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/octopress/'>Octopress</a></span>
-</footer>
-
-
-</article>
+<h2>安装</h2>
 
 </div>
-
   
-</article>
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/">Read on &rarr;</a>
+    </footer>
+  
 
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
 </div>
-
 <aside class="sidebar">
   
     <section>
@@ -318,7 +228,6 @@ ds.charset = 'UTF-8';
 
   
 </aside>
-
 
     </div>
   </div>

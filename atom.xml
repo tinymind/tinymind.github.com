@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-04-01T10:35:53+08:00</updated>
+  <updated>2014-05-20T20:44:01+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,162 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[将已存在的Octopress博客部署到一台新机器(OSX)]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/05/20/clone-exists-octopress-blog-to-new-mac/"/>
+    <updated>2014-05-20T18:45:00+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/05/20/clone-exists-octopress-blog-to-new-mac</id>
+    <content type="html"><![CDATA[<h3>适用情形</h3>
+
+<p>已经通过另一台电脑基于octopress搭建了一个博客，现在换到一台新电脑，或者想在两台电脑同时更新博客。本文针对的是Mac电脑，OSX系统。</p>
+
+<h3>步骤简述</h3>
+
+<p>与新搭建一个octopress博客的过程大同小异，都是需要安装Git、安装Ruby、安装Octopress，只是从git中clone已有数据的地方有所不同。</p>
+
+<h3>具体方法</h3>
+
+<h4>安装Homebrew，用于安装应用。</h4>
+
+<pre><code>$ ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)”。
+</code></pre>
+
+<p>有可能提示需要安装CLT(Command Line Tools) &ldquo;xcode-select —install&#8221;。</p>
+
+<h4>安装Git，用于Octopress上传。</h4>
+
+<p>如果还没有安装Git，使用命令安装：<code>$ brew install git</code><br/>
+安装好之后，<a href="https://help.github.com/articles/generating-ssh-keys">配置ssh-key</a>。</p>
+
+<h4>安装Ruby，以便使用Octopress。</h4>
+
+<p>Mac系统默认会安装ruby，但是它设定了权限，导致用户无法修改ruby的文件内容，所以我们需要单独在用户目录下安装一个ruby。见<a href="http://stackoverflow.com/questions/14607193/installing-gem-or-updating-rubygems-fails-with-permissions-error">installing-gem-or-updating-rubygems-fails-with-permissions-error</a>。</p>
+
+<p>如果使用默认的ruby，在后面的步骤有可能会出现以下错误：</p>
+
+<h5>没有权限：</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install bundler
+</span><span class='line'>Fetching: bundler-1.6.2.gem <span class="o">(</span>100%<span class="o">)</span>
+</span><span class='line'>ERROR:  While executing gem ... <span class="o">(</span>Gem::FilePermissionError<span class="o">)</span>
+</span><span class='line'>    You don<span class="err">&#39;</span>t have write permissions <span class="k">for </span>the /Library/Ruby/Gems/2.0.0 directory.
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>即使加了sudo，成功执行这一步，后面也会出错：</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>bundle install
+</span><span class='line'>Fetching <span class="nb">source </span>index from http://ruby.taobao.org/
+</span><span class='line'>
+</span><span class='line'>Errno::EACCES: Permission denied - /Library/Ruby/Gems/2.0.0/build_info/rake-0.9.6.info
+</span><span class='line'>An error occurred <span class="k">while </span>installing rake <span class="o">(</span>0.9.6<span class="o">)</span>, and Bundler cannot <span class="k">continue</span>.
+</span><span class='line'>Make sure that <span class="sb">`</span>gem install rake -v <span class="s1">&#39;0.9.6&#39;</span><span class="sb">`</span> succeeds before bundling.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>所以，还是老老实实安装一个Ruby吧：</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'> <span class="c"># 1. 安装Rvm：</span>
+</span><span class='line'>    <span class="nv">$ </span>curl -L https://get.rvm.io | bash -s stable —ruby
+</span><span class='line'>    <span class="c"># 2. 安装Ruby：</span>
+</span><span class='line'>    <span class="nv">$ </span>rvm install ruby-2.0.0-p353  <span class="o">&amp;&amp;</span> rvm use ruby-2.0.0-p353
+</span><span class='line'>    <span class="nv">$ </span>rvm rubygems latest
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>安装Octopress</h4>
+
+<p>见：<a href="http://blog.zerosharp.com/clone-your-octopress-to-blog-from-two-places/">http://blog.zerosharp.com/clone-your-octopress-to-blog-from-two-places/</a></p>
+
+<p>在本地目录为已有的博客创建一个目录，如：Blog。命令行下切换到该目录，执行以下命令：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>     <span class="c"># 将source分支迁出到本地Blog/octopress_blog</span>
+</span><span class='line'>     <span class="nv">$ </span>git clone -b <span class="nb">source </span>git@github.com:username/username.github.com.git octopress_blog
+</span><span class='line'>     <span class="c"># clone _deploy目录</span>
+</span><span class='line'>     <span class="nv">$ </span><span class="nb">cd </span>octopress_blog
+</span><span class='line'>     <span class="nv">$ </span>git clone git@github.com:username/username.github.com.git _deploy
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后运行rake进行配置：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>     <span class="nv">$ </span>gem install bundler
+</span><span class='line'>     <span class="nv">$ </span>rbenv rehash    <span class="c"># If you use rbenv, rehash to be able to run the bundle command</span>
+</span><span class='line'>     <span class="nv">$ </span>bundle install
+</span><span class='line'>     <span class="nv">$ </span>rake setup_github_pages
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>会要求输入你的repos路径，输入即可。然后就可以在新机器上写博客了。</p>
+
+<h4>在两台机器上同步Octopress内容</h4>
+
+<h5>在一台机器提交新的更改：</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>     <span class="nv">$ </span>rake generate
+</span><span class='line'>     <span class="nv">$ </span>git add .
+</span><span class='line'>     <span class="nv">$ </span>git commit -am <span class="s2">&quot;Some comment here.&quot;</span>
+</span><span class='line'>     <span class="nv">$ </span>git push origin <span class="nb">source</span>  <span class="c"># update the remote source branch</span>
+</span><span class='line'>     <span class="nv">$ </span>rake deploy             <span class="c"># update the remote master branch</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>从另一台机器同步更新：</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>     <span class="nv">$ </span><span class="nb">cd </span>octopress_blog
+</span><span class='line'>     <span class="nv">$ </span>git pull origin <span class="nb">source</span>  <span class="c"># update the local source branch</span>
+</span><span class='line'>     <span class="nv">$ </span><span class="nb">cd</span> ./_deploy
+</span><span class='line'>     <span class="nv">$ </span>git pull origin master  <span class="c"># update the local master branch</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2014/05/20/clone-exists-octopress-blog-to-new-mac/'>http://blog.lessfun.com/blog/2014/05/20/clone-exists-octopress-blog-to-new-mac/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[在C++中使用七牛C-SDK，给QINIU_ACCESS_KEY和QINIU_SECRET_KEY赋值失败的解决方法]]></title>
