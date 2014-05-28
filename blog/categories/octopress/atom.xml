@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-05-20T20:44:01+08:00</updated>
+  <updated>2014-05-28T09:55:39+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -480,7 +480,7 @@ rvm rubygems latest
 
 <p>利用终端，或Finder在本地建立一个用于存放Octopress的文件夹，并在终端切换到该目录，然后按以下步骤操作。</p>
 
-<p>1)从Github将源码clong下来：</p>
+<p>1)从Github将源码clone下来：</p>
 
 <p>``` sh</p>
 
