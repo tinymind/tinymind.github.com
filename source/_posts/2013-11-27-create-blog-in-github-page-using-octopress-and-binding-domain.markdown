@@ -85,7 +85,7 @@ Octopress生成的博客可以很方便地部署到Github Pages上，网上已�
 
 利用终端，或Finder在本地建立一个用于存放Octopress的文件夹，并在终端切换到该目录，然后按以下步骤操作。
 
-1)从Github将源码clong下来：
+1)从Github将源码clone下来：
 
 ``` sh
 	git clone git://github.com/imathis/octopress.git octopress
