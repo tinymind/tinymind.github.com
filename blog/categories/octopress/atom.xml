@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-05-28T09:55:39+08:00</updated>
+  <updated>2014-06-08T14:57:25+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -25,6 +25,9 @@
 <h3>步骤简述</h3>
 
 <p>与新搭建一个octopress博客的过程大同小异，都是需要安装Git、安装Ruby、安装Octopress，只是从git中clone已有数据的地方有所不同。</p>
+
+<!--more-->
+
 
 <h3>具体方法</h3>
 
