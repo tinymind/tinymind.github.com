@@ -16,6 +16,8 @@ description: 在新的Mac系统上部署已有的Octopress博客
 ###步骤简述
 与新搭建一个octopress博客的过程大同小异，都是需要安装Git、安装Ruby、安装Octopress，只是从git中clone已有数据的地方有所不同。
 
+<!--more-->
+
 ###具体方法
 
 ####安装Homebrew，用于安装应用。
