@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>在UINavigationController中使用UITabBarController，处理Two-stage Rotation错误 - 浮生猎趣</title>
+  <title>在一台电脑上使用两个Github账号 - 浮生猎趣</title>
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="在UINavigationController中使用UITabBarController，处理Two-stage rotation错误">
-  <meta name="keywords" content="ios, uinavigationcontroller, uitabbarcontroller, two-stage sotation">
+  <meta name="description" content="有时候我们需要在一台电脑上push到两个github的repo，但是默认情况github只适用一个账号。本文介绍了如何在一台电脑使用两个Github提交更改的方法。">
+  <meta name="keywords" content="Github, ssh-key, Mac">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.lessfun.com/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller">
+  <link rel="canonical" href="http://blog.lessfun.com/blog/2014/06/11/two-github-account-in-one-client">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
@@ -81,7 +81,7 @@
   
   <header>
     
-      <h1 class="entry-title">在UINavigationController中使用UITabBarController，处理Two-stage Rotation错误</h1>
+      <h1 class="entry-title">在一台电脑上使用两个Github账号</h1>
     
     
       <p class="meta">
@@ -97,7 +97,7 @@
   
 
 
-<time datetime="2014-01-15T12:12:51+08:00" pubdate data-updated="true">2014-01-15, Wed</time>
+<time datetime="2014-06-11T01:30:09+08:00" pubdate data-updated="true">2014-06-11, Wed</time>
         
 		
           | <a href="#comments">Comments</a>
@@ -107,21 +107,43 @@
   </header>
 
 
-<div class="entry-content"><p>写iOS应用时，经常需要将UITabBarController嵌入到一个根UINavigationController中，如果处理不好，我们会遇到这样的错误：</p>
-
-<pre><code>Two-stage rotation animation is deprecated. This application should use the smoother single-stage animation.
-</code></pre>
-
-<p>网上找了一下，StackOverFlow的<a href="http://stackoverflow.com/a/6637554">这个答案</a>说，不应该将UITabBarControllier嵌入到UINavigationController中作为rootViewController，但是，我们的确想要这样做，所以只好寻找其它办法。不过，至少我们可以确定的是，问题出在rootViewController同时包含UITabBarController和UINavigationController。</p>
+<div class="entry-content"><p>有时候我们需要在一台电脑上push到两个github的repo，但是默认情况Github只适用一个账号。本文介绍了如何在一台电脑使用两个Github提交更改的方法。</p>
 
 <!--more-->
 
 
-<p>几经尝试，最后发现，在设置为<code>window.rootViewController</code>之前，先指定<code>tabBarController.selectedIndex = 0</code>，问题解决。</p>
+<p>前提：你已经在使用github的A账号，其ssh-key保存在~/.ssh/id_rsa中。<br/>
+现在，需要做的是添加另一个ssh-key，按照以下步骤操作。</p>
 
-<p>可以得出，出现上述错误，是因为XCode不知道你需要push哪个子viewController，在加载navigationController的时候，不知道要载入哪一个controller，于是无脑的将tabBarController的viewControllers都动画载入了。</p>
+<h4>1. 生成新的ssh-key</h4>
 
-<p>完整代码如下：</p>
+<p>保存的时候，输入一个新的文件名，如：id_rsa_second</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ssh</span>-keygen -t rsa -C <span class="s2">&quot;your_email@example.com&quot;</span>
+</span><span class='line'>    <span class="c"># Creates a new ssh key, using the provided email as a label</span>
+</span><span class='line'>    <span class="c"># Generating public/private rsa key pair.</span>
+</span><span class='line'>    <span class="c"># Enter file in which to save the key (/Users/you/.ssh/id_rsa_second): [Press enter]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2. 添加到ssh-agent（每次重启之后都需要调用这句）</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ssh</span>-add ~/.ssh/id_rsa_second
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>3. 添加ssh key到github</h4>
+
+<p>见<a href="https://help.github.com/articles/generating-ssh-keys">配置ssh-key</a>。</p>
+
+<h4>4. 配置多个ssh-key</h4>
+
+<p>修改<code>~/.ssh/config</code>文件，如下：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -132,49 +154,55 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nl">application:</span><span class="p">(</span><span class="n">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="n">application</span> <span class="nl">didFinishLaunchingWithOptions:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="n">launchOptions</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">window</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIWindow</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame:</span><span class="p">[[</span><span class="n">UIScreen</span> <span class="n">mainScreen</span><span class="p">]</span> <span class="n">bounds</span><span class="p">]];</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="c">#default github</span>
+</span><span class='line'>    Host github.com
+</span><span class='line'>      HostName github.com
+</span><span class='line'>      IdentityFile ~/.ssh/id_rsa
 </span><span class='line'>
-</span><span class='line'>    <span class="n">UIStoryboard</span> <span class="o">*</span><span class="n">storyBoard</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIStoryboard</span> <span class="nl">storyboardWithName:</span><span class="err">@</span><span class="s">&quot;Main&quot;</span> <span class="nl">bundle:</span><span class="n">nil</span><span class="p">];</span>
+</span><span class='line'>    Host github_second
+</span><span class='line'>      HostName github.com
+</span><span class='line'>      IdentityFile ~/.ssh/id_rsa_second
 </span><span class='line'>
-</span><span class='line'>    <span class="n">UINavigationController</span> <span class="o">*</span><span class="n">navVC</span> <span class="o">=</span> <span class="p">[</span><span class="n">storyBoard</span> <span class="n">instantiateInitialViewController</span><span class="p">];</span>
-</span><span class='line'>    <span class="c1">//MainViewController是UITabBarController的子类</span>
-</span><span class='line'>    <span class="n">MainViewController</span> <span class="o">*</span><span class="n">rootVC</span> <span class="o">=</span> <span class="p">(</span><span class="n">MainViewController</span> <span class="o">*</span><span class="p">)</span><span class="n">navVC</span><span class="p">.</span><span class="n">visibleViewController</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">rootVC</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">rootVC</span><span class="p">.</span><span class="n">selectedIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>   <span class="c1">//需要这样设置</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="n">navVC</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">window</span> <span class="n">makeKeyAndVisible</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">YES</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>StoryBoard：</p>
+<h4>5. 使用别名pull/push代码</h4>
 
-<p><img src="/images/2014/01/ios_tabbar_storyboard.png" alt="ios_tabbar_storyboard" /></p>
+<p>如：</p>
 
-<p>运行效果：</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    git clone git@github_second:username/reponame
+</span></code></pre></td></tr></table></div></figure>
 
-<p><img src="/images/2014/01/ios_tabbar_running.png" alt="ios_tabbar_running" /></p>
+
+<h4>6. 为每个账号对应的项目配置email/name</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    1.取消global
+</span><span class='line'>    git config --global --unset user.name
+</span><span class='line'>    git config --global --unset user.email
+</span><span class='line'>
+</span><span class='line'>    2.设置每个项目repo的自己的user.email
+</span><span class='line'>    git config  user.email <span class="s2">&quot;xxxx@xx.com&quot;</span>
+</span><span class='line'>    git config  user.name <span class="s2">&quot;xxxx&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>这样，以后每次在相应的repo下提交更改，都会自动匹配相应的ssh-key了。</p>
 
 <blockquote class='post_original_block'>
             原文作者：
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
-            <a href='http://blog.lessfun.com/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller/'>http://blog.lessfun.com/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller/</a><br/>
+            <a href='http://blog.lessfun.com/blog/2014/06/11/two-github-account-in-one-client/'>http://blog.lessfun.com/blog/2014/06/11/two-github-account-in-one-client/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>
@@ -201,12 +229,12 @@
   
 
 
-<time datetime="2014-01-15T12:12:51+08:00" pubdate data-updated="true">2014-01-15, Wed</time>
+<time datetime="2014-06-11T01:30:09+08:00" pubdate data-updated="true">2014-06-11, Wed</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ios/'>iOS</a>
+    <a class='category' href='/blog/categories/github/'>Github</a>
   
 </span>
 
@@ -222,10 +250,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/" title="Previous Post: 修复iOS中UIScrollView的scrollToTop设置后不生效的问题">&laquo; 修复iOS中UIScrollView的scrollToTop设置后不生效的问题</a>
+        <a class="basic-alignment left" href="/blog/2014/05/20/clone-exists-octopress-blog-to-new-mac/" title="Previous Post: 将已存在的Octopress博客部署到一台新机器(OSX)">&laquo; 将已存在的Octopress博客部署到一台新机器(OSX)</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/03/18/get-dll-path-at-runtime/" title="Next Post: 在程序运行时获取被调用的DLL的本地文件路径">在程序运行时获取被调用的DLL的本地文件路径 &raquo;</a>
       
     </p>
   </footer>

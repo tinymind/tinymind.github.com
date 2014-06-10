@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Github | 浮生猎趣]]></title>
+  <link href="http://blog.lessfun.com/blog/categories/github/atom.xml" rel="self"/>
+  <link href="http://blog.lessfun.com/"/>
+  <updated>2014-06-11T02:25:55+08:00</updated>
+  <id>http://blog.lessfun.com/</id>
+  <author>
+    <name><![CDATA[lslin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[在一台电脑上使用两个Github账号]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/06/11/two-github-account-in-one-client/"/>
+    <updated>2014-06-11T01:30:09+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/06/11/two-github-account-in-one-client</id>
+    <content type="html"><![CDATA[<p>有时候我们需要在一台电脑上push到两个github的repo，但是默认情况Github只适用一个账号。本文介绍了如何在一台电脑使用两个Github提交更改的方法。</p>
+
+<!--more-->
+
+
+<p>前提：你已经在使用github的A账号，其ssh-key保存在~/.ssh/id_rsa中。<br/>
+现在，需要做的是添加另一个ssh-key，按照以下步骤操作。</p>
+
+<h4>1. 生成新的ssh-key</h4>
+
+<p>保存的时候，输入一个新的文件名，如：id_rsa_second</p>
+
+<p>``` bash</p>
+
+<pre><code>$ssh-keygen -t rsa -C "your_email@example.com"
+# Creates a new ssh key, using the provided email as a label
+# Generating public/private rsa key pair.
+# Enter file in which to save the key (/Users/you/.ssh/id_rsa_second): [Press enter]
+</code></pre>
+
+<p>```</p>
+
+<h4>2. 添加到ssh-agent（每次重启之后都需要调用这句）</h4>
+
+<p>``` bash</p>
+
+<pre><code>$ssh-add ~/.ssh/id_rsa_second
+</code></pre>
+
+<p>```</p>
+
+<h4>3. 添加ssh key到github</h4>
+
+<p>见<a href="https://help.github.com/articles/generating-ssh-keys">配置ssh-key</a>。</p>
+
+<h4>4. 配置多个ssh-key</h4>
+
+<p>修改<code>~/.ssh/config</code>文件，如下：</p>
+
+<p>``` bash</p>
+
+<pre><code>#default github
+Host github.com
+  HostName github.com
+  IdentityFile ~/.ssh/id_rsa
+
+Host github_second
+  HostName github.com
+  IdentityFile ~/.ssh/id_rsa_second
+</code></pre>
+
+<p>```</p>
+
+<h4>5. 使用别名pull/push代码</h4>
+
+<p>如：</p>
+
+<p>``` bash</p>
+
+<pre><code>git clone git@github_second:username/reponame
+</code></pre>
+
+<p>```</p>
+
+<h4>6. 为每个账号对应的项目配置email/name</h4>
+
+<p>``` bash</p>
+
+<pre><code>1.取消global
+git config --global --unset user.name
+git config --global --unset user.email
+
+2.设置每个项目repo的自己的user.email
+git config  user.email "xxxx@xx.com"
+git config  user.name "xxxx"
+</code></pre>
+
+<p>```</p>
+
+<p>这样，以后每次在相应的repo下提交更改，都会自动匹配相应的ssh-key了。</p>
+]]></content>
+  </entry>
+  
+</feed>

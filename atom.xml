@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-06-08T14:57:25+08:00</updated>
+  <updated>2014-06-11T02:25:55+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,114 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[在一台电脑上使用两个Github账号]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/06/11/two-github-account-in-one-client/"/>
+    <updated>2014-06-11T01:30:09+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/06/11/two-github-account-in-one-client</id>
+    <content type="html"><![CDATA[<p>有时候我们需要在一台电脑上push到两个github的repo，但是默认情况Github只适用一个账号。本文介绍了如何在一台电脑使用两个Github提交更改的方法。</p>
+
+<!--more-->
+
+
+<p>前提：你已经在使用github的A账号，其ssh-key保存在~/.ssh/id_rsa中。<br/>
+现在，需要做的是添加另一个ssh-key，按照以下步骤操作。</p>
+
+<h4>1. 生成新的ssh-key</h4>
+
+<p>保存的时候，输入一个新的文件名，如：id_rsa_second</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ssh</span>-keygen -t rsa -C <span class="s2">&quot;your_email@example.com&quot;</span>
+</span><span class='line'>    <span class="c"># Creates a new ssh key, using the provided email as a label</span>
+</span><span class='line'>    <span class="c"># Generating public/private rsa key pair.</span>
+</span><span class='line'>    <span class="c"># Enter file in which to save the key (/Users/you/.ssh/id_rsa_second): [Press enter]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2. 添加到ssh-agent（每次重启之后都需要调用这句）</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ssh</span>-add ~/.ssh/id_rsa_second
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>3. 添加ssh key到github</h4>
+
+<p>见<a href="https://help.github.com/articles/generating-ssh-keys">配置ssh-key</a>。</p>
+
+<h4>4. 配置多个ssh-key</h4>
+
+<p>修改<code>~/.ssh/config</code>文件，如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="c">#default github</span>
+</span><span class='line'>    Host github.com
+</span><span class='line'>      HostName github.com
+</span><span class='line'>      IdentityFile ~/.ssh/id_rsa
+</span><span class='line'>
+</span><span class='line'>    Host github_second
+</span><span class='line'>      HostName github.com
+</span><span class='line'>      IdentityFile ~/.ssh/id_rsa_second
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>5. 使用别名pull/push代码</h4>
+
+<p>如：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    git clone git@github_second:username/reponame
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>6. 为每个账号对应的项目配置email/name</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    1.取消global
+</span><span class='line'>    git config --global --unset user.name
+</span><span class='line'>    git config --global --unset user.email
+</span><span class='line'>
+</span><span class='line'>    2.设置每个项目repo的自己的user.email
+</span><span class='line'>    git config  user.email <span class="s2">&quot;xxxx@xx.com&quot;</span>
+</span><span class='line'>    git config  user.name <span class="s2">&quot;xxxx&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>这样，以后每次在相应的repo下提交更改，都会自动匹配相应的ssh-key了。</p>
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2014/06/11/two-github-account-in-one-client/'>http://blog.lessfun.com/blog/2014/06/11/two-github-account-in-one-client/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[将已存在的Octopress博客部署到一台新机器(OSX)]]></title>
