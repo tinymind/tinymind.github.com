@@ -4,7 +4,7 @@ title: "免费获得比特币的方法汇总"
 date: 2013-12-01 19:12:20 +0800
 comments: true
 categories: [Bitcoin]
-tags: [Bitcoin]
+tags: [bitcoin]
 keywords: bitcoin, 比特币, 免费
 description: 目前可用的可以免费获得比特币的方法汇总
 ---

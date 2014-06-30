@@ -3,8 +3,8 @@ layout: post
 title: "在一台电脑上使用两个Github账号"
 date: 2014-06-11 01:30:09 +0800
 comments: true
-categories: [Github]
-tags: [Github]
+categories: [Github, Mac]
+tags: [github, mac]
 keywords: Github, ssh-key, Mac
 description: 有时候我们需要在一台电脑上push到两个github的repo，但是默认情况github只适用一个账号。本文介绍了如何在一台电脑使用两个Github提交更改的方法。
 ---

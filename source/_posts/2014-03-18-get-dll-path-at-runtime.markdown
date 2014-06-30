@@ -4,7 +4,7 @@ title: "在程序运行时获取被调用的DLL的本地文件路径"
 date: 2014-03-18 17:42:46 +0800
 comments: true
 categories: [C++]
-tags: [C++, DLL]
+tags: [c++, dll]
 keywords: DLL, GetModuleFileName, IMAGE_DOS_HEADER
 description: 在程序运行时获取被调用的DLL文件路径
 ---

@@ -4,7 +4,7 @@ title: "在C++中使用七牛C-SDK，给QINIU_ACCESS_KEY和QINIU_SECRET_KEY赋�
 date: 2014-04-01 10:14
 comments: true
 categories: [C++]
-tags: [C++, DLL, Qiniu]
+tags: [c++, dll, qiniu]
 keywords: C++, Qiniu, 七牛, uptoken
 description: 在C++中使用七牛C-SDK，避免给QINIU_ACCESS_KEY和QINIU_SECRET_KEY赋值失败，自己生成uptoken的方法
 ---
