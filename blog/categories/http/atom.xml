@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Http | 浮生猎趣]]></title>
+  <link href="http://blog.lessfun.com/blog/categories/http/atom.xml" rel="self"/>
+  <link href="http://blog.lessfun.com/"/>
+  <updated>2014-06-30T16:17:41+08:00</updated>
+  <id>http://blog.lessfun.com/</id>
+  <author>
+    <name><![CDATA[lslin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[在Mac系统上简便地启用Http Server]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/06/30/setup-a-simple-http-server-on-mac/"/>
+    <updated>2014-06-30T15:27:28+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/06/30/setup-a-simple-http-server-on-mac</id>
+    <content type="html"><![CDATA[<p>在本地调试Html等简单网页的时候，经常需要启动一个Web服务器，但又不想或不方便安装Apache或者IIS之类的软件，那么可以使用简单的方法：在Python或Php命令行下启用Http Server。</p>
+
+<p>由于在Mac系统下，Python和Php都是默认安装好的，所以不需要额外的软件支持。具体方法如下：</p>
+
+<!--more-->
+
+
+<h4>方法一：不支持Php</h4>
+
+<p>这一方法的前提是，Mac系统默认安装了Python，所以可以利用Python启用Http服务器。
+步骤：
+``` bash</p>
+
+<pre><code>$cd /path/project/site
+$python -m SimpleHTTPServer 8080
+</code></pre>
+
+<p>````</p>
+
+<p>然后，在浏览器打开<a href="http://localhost:8080/index.html%E5%8D%B3%E5%8F%AF%E3%80%82">http://localhost:8080/index.html%E5%8D%B3%E5%8F%AF%E3%80%82</a></p>
+
+<h4>方法二：支持Php</h4>
+
+<p>注意，以上方法，仅适用于提供html等文件服务，不支持运行php脚本。</p>
+
+<p>如果需要运行php，参考 StackOverFlow 和 官网。请先确保php版本是5.4之后。
+步骤：
+``` bash</p>
+
+<pre><code>$cd /path/project/site
+$php -S localhost:8080
+</code></pre>
+
+<p>```</p>
+
+<h4>停止Server</h4>
+
+<p>在终端按<code>Ctrl-C</code>即可停止。</p>
+
+<h4>其他系统</h4>
+
+<p>由于Python和PHP都是跨平台的，在其他系统上，只需要安装好这两个运行环境，就可以使用同样的方法。</p>
+]]></content>
+  </entry>
+  
+</feed>

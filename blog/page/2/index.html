@@ -84,6 +84,69 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/12/05/config-the-octopress-blog-after-deployed/">Octopress博客发布后的基本配置、继续阅读、自动打开、代码高亮、插入图片、分类标签、修改样式</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-05T02:41:00+08:00" pubdate data-updated="true">2013-12-05, Thu</time>
+        
+		
+          | <a href="/blog/2013/12/05/config-the-octopress-blog-after-deployed/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>基本配置</h2>
+
+<p>修改_config.yml，格式为：<code>配置项: + 空格 + 参数</code>，空格不能少。</p>
+
+<h3>标题、副标题、作者、侧边栏等</h3>
+
+<p>编辑<code>_config.yml</code>，修改<code>url:</code>、<code>title</code>、<code>sub_title</code>、<code>author</code>, <code>default_asides</code>的对应参数。</p>
+
+<h3>修改日期格式</h3>
+
+<p>编辑<code>_config.yml</code>的<code>date_format</code>，格式定义见<a href="http://www.ruby-doc.org/core-1.9.2/Time.html#method-i-strftime">这里</a></p>
+
+<p>如想显示为：<code>2013-12-02, Mon</code>，则改为：</p>
+
+<pre><code>date_format: "%F, %a"
+</code></pre>
+
+<h2>继续阅读</h2>
+
+<p>如果正文太长，不希望在首页直接显示完整内容，可以在适当的位置加上一句<code>&lt;!--more--&gt;</code>，后面的内容就会被按钮<code>Read on→</code>所替代，点击继续阅读。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/12/05/config-the-octopress-blog-after-deployed/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/12/01/get-free-bitcoin/">免费获得比特币的方法汇总</a></h1>
     
     
@@ -242,6 +305,8 @@
     <li class='category'><a href='/blog/categories/bitcoin/'>Bitcoin (2)</a></li>
 <li class='category'><a href='/blog/categories/c-/'>C++ (2)</a></li>
 <li class='category'><a href='/blog/categories/github/'>Github (1)</a></li>
+<li class='category'><a href='/blog/categories/http/'>Http (1)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (2)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (3)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (4)</a></li>
 
@@ -250,6 +315,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/30/setup-a-simple-http-server-on-mac/">在Mac系统上简便地启用Http Server</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/06/11/two-github-account-in-one-client/">在一台电脑上使用两个Github账号</a>
@@ -265,10 +334,6 @@
     
       <li class="post">
         <a href="/blog/2014/03/18/get-dll-path-at-runtime/">在程序运行时获取被调用的DLL的本地文件路径</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller/">在UINavigationController中使用UITabBarController，处理Two-stage Rotation错误</a>
       </li>
     
   </ul>
