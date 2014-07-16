@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Godaddy | 浮生猎趣]]></title>
+  <link href="http://blog.lessfun.com/blog/categories/godaddy/atom.xml" rel="self"/>
+  <link href="http://blog.lessfun.com/"/>
+  <updated>2014-07-16T18:02:44+08:00</updated>
+  <id>http://blog.lessfun.com/</id>
+  <author>
+    <name><![CDATA[lslin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[在Godaddy上使用PHPMailer通过SMTP发送邮件的方法]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/"/>
+    <updated>2014-07-16T13:51:29+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy</id>
+    <content type="html"><![CDATA[<p>对于个人站点的“留言”、“评论”功能，除了把用户的发言保存到MySQL数据库中以外，管理员往往还希望在用户留言的同时发送一封邮件到指定邮箱，方便查看。</p>
+
+<p>这个功能用PHP+MySQL实现很简单，PHP语言有一个mail()方法，只需配置好SMTP服务器、发件人的邮箱密码、收件人的邮箱，就可以自动发送邮件。</p>
+
+<p>但是，mail()方法过于简洁，需要用户作很多其他配置，比如在php.ini里设置stmp服务器地址、端口等信息，同时使用也不太方便，比如没法便捷地使用抄送、添加附件等功能。</p>
+
+<p>于是有了<a href="http://phpmailer.worxware.com">PHPMailer</a>，简化了发送邮件的配置。</p>
+
+<!--more-->
+
+
+<p>使用PHPMailer发送邮件的代码如下：</p>
+
+<p>``` php</p>
+
+<pre><code>&lt;?php
+require 'PHPMailerAutoload.php';
+
+$mail = new PHPMailer;
+
+$mail-&gt;isSMTP();
+$mail-&gt;Host = 'smtp1.example.com;smtp2.example.com';
+$mail-&gt;SMTPAuth = true;
+$mail-&gt;Username = 'user@example.com';
+$mail-&gt;Password = 'secret';
+
+$mail-&gt;From = 'from@example.com';
+$mail-&gt;FromName = 'Mailer';
+$mail-&gt;addAddress('joe@example.net', 'Joe User');
+$mail-&gt;WordWrap = 50;
+$mail-&gt;isHTML(true);
+$mail-&gt;Subject = 'Here is the subject';
+$mail-&gt;Body    = 'This is the HTML message body &lt;b&gt;in bold!&lt;/b&gt;';
+if(!$mail-&gt;send()) {
+    echo 'Message could not be sent.';
+    echo 'Mailer Error: ' . $mail-&gt;ErrorInfo;
+} else {
+    echo 'Message has been sent';
+}
+</code></pre>
+
+<p>```</p>
+
+<p>以上代码在本地服务器测试一切正常，但是上传到Godaddy空间后，发送邮件时会提示失败，因为Godaddy限制了用户利用第三方的SMTP服务器发送邮件。</p>
+
+<p>解决方法有两个：</p>
+
+<ol>
+<li>使用Godaddy提供的免费邮箱转发</li>
+<li>使用Godaddy提供的公共SMTP转发</li>
+</ol>
+
+
+<h3>方法1，使用Godaddy提供的邮箱账号</h3>
+
+<p>购买了Godaddy的空间之后，会给用户提供企业Email，后缀名是自己的域名，免费账号可以有100个。我们需要在上面创建一个Email账号。比如：user@test.com, helloworld。见<a href="http://support.godaddy.com/help/article/3552/managing-your-email-account-smtp-relays">这里</a>。</p>
+
+<p>完成后，查看相应账号的<code>Tools - Server Settings</code>，会列出该邮箱使用的smtp host和端口，host一般都是<code>smtpout.secureserver.net</code>，端口则有：<code>25, 80, 3535</code>。可以参考<a href="">Godaddy的帮助</a>。</p>
+
+<p>有了上述信息之后，调整PHPMailer配置如下：</p>
+
+<p>``` php</p>
+
+<pre><code>$mail-&gt;Host = 'smtpout.secureserver.net';
+$mail-&gt;Port = 80;
+$mail-&gt;SMTPAuth = true;
+$mail-&gt;Username = 'user@test';
+$mail-&gt;Password = 'helloworld';
+</code></pre>
+
+<p>```</p>
+
+<p>这时候再发送，就不会提示<code>SMTP -&gt; ERROR: Failed to connect to server: Connection refused (111)</code>之类的错误了。</p>
+
+<h3>方法2，使用Godaddy提供的公共SMTP服务器</h3>
+
+<p><a href="http://www.freehao123.com/godaddy-smtp/">这里</a>提到了另一种免邮箱账号密码发送邮件的方法，就是利用Godaddy提供的公共SMTP服务器。</p>
+
+<p>代码如下：</p>
+
+<p>``` php</p>
+
+<pre><code>$mail-&gt;Host = 'relay-hosting.secureserver.net';
+$mail-&gt;Port = 25;
+$mail-&gt;SMTPAuth = false;
+$mail-&gt;Username = '';   //blank
+$mail-&gt;Password = '';   //blank
+</code></pre>
+
+<p>```</p>
+
+<p>(完)</p>
+]]></content>
+  </entry>
+  
+</feed>

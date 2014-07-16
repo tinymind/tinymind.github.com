@@ -84,6 +84,56 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/">在Godaddy上使用PHPMailer通过SMTP发送邮件的方法</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-16T13:51:29+08:00" pubdate data-updated="true">2014-07-16, Wed</time>
+        
+		
+          | <a href="/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>对于个人站点的“留言”、“评论”功能，除了把用户的发言保存到MySQL数据库中以外，管理员往往还希望在用户留言的同时发送一封邮件到指定邮箱，方便查看。</p>
+
+<p>这个功能用PHP+MySQL实现很简单，PHP语言有一个mail()方法，只需配置好SMTP服务器、发件人的邮箱密码、收件人的邮箱，就可以自动发送邮件。</p>
+
+<p>但是，mail()方法过于简洁，需要用户作很多其他配置，比如在php.ini里设置stmp服务器地址、端口等信息，同时使用也不太方便，比如没法便捷地使用抄送、添加附件等功能。</p>
+
+<p>于是有了<a href="http://phpmailer.worxware.com">PHPMailer</a>，简化了发送邮件的配置。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/06/30/setup-a-simple-http-server-on-mac/">在Mac系统上简便地启用Http Server</a></h1>
     
     
@@ -551,79 +601,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/">iOS中检测UIScrollView滚动动画是否结束</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-06T00:34:00+08:00" pubdate data-updated="true">2013-12-06, Fri</time>
-        
-		
-          | <a href="/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>在iOS中使用UITableView的时候，有时候需要检测UITableView的滚动动画是否结束，但是很遗憾，iOS没有直接提供这样的API。
-先看一下现有的几个方法是怎样的：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndDragging:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span> <span class="nl">willDecelerate:</span><span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="n">decelerate</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个方法表示手指离开了scrollview，第二个参数用于判断滚动速度是否慢慢下降。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndDecelerating:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span><span class="p">;</span>      <span class="c1">// called when scroll view grinds to a halt</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个方法看上去挺像我们要找的：停止减速。但是，从注释看，“嘎然而止”的时候才会被调用，很明显，我们要的是“自然停止”时被调的方法。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndScrollingAnimation:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span><span class="p">;</span> <span class="c1">// called when setContentOffset scrollRectVisible:animated: finishes. not called if not animating</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个是指scrollview停止滚动动画，嗯，这下是我们想要的了吧！</p>
-
-<p>抱歉，不是！！！
-试验一下就会发现，无论怎么滚动怎么停止，这个方法都不会被调！处分用代码的方式调用了<code>setContentOffset scrollRectVisible:animated: finishes</code>，但是，我们手指触发试图滚动是不会调该方法的……</p>
-
-<p>一堆似是而非的方法绕得头晕啊……</p>
-
-<h3>解决方法</h3>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -645,9 +622,11 @@
     <li class='category'><a href='/blog/categories/bitcoin/'>Bitcoin (2)</a></li>
 <li class='category'><a href='/blog/categories/c-/'>C++ (2)</a></li>
 <li class='category'><a href='/blog/categories/github/'>Github (1)</a></li>
+<li class='category'><a href='/blog/categories/godaddy/'>Godaddy (1)</a></li>
 <li class='category'><a href='/blog/categories/http/'>Http (1)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (2)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (3)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (4)</a></li>
 
   </ul>
@@ -655,6 +634,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/">在Godaddy上使用PHPMailer通过SMTP发送邮件的方法</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/06/30/setup-a-simple-http-server-on-mac/">在Mac系统上简便地启用Http Server</a>
@@ -670,10 +653,6 @@
     
       <li class="post">
         <a href="/blog/2014/04/01/using-qiniu-c-sdk-in-cpp/">在C++中使用七牛C-SDK，给QINIU_ACCESS_KEY和QINIU_SECRET_KEY赋值失败的解决方法</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/18/get-dll-path-at-runtime/">在程序运行时获取被调用的DLL的本地文件路径</a>
       </li>
     
   </ul>

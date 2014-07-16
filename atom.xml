@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-06-30T16:17:41+08:00</updated>
+  <updated>2014-07-16T18:02:44+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,141 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[在Godaddy上使用PHPMailer通过SMTP发送邮件的方法]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/"/>
+    <updated>2014-07-16T13:51:29+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy</id>
+    <content type="html"><![CDATA[<p>对于个人站点的“留言”、“评论”功能，除了把用户的发言保存到MySQL数据库中以外，管理员往往还希望在用户留言的同时发送一封邮件到指定邮箱，方便查看。</p>
+
+<p>这个功能用PHP+MySQL实现很简单，PHP语言有一个mail()方法，只需配置好SMTP服务器、发件人的邮箱密码、收件人的邮箱，就可以自动发送邮件。</p>
+
+<p>但是，mail()方法过于简洁，需要用户作很多其他配置，比如在php.ini里设置stmp服务器地址、端口等信息，同时使用也不太方便，比如没法便捷地使用抄送、添加附件等功能。</p>
+
+<p>于是有了<a href="http://phpmailer.worxware.com">PHPMailer</a>，简化了发送邮件的配置。</p>
+
+<!--more-->
+
+
+<p>使用PHPMailer发送邮件的代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'>  <span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>  <span class="k">require</span> <span class="s1">&#39;PHPMailerAutoload.php&#39;</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nv">$mail</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PHPMailer</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">isSMTP</span><span class="p">();</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Host</span> <span class="o">=</span> <span class="s1">&#39;smtp1.example.com;smtp2.example.com&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">SMTPAuth</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Username</span> <span class="o">=</span> <span class="s1">&#39;user@example.com&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Password</span> <span class="o">=</span> <span class="s1">&#39;secret&#39;</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">From</span> <span class="o">=</span> <span class="s1">&#39;from@example.com&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">FromName</span> <span class="o">=</span> <span class="s1">&#39;Mailer&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">addAddress</span><span class="p">(</span><span class="s1">&#39;joe@example.net&#39;</span><span class="p">,</span> <span class="s1">&#39;Joe User&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">WordWrap</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">isHTML</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Subject</span> <span class="o">=</span> <span class="s1">&#39;Here is the subject&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Body</span>    <span class="o">=</span> <span class="s1">&#39;This is the HTML message body &lt;b&gt;in bold!&lt;/b&gt;&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">send</span><span class="p">())</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">echo</span> <span class="s1">&#39;Message could not be sent.&#39;</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">echo</span> <span class="s1">&#39;Mailer Error: &#39;</span> <span class="o">.</span> <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">ErrorInfo</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">echo</span> <span class="s1">&#39;Message has been sent&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上代码在本地服务器测试一切正常，但是上传到Godaddy空间后，发送邮件时会提示失败，因为Godaddy限制了用户利用第三方的SMTP服务器发送邮件。</p>
+
+<p>解决方法有两个：</p>
+
+<ol>
+<li>使用Godaddy提供的免费邮箱转发</li>
+<li>使用Godaddy提供的公共SMTP转发</li>
+</ol>
+
+
+<h3>方法1，使用Godaddy提供的邮箱账号</h3>
+
+<p>购买了Godaddy的空间之后，会给用户提供企业Email，后缀名是自己的域名，免费账号可以有100个。我们需要在上面创建一个Email账号。比如：user@test.com, helloworld。见<a href="http://support.godaddy.com/help/article/3552/managing-your-email-account-smtp-relays">这里</a>。</p>
+
+<p>完成后，查看相应账号的<code>Tools - Server Settings</code>，会列出该邮箱使用的smtp host和端口，host一般都是<code>smtpout.secureserver.net</code>，端口则有：<code>25, 80, 3535</code>。可以参考<a href="">Godaddy的帮助</a>。</p>
+
+<p>有了上述信息之后，调整PHPMailer配置如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Host</span> <span class="o">=</span> <span class="s1">&#39;smtpout.secureserver.net&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Port</span> <span class="o">=</span> <span class="mi">80</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">SMTPAuth</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Username</span> <span class="o">=</span> <span class="s1">&#39;user@test&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Password</span> <span class="o">=</span> <span class="s1">&#39;helloworld&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这时候再发送，就不会提示<code>SMTP -&gt; ERROR: Failed to connect to server: Connection refused (111)</code>之类的错误了。</p>
+
+<h3>方法2，使用Godaddy提供的公共SMTP服务器</h3>
+
+<p><a href="http://www.freehao123.com/godaddy-smtp/">这里</a>提到了另一种免邮箱账号密码发送邮件的方法，就是利用Godaddy提供的公共SMTP服务器。</p>
+
+<p>代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Host</span> <span class="o">=</span> <span class="s1">&#39;relay-hosting.secureserver.net&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Port</span> <span class="o">=</span> <span class="mi">25</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">SMTPAuth</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Username</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>   <span class="c1">//blank</span>
+</span><span class='line'>  <span class="nv">$mail</span><span class="o">-&gt;</span><span class="na">Password</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>   <span class="c1">//blank</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(完)</p>
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/'>http://blog.lessfun.com/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[在Mac系统上简便地启用Http Server]]></title>
