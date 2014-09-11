@@ -38,3 +38,19 @@ description: 让iOS开发者乱成一团的强制提交支持64位架构的App�
 
 好了，没啥事了，还不能洗洗睡，继续提交32位App去吧~  
 
+PS: 查看.a库或.framework文件支持那些架构的方法如下：
+
+``` bash
+; .a
+$cd libs
+$lipo -info *.a
+Architectures in the fat file: libssl.a are: i386 armv7 armv7s
+
+; .framework
+$cd xxFramework.framework
+$lipo -info xxFramework
+Architectures in the fat file: xxFramework are: armv7 armv7s i386
+
+```
+
+
