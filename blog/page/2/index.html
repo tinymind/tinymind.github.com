@@ -87,6 +87,57 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/">通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-10T15:07:24+08:00" pubdate data-updated="true">2014-01-10, Fri</time>
+        
+		
+          | <a href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>设置view从导航栏下方开始布局</h3>
+
+<p>在iOS6及以前的版本中，UIViewController的高度和位置都是从导航栏下方开始的。但是在iOS7中，UIViewController不再提供wantsFullScreenLayout属性，UIViewController创建后默认就是Full Screen的，因此如果带导航栏的应用界面中的部分控件会与导航栏重叠在一起。</p>
+
+<p>我们的应用大都要兼容低于iOS7的版本，所以必须解决这种不兼容的现象。
+思路是，还是按照iOS6的布局方式，因为被导航栏覆盖部分界面实在看不出有什么好处。所以，我们需要判断iOS版本，如果是iOS6，一切照旧，如果是iOS7，则设置view从导航栏下方开始布局。</p>
+
+<p>简单的方法，在ViewDidLoad里面增加几句代码即可，如下：</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/12/13/some-feeling-about-bitcoin-trading/">比特币交易的一点感想</a></h1>
     
     
@@ -436,13 +487,17 @@
 <li class='category'><a href='/blog/categories/mac/'>Mac (2)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (3)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (4)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (5)</a></li>
 
   </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/09/11/invalid-binary-the-binary-is-missing-architectures-arm64/">Invalid Binary, the Binary Is Missing Architectures[arm64] - iTunes Connect的Bug</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/08/28/to-achieve-financial-freedom/">从储蓄罐到实现财务自由</a>
@@ -458,10 +513,6 @@
     
       <li class="post">
         <a href="/blog/2014/06/11/two-github-account-in-one-client/">在一台电脑上使用两个Github账号</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/20/clone-exists-octopress-blog-to-new-mac/">将已存在的Octopress博客部署到一台新机器(OSX)</a>
       </li>
     
   </ul>
