@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-09-11T15:20:14+08:00</updated>
+  <updated>2014-09-11T15:36:21+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -47,6 +47,21 @@
 <p>居然Sorry也没一句！任你乱如蚂蚁，我自泰然自若。</p>
 
 <p>好了，没啥事了，还不能洗洗睡，继续提交32位App去吧~</p>
+
+<p>PS: 查看.a库或.framework文件支持那些架构的方法如下：</p>
+
+<p>``` bash
+; .a
+$cd libs
+$lipo -info *.a
+Architectures in the fat file: libssl.a are: i386 armv7 armv7s</p>
+
+<p>; .framework
+$cd xxFramework.framework
+$lipo -info xxFramework
+Architectures in the fat file: xxFramework are: armv7 armv7s i386</p>
+
+<p>```</p>
 ]]></content>
   </entry>
   

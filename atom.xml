@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-09-11T15:20:14+08:00</updated>
+  <updated>2014-09-11T15:36:21+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -47,6 +47,31 @@
 <p>居然Sorry也没一句！任你乱如蚂蚁，我自泰然自若。</p>
 
 <p>好了，没啥事了，还不能洗洗睡，继续提交32位App去吧~</p>
+
+<p>PS: 查看.a库或.framework文件支持那些架构的方法如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>; .a
+</span><span class='line'><span class="nv">$cd</span> libs
+</span><span class='line'><span class="nv">$lipo</span> -info *.a
+</span><span class='line'>Architectures in the fat file: libssl.a are: i386 armv7 armv7s
+</span><span class='line'>
+</span><span class='line'>; .framework
+</span><span class='line'><span class="nv">$cd</span> xxFramework.framework
+</span><span class='line'><span class="nv">$lipo</span> -info xxFramework
+</span><span class='line'>Architectures in the fat file: xxFramework are: armv7 armv7s i386
+</span></code></pre></td></tr></table></div></figure>
+
+
+
 
 <blockquote class='post_original_block'>
             原文作者：
