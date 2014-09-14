@@ -87,6 +87,56 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/">修复iOS中UIScrollView的scrollToTop设置后不生效的问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-13T15:15:04+08:00" pubdate data-updated="true">2014-01-13, Mon</time>
+        
+		
+          | <a href="/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>iOS中的<code>UIScrollView</code>有一个属性<code>scrollToTop</code>，设置为<code>YES</code>之后，点击设备的状态栏(StatusBar)即可将滚动试图的内容滚动到最顶端，在滚动列表很长的时候，这个特性十分有用。</p>
+
+<p>今日在使用这一属性的时候，发现部分情况下，一切正常；但是也有时候，点击状态栏，滚动条没反应！检查了代码，确定已经设置<code>scrollToTop = YES</code>，但是总是会有不起作用的情况。</p>
+
+<p>于是到万能的StackOverflow寻求答案，不失所望，找到了类似的问题：<a href="http://stackoverflow.com/questions/8951357/scroll-uitableview-to-top-when-tapping-top-of-the-screen">scroll UITableView to top when tapping top of the screen</a></p>
+
+<p>答案也解释得很清楚了，如下：</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/">通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6</a></h1>
     
     
@@ -485,7 +535,7 @@
 <li class='category'><a href='/blog/categories/godaddy/'>Godaddy (1)</a></li>
 <li class='category'><a href='/blog/categories/http/'>Http (1)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (2)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (3)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (4)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (5)</a></li>
 
@@ -494,6 +544,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/09/14/show-article-title-in-duoshuo-comment/">让Octopress博客侧边栏的多说评论显示文章标题</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/09/11/invalid-binary-the-binary-is-missing-architectures-arm64/">Invalid Binary, the Binary Is Missing Architectures[arm64] - iTunes Connect的Bug</a>
@@ -509,10 +563,6 @@
     
       <li class="post">
         <a href="/blog/2014/06/30/setup-a-simple-http-server-on-mac/">在Mac系统上简便地启用Http Server</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/11/two-github-account-in-one-client/">在一台电脑上使用两个Github账号</a>
       </li>
     
   </ul>

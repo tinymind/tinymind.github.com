@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-09-14T11:39:48+08:00</updated>
+  <updated>2014-09-14T16:34:16+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[让Octopress博客侧边栏的多说评论显示文章标题]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/09/14/show-article-title-in-duoshuo-comment/"/>
+    <updated>2014-09-14T16:02:58+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/09/14/show-article-title-in-duoshuo-comment</id>
+    <content type="html"><![CDATA[<p>基于Octopress的博客搭建，在<a href="http://blog.lessfun.com/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/">用Octopress在Github搭建博客，并绑定独立域名</a>里已经介绍过了，并且介绍了在侧边栏集成多说评论的方法。</p>
+
+<p>但是，有一处陷阱，一直坑了我好久，那就是，多说的最近评论里，被评论的文章标题与链接大多数时候是空的，但是偶尔又能正常显示，如图：<br/>
+<img src="http://blog.lessfun.com/images/2014/09/recent_comment_title.png" alt="多说最近评论" /></p>
+
+<!--more-->
+
+
+<p>一直以来，我都以为这是多说的Bug，默默期待着它有朝一日会自动修复。安静地等待了大半年之后……这个Bug依然深深地存在我的博客里。虽然用户评论不多，但是偶尔难得有一条新评论，但是我却不知道评论的是哪一篇文章，得从头到尾慢慢遍历所有文章才能找出来，这种感觉实在是太不好受了！！！</p>
+
+<p>我忍不住了，那么明显的Bug，多说不可能会那么久都不修复，一定是我的配置出了问题！于是，我检查了三遍<code>_config.yml</code>的内容：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>duoshuo_asides_title: 1 <span class="c">#显示评论的文章标题</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>配置是没问题的啊！！！<br/>
+估计靠个人力量是解决不了这个问题的了，于是我用上了万能的谷歌，在<a href="http://yrzhll.com/blog/2012/12/12/comment/">蝶姐的博客</a>中找到了原因与解决方法。</p>
+
+<h3>问题原因</h3>
+
+<p>多说默认没有传递文章标题，需要用户手动传递。</p>
+
+<h3>解决方法</h3>
+
+<p>修改<code>source/_includes/post/duoshuo.html</code>：</p>
+
+<p>将：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'> <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;ds-thread&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>改为：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'> <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;ds-thread&quot;</span> <span class="na">data-title=</span><span class="s">&quot;{ { page.title } }&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>rake genrate</code>重新生成一下，Done。</p>
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2014/09/14/show-article-title-in-duoshuo-comment/'>http://blog.lessfun.com/blog/2014/09/14/show-article-title-in-duoshuo-comment/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Invalid Binary, the Binary Is Missing Architectures[arm64] - iTunes Connect的Bug]]></title>
