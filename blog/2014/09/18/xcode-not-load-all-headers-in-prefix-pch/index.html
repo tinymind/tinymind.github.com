@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>比特币交易的一点感想 - 浮生猎趣</title>
+  <title>XCode无法正确import预编译文件.pch里的头文件 - 浮生猎趣</title>
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="比特币交易的一点感想，一入比特深似海，从此淡定是路人">
-  <meta name="keywords" content="bitcoin, 比特币, 交易">
+  <meta name="description" content="有时候用XCode打开Obj-C工程会遇到一些符号已经定义但是就是无法被识别的问题，比如在Prefix.pch预编译头文件中import的文件没有被全部加载。">
+  <meta name="keywords" content="xcode, objective-c, ios, macro, prefix.pch">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading">
+  <link rel="canonical" href="http://blog.lessfun.com/blog/2014/09/18/xcode-not-load-all-headers-in-prefix-pch">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
@@ -84,7 +84,7 @@
   
   <header>
     
-      <h1 class="entry-title">比特币交易的一点感想</h1>
+      <h1 class="entry-title">XCode无法正确import预编译文件.pch里的头文件</h1>
     
     
       <p class="meta">
@@ -100,7 +100,7 @@
   
 
 
-<time datetime="2013-12-13T10:14:00+08:00" pubdate data-updated="true">2013-12-13, Fri</time>
+<time datetime="2014-09-18T11:13:56+08:00" pubdate data-updated="true">2014-09-18, Thu</time>
         
 		
           | <a href="#comments">Comments</a>
@@ -110,36 +110,60 @@
   </header>
 
 
-<div class="entry-content"><p>我接触比特币比较晚，13年10月末才知道有比特币这个东西存在，当时是逛知乎，发现了这个问题：<a href="http://www.zhihu.com/question/19982269/answer/13554085">大三的学生，手头有6000元的钱，想要做些小投资赚点儿钱，有什么好建议么？</a></p>
-
-<p>该问题的答案如下：</p>
-
-<p><img src="/images/2013/12/bitcoin_trading_answer.png" alt="关于小投资的回答" /></p>
+<div class="entry-content"><p><img class="center" src="/images/2014/09/lessfun_xcode_reload_pch_1.png" title="lessfun_xcode_reload_pch_1" alt="lessfun_xcode_reload_pch_1"></p>
 
 <!--more-->
 
 
-<p>事实上，我在知乎上遇见了几次这条答案，但没放在心上，因为我不知道比特币是什么东西。后来，我看到这条回答的评论有很多，于是点开了评论，看到“收益率简直太疯狂了”，开始觉得这是个靠谱的可以让人致富的回答，于是，开始搜索比特币的资料。</p>
+<p>如图。我在<code>xx-Prefix.pch</code>预编译文件中添加了<code>#import "YYMacro.h"</code>，其中定义了一些公共常用的宏和常量。这样就不需要在每个源文件中再import一次，节省代码并且可以提高便以速度。</p>
 
-<p>然后就大概了解了比特币是什么东西，当然，对于其复杂的算法是不懂的，只知道，比特币是去中心化的总数量固定的可以无限分割的虚拟货币，本身无价值，靠众多持有者用现实货币交易而定价。</p>
+<p>大部分情况下，一切工作正常。但是，偶尔，XCode会出现一些Bug，导致无法完全加载pch里的头文件，而代码里用到的在Macro.h中定义的常量，全部被标识为未定义：</p>
 
-<p>由于本身无价值，导致它利润极高，如果在刚提出来的时候就开始了挖矿，成本几乎为零，等到交易价为现在的500+美元的时候卖出，收益翻了N倍。也由于本身无价值，靠交易者自由交易而定价，导致它风险极高，如果不是免费获得，而是通过现实货币买入，则很可能买入之后价格一路下降，血本无归……</p>
+<p><img class="center" src="/images/2014/09/lessfun_xcode_reload_pch_2.png" title="lessfun_xcode_reload_pch_2" alt="lessfun_xcode_reload_pch_2"></p>
 
-<p>风险与收益并存而且都那么高，所以，刚开始我是不准备买入的，因为那时候单个比特币的价格已经是200+美元了。不过我也相信这是一个会增值的虚拟货币，所以我开始寻找免费获得比特币的方法。然后就找到了一些点击广告获得赠送的比特币的方法，刚开始还好，三四天就可以收到0.0003个比特币。后来，单价上涨之后，免费获得的比特币越来越少，我终于绝望了。同时想到如果当初200美元买入了，那么现在就涨了几倍……于是决定直接买入。</p>
+<p>虽然不影响编译运行，但是却让代码可读性变得很差，无法正常自动补全。试过了以下方法：</p>
 
-<p>我用了3000元人民币，在两个平台分别充值1500，以4600和4700的价格买入。本想着长期持有等待升值的，但是，事实证明情绪没那么容易稳定。买入之后，看到单价上升，就会内心窃喜，同时有卖出再买入的打算；看到单价下降，忍不住彷徨紧张，后悔买入太早。这样一折腾，终于沦为短线操作。短线操作也有问题，如果买入之后，价格继续下跌，就会后悔买入太早；如果卖出之后价格上涨，就会后悔卖出太早。总之，一入比特深似海，从此安宁是路人。</p>
+<ul>
+<li>重启XCode</li>
+<li>Product &ndash; Clean</li>
+<li>Build &ndash; Run</li>
+</ul>
 
-<p>不过，几手交易下来，总值还是有所增长的，只是，心态不稳，收益只有几十块。后来看到莱特币利润更大，就在一个平台卖出比特币，买入莱特币。</p>
 
-<p>现在的情况是，分别在5800买入了比特币、在213.5买入了莱特币。此时（2013.12.15 15:50）比特币价格是5111元人民币，莱特币是175.33元人民币，也就是说，我开始赚到的那几十块亏了，本金也缩水不少，总投3000元，现值2760元。</p>
+<p>无果。<br/>
+摸索并搜索之后，找到了<a href="http://stackoverflow.com/questions/11840622/xcode-4-4-does-not-get-all-the-pch-file-headers-imports">解决方法</a>。</p>
 
-<p>也许过一段时间，价格还会涨回去。但是，实时关注价格走势，心情跟着一路起伏，严重影响身心健康。我开始怀疑是否值得进行虚拟货币交易。诚然，那么点钱，亏了也不是大问题，只是，赚了也不会发什么财。如论哪里，都是土豪的世界。</p>
+<h3>解决方法</h3>
+
+<h4>1. 打开DerivedData目录</h4>
+
+<p>打开<code>Window</code>&ndash;<code>Organizer</code>，点击<code>右箭头</code>：</p>
+
+<p><img class="center" src="/images/2014/09/lessfun_xcode_reload_pch_3.png" title="lessfun_xcode_reload_pch_3" alt="lessfun_xcode_reload_pch_3"></p>
+
+<h4>2. 定位到Index &ndash; PrecompiledHeaders</h4>
+
+<p><img class="center" src="/images/2014/09/lessfun_xcode_reload_pch_4.png" title="lessfun_xcode_reload_pch_4" alt="lessfun_xcode_reload_pch_4"></p>
+
+<h4>3. 删掉相关的预编译头文件目录</h4>
+
+<p>由于XCode打开的可能是Workspace，包含了多个工程，而大部分工程的pch工作正常，所以我们不需要删除整个<code>PrecompiledHeaders</code>，只需要删除无法正常工作的工程的相关目录，就是以工程名为前缀的那几个。</p>
+
+<h4>4. 重新编译</h4>
+
+<p>现在，一切又正常了。</p>
+
+<p><img class="center" src="/images/2014/09/lessfun_xcode_reload_pch_5.png" title="lessfun_xcode_reload_pch_5" alt="lessfun_xcode_reload_pch_5"></p>
+
+<h3>结论</h3>
+
+<p>与XCode相关的Bug，比如变量无法正确被加载，头文件没有被import，修改了xib文件但是在模拟器中不起作用，等等，都可以通过删除<code>DerivedData</code>的中间文件解决。</p>
 
 <blockquote class='post_original_block'>
             原文作者：
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
-            <a href='http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading/'>http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading/</a><br/>
+            <a href='http://blog.lessfun.com/blog/2014/09/18/xcode-not-load-all-headers-in-prefix-pch/'>http://blog.lessfun.com/blog/2014/09/18/xcode-not-load-all-headers-in-prefix-pch/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>
@@ -166,12 +190,12 @@
   
 
 
-<time datetime="2013-12-13T10:14:00+08:00" pubdate data-updated="true">2013-12-13, Fri</time>
+<time datetime="2014-09-18T11:13:56+08:00" pubdate data-updated="true">2014-09-18, Thu</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/bitcoin/'>Bitcoin</a>
+    <a class='category' href='/blog/categories/xcode/'>XCode</a>, <a class='category' href='/blog/categories/ios/'>iOS</a>
   
 </span>
 
@@ -187,10 +211,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/" title="Previous Post: iOS中检测UIScrollView滚动动画是否结束">&laquo; iOS中检测UIScrollView滚动动画是否结束</a>
+        <a class="basic-alignment left" href="/blog/2014/09/14/show-article-title-in-duoshuo-comment/" title="Previous Post: 让Octopress博客侧边栏的多说评论显示文章标题">&laquo; 让Octopress博客侧边栏的多说评论显示文章标题</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/" title="Next Post: 通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6">通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6 &raquo;</a>
       
     </p>
   </footer>
@@ -200,7 +222,7 @@
   <section>
     <h1>发表评论</h1>
     <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
-	<div class="ds-thread" data-title="比特币交易的一点感想"></div>
+	<div class="ds-thread" data-title="XCode无法正确import预编译文件.pch里的头文件"></div>
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"lsfun"};
 	(function() {

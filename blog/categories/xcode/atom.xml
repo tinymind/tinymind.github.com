@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: XCode | 浮生猎趣]]></title>
+  <link href="http://blog.lessfun.com/blog/categories/xcode/atom.xml" rel="self"/>
+  <link href="http://blog.lessfun.com/"/>
+  <updated>2014-09-18T11:57:24+08:00</updated>
+  <id>http://blog.lessfun.com/</id>
+  <author>
+    <name><![CDATA[lslin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[XCode无法正确import预编译文件.pch里的头文件]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/09/18/xcode-not-load-all-headers-in-prefix-pch/"/>
+    <updated>2014-09-18T11:13:56+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/09/18/xcode-not-load-all-headers-in-prefix-pch</id>
+    <content type="html"><![CDATA[<p><img class="center" src="/images/2014/09/lessfun_xcode_reload_pch_1.png" title="&lsquo;lessfun_xcode_reload_pch_1&rsquo; &lsquo;lessfun_xcode_reload_pch_1&rsquo;" ></p>
+
+<!--more-->
+
+
+<p>如图。我在<code>xx-Prefix.pch</code>预编译文件中添加了<code>#import "YYMacro.h"</code>，其中定义了一些公共常用的宏和常量。这样就不需要在每个源文件中再import一次，节省代码并且可以提高便以速度。</p>
+
+<p>大部分情况下，一切工作正常。但是，偶尔，XCode会出现一些Bug，导致无法完全加载pch里的头文件，而代码里用到的在Macro.h中定义的常量，全部被标识为未定义：</p>
+
+<p><img class="center" src="/images/2014/09/lessfun_xcode_reload_pch_2.png" title="&lsquo;lessfun_xcode_reload_pch_2&rsquo; &lsquo;lessfun_xcode_reload_pch_2&rsquo;" ></p>
+
+<p>虽然不影响编译运行，但是却让代码可读性变得很差，无法正常自动补全。试过了以下方法：</p>
+
+<ul>
+<li>重启XCode</li>
+<li>Product &ndash; Clean</li>
+<li>Build &ndash; Run</li>
+</ul>
+
+
+<p>无果。<br/>
+摸索并搜索之后，找到了<a href="http://stackoverflow.com/questions/11840622/xcode-4-4-does-not-get-all-the-pch-file-headers-imports">解决方法</a>。</p>
+
+<h3>解决方法</h3>
+
+<h4>1. 打开DerivedData目录</h4>
+
+<p>打开<code>Window</code>&ndash;<code>Organizer</code>，点击<code>右箭头</code>：</p>
+
+<p><img class="center" src="/images/2014/09/lessfun_xcode_reload_pch_3.png" title="&lsquo;lessfun_xcode_reload_pch_3&rsquo; &lsquo;lessfun_xcode_reload_pch_3&rsquo;" ></p>
+
+<h4>2. 定位到Index &ndash; PrecompiledHeaders</h4>
+
+<p><img class="center" src="/images/2014/09/lessfun_xcode_reload_pch_4.png" title="&lsquo;lessfun_xcode_reload_pch_4&rsquo; &lsquo;lessfun_xcode_reload_pch_4&rsquo;" ></p>
+
+<h4>3. 删掉相关的预编译头文件目录</h4>
+
+<p>由于XCode打开的可能是Workspace，包含了多个工程，而大部分工程的pch工作正常，所以我们不需要删除整个<code>PrecompiledHeaders</code>，只需要删除无法正常工作的工程的相关目录，就是以工程名为前缀的那几个。</p>
+
+<h4>4. 重新编译</h4>
+
+<p>现在，一切又正常了。</p>
+
+<p><img class="center" src="/images/2014/09/lessfun_xcode_reload_pch_5.png" title="&lsquo;lessfun_xcode_reload_pch_5&rsquo; &lsquo;lessfun_xcode_reload_pch_5&rsquo;" ></p>
+
+<h3>结论</h3>
+
+<p>与XCode相关的Bug，比如变量无法正确被加载，头文件没有被import，修改了xib文件但是在模拟器中不起作用，等等，都可以通过删除<code>DerivedData</code>的中间文件解决。</p>
+]]></content>
+  </entry>
+  
+</feed>
