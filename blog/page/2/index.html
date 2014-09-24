@@ -87,6 +87,59 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/03/18/get-dll-path-at-runtime/">在程序运行时获取被调用的DLL的本地文件路径</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-18T17:42:46+08:00" pubdate data-updated="true">2014-03-18, Tue</time>
+        
+		
+          | <a href="/blog/2014/03/18/get-dll-path-at-runtime/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>很多时候，DLL都是被别的进程所调用，所以在运行时，下面方法获取到的实际上是EXE所在的文件路径：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">QCoreApplication</span><span class="o">::</span><span class="n">applicationFilePath</span><span class="p">();</span><span class="c1">//Qt</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是我们实际上想要获得的是DLL本身的路径，因为运行的EXE与被调用的DLL不一定在同一个目录，比如，当把abc.dll注入到notepad.exe进程，很明显abc.dll是不在notepad所在的目录的。在dll代码中调用上述语句，返回的实际上是notepad的EXE路径。</p>
+
+<p>那么，我们要获得abc.dll真实路径，有两个方法。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/03/18/get-dll-path-at-runtime/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller/">在UINavigationController中使用UITabBarController，处理Two-stage Rotation错误</a></h1>
     
     
@@ -587,13 +640,17 @@
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (4)</a></li>
 <li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
 <li class='category'><a href='/blog/categories/xcode/'>XCode (1)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (6)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (7)</a></li>
 
   </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/09/24/ios8-issue-keyboard-orientation-and-idletimerdisabled-not-working/">App适配iOS8遇到的兼容问题：键盘方向与StatusBar方向不一致，阻止锁屏失效，OpenGL崩溃</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/09/18/xcode-not-load-all-headers-in-prefix-pch/">XCode无法正确import预编译文件.pch里的头文件</a>
@@ -609,10 +666,6 @@
     
       <li class="post">
         <a href="/blog/2014/08/28/to-achieve-financial-freedom/">从储蓄罐到实现财务自由</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/">在Godaddy上使用PHPMailer通过SMTP发送邮件的方法</a>
       </li>
     
   </ul>

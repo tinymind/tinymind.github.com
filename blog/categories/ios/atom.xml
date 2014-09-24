@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-09-18T12:09:43+08:00</updated>
+  <updated>2014-09-24T16:36:27+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,163 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[App适配iOS8遇到的兼容问题：键盘方向与StatusBar方向不一致，阻止锁屏失效，OpenGL崩溃]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/09/24/ios8-issue-keyboard-orientation-and-idletimerdisabled-not-working/"/>
+    <updated>2014-09-24T13:59:29+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/09/24/ios8-issue-keyboard-orientation-and-idletimerdisabled-not-working</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/2014/09/lessfun_ios8_adapt.png" title="&lsquo;ios8 adapt&rsquo; &lsquo;ios8 adapt&rsquo;" >
+苹果正式发布iOS8系统，到现在安装覆盖率已达48%，而iOS7的安装率是49%。所以，各位开发者又有得忙了，把所有的App都升级并适配到iOS8系统可不是一件轻松的事。</p>
+
+<p>下面罗列一下我在适配iOS8过程中遇到的兼容问题——而同样的代码在iOS6/7是完全没问题的。</p>
+
+<!--more-->
+
+
+<h2>1. 键盘弹出方向与StatusBar方向不一致</h2>
+
+<p>在App中，第一个ViewController是只支持竖屏方向(Portrait)的，切换到第二个页面，默认也是Portrait，但用户可以点击按钮切换为横屏(Landscape)。</p>
+
+<p>所以，我把App-Info.plist只选中了<code>Portrait</code>一项，并且在<code>Root ViewController</code>重载了以下方法：</p>
+
+<p>``` c</p>
+
+<pre><code>- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationPortrait;
+}
+</code></pre>
+
+<p>```</p>
+
+<p>然后在需要切换到横屏的时候，调用以下代码：</p>
+
+<p>``` c</p>
+
+<ul>
+<li>(void)onFullScreenButtonTouchUpInside:(id)sender
+{
+  [self adjustViewFrameToFullScreen];
+  [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];
+}</li>
+</ul>
+
+
+<p>```</p>
+
+<p>由于在iOS6、7中，键盘方向是跟随状态栏方向的，所以一切表现正常，横屏下，无论设备方向怎样，键盘都是横着弹出。</p>
+
+<p>但是，在iOS8中，键盘却随着设备方向弹出了。换言之，<strong>即使Interface Orientation为Landscape，但Device Orientation为Portrait，键盘就会以Portrait的方向弹出</strong>。<br/>
+如下图：</p>
+
+<p><img class="center" src="/images/2014/09/lessfun_ios8_adapt_keyboard.png" title="&lsquo;ios8 adapt keyboard&rsquo; &lsquo;ios8 adapt keyboard&rsquo;" ></p>
+
+<h3>1.1 解决方法</h3>
+
+<p>我想要的是键盘不管设备方向，只关注状态栏方向，也就是StatusBarOrientation。由于iOS8新出不久，在网上没找到解决方案。后来我一同事发现手动更改设备方向可以解决这一问题：</p>
+
+<p>``` c</p>
+
+<ul>
+<li>(void)onFullScreenButtonTouchUpInside:(id)sender
+{
+  [self adjustViewFrameToFullScreen];
+  [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];
+  //改设备方向
+  if (IsIOS8) {
+      [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:@&ldquo;orientation&rdquo;];
+  }
+}</li>
+</ul>
+
+
+<p>```</p>
+
+<h2>2. 禁用屏幕自动锁定失效</h2>
+
+<p>本来，防止屏幕锁定只需一句代码：</p>
+
+<p>``` c</p>
+
+<pre><code>[[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+</code></pre>
+
+<p>```</p>
+
+<p>但是，在iOS8中，偶尔会失效。测试人员发现了这个问题是在弹出键盘点击发送后必现，而原因不明。因为键盘出现与隐藏，理论上不应该影响这个<code>idleTimerDisabled</code>的属性。暂且认为是iOS8的Bug吧。</p>
+
+<h3>2.1 解决方法</h3>
+
+<p>在键盘收起的时候，重设<code>IdleTimerDisabled</code>。</p>
+
+<p>``` c</p>
+
+<pre><code>- (void)onKeyboardDidHide:(NSNotification *)notification
+{
+    if (IsIOS8) {
+        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    }
+}
+</code></pre>
+
+<p>```</p>
+
+<h2>3. OpenGL ES渲染时崩溃</h2>
+
+<p>在iOS中使用OpenGL ES渲染，切换到后台时需要停止渲染，否则会引起崩溃。见这里：<a href="https://developer.apple.com/library/ios/qa/qa1766/_index.html">How to fix OpenGL ES application crashes when moving to the background</a></p>
+
+<p>但是在iOS8中，即使不是切换到后台，而是通过<code>NavigationController</code>切换到另一个ViewController再切回来，也会引起崩溃，崩溃点在：</p>
+
+<p>``` c</p>
+
+<pre><code>[EAGLContext presentRenderbuffer:GL_RENDERBUFFER];
+</code></pre>
+
+<p>```</p>
+
+<p>猜测可能是，在iOS 8中，如果OpenGL的视图如果切换到不可见的ViewController，也需要停止绘制，否则也会引起在后台渲染OpenGL类似的崩溃。</p>
+
+<h3>3.1 解决方法</h3>
+
+<p>在ViewWillDisapper的时候停止渲染。</p>
+
+<p>``` c</p>
+
+<pre><code>- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    if (_videoView &amp;&amp; IsIOS8) {
+        [_videoView pauseVideo];
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    if (_videoView &amp;&amp; IsIOS8) {
+        [_videoView resumeVideo];
+    }
+}
+</code></pre>
+
+<p>```</p>
+
+<p>iOS的兼容真是个蛋疼的问题。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[XCode无法正确import预编译文件.pch里的头文件]]></title>
@@ -200,80 +357,6 @@ return YES;
 </code></p>
 
 <p>所以我们需要显示设置其他的<code>scrollView.scrollToTop = NO</code>。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/"/>
-    <updated>2014-01-10T15:07:24+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7</id>
-    <content type="html"><![CDATA[<h3>设置view从导航栏下方开始布局</h3>
-
-<p>在iOS6及以前的版本中，UIViewController的高度和位置都是从导航栏下方开始的。但是在iOS7中，UIViewController不再提供wantsFullScreenLayout属性，UIViewController创建后默认就是Full Screen的，因此如果带导航栏的应用界面中的部分控件会与导航栏重叠在一起。</p>
-
-<p>我们的应用大都要兼容低于iOS7的版本，所以必须解决这种不兼容的现象。
-思路是，还是按照iOS6的布局方式，因为被导航栏覆盖部分界面实在看不出有什么好处。所以，我们需要判断iOS版本，如果是iOS6，一切照旧，如果是iOS7，则设置view从导航栏下方开始布局。</p>
-
-<p>简单的方法，在ViewDidLoad里面增加几句代码即可，如下：</p>
-
-<!--more-->
-
-
-<p>``` cpp</p>
-
-<p> #define SystemVersionLessThan(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)</p>
-
-<ul>
-<li><p>(void)viewDidLoad
-{
-[super viewDidLoad];</p>
-
-<p>if (!SystemVersionLessThan(@&ldquo;7.0&rdquo;)) {
-  self.edgesForExtendedLayout = UIRectEdgeNone;
-  self.extendedLayoutIncludesOpaqueBars = NO;
-}
-}
-```</p></li>
-</ul>
-
-
-<p>这样设置之后，可以看到在iOS7中布局跟iOS显示一样了。</p>
-
-<p>如果有很多个UIViewController，只需要新建一个UIViewController的子类，比如<code>MyUIViewController</code>，把上面代码放到MyUIViewController的<code>ViewDidLoad</code>中，然后修改所有的UIViewController为MyUIViewController即可。</p>
-
-<h3>修改iOS7中UITableViewCell的分隔线</h3>
-
-<p>只是还有一个问题，如果添加了UITableView，会发现cell的分隔线短了一小部分，还需设置如下：</p>
-
-<p><code>cpp
-  self.tableView.separatorInset = UIEdgeInsetsZero;
-</code></p>
-
-<p>修改后的效果如图：
-iOS6：<br/>
-<img src="/images/2014/01/ios_adjust_ios6.png" alt="ios_adjust_ios6" /></p>
-
-<p>iOS7:<br/>
-<img src="/images/2014/01/ios_adjust_ios7.png" alt="ios_adjust_ios6" /></p>
-
-<p>iOS7表格分隔线：<br/>
-<img src="/images/2014/01/ios_adjust_ios7_tableviewcell.png" alt="ios_adjust_ios6" /></p>
-
-<p>搞定！</p>
-
-<h3>去掉iOS6中导航栏的阴影</h3>
-
-<p>iOS6的UINavigationBar默认加了一层阴影，而iOS7中则默认没有，我们可以通过下面的代码去掉iOS6的导航栏阴影：</p>
-
-<p>``` cpp
-  if (!SystemVersionLessThan(@&ldquo;6.0&rdquo;)) {</p>
-
-<pre><code>  [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-</code></pre>
-
-<p>  }
-```</p>
 ]]></content>
   </entry>
   
