@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-09-24T16:36:27+08:00</updated>
+  <updated>2014-10-15T19:42:06+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,57 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS通过宏定义快速调整View的Frame]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/10/15/ios-adjust-view-frame-quickly-with-macro/"/>
+    <updated>2014-10-15T18:45:03+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/10/15/ios-adjust-view-frame-quickly-with-macro</id>
+    <content type="html"><![CDATA[<p>在iOS开发中，经常需要在运行时动态修改View Frame，比如，theView的X坐标右移2个点，Y坐标下移2个点，常用的方法如下：</p>
+
+<p>``` c</p>
+
+<pre><code>CGRect newFrame = self.theView.frame;
+newFrame.origin.x += 2;
+newFrame.origin.y += 2;
+self.theView.frame = newFrame;
+</code></pre>
+
+<p>```</p>
+
+<p>逻辑很简单，就是代码繁琐了点，设想一下，假如有5个以上的子View需要调整位置与大小……</p>
+
+<!--more-->
+
+
+<h3>解决方法</h3>
+
+<p>也很简单，就是封装为通用的宏，或者方法(有些人比较反感C语言样式的宏定义)。</p>
+
+<p>``` c</p>
+
+<pre><code>#define CGRectAdjust(r, x1, y1, w1, h1)    CGRectMake(r.origin.x + x1, r.origin.y + y1,  r.size.width + w1, r.size.height + h1)
+#define CGRectSetSize(r, w, h)    CGRectMake(r.origin.x, r.origin.y, w, h)
+#define CGRectSetOrigin(r, x, y)    CGRectMake(x, y, r.size.width, r.size.height)
+
+#define ViewAdjustFrame(view, x1, y1, w1, h1)   view.frame = CGRectAdjust(view.frame, x1, y1, w1, h1)
+#define ViewSetSize(view, w, h)   view.frame = CGRectSetSize(view.frame, w, h)
+#define ViewSetOrigin(view, x, y)   view.frame = CGRectSetOrigin(view.frame, x, y)
+</code></pre>
+
+<p>```</p>
+
+<p>然后，就可以这样调整UIView的Frame了：</p>
+
+<p>``` c</p>
+
+<pre><code>//大小不变，位置往右下方移动2个点
+ViewAdjustFrame(theView, 2, 2, 0, 0);
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[App适配iOS8遇到的兼容问题：键盘方向与StatusBar方向不一致，阻止锁屏失效，OpenGL崩溃]]></title>
@@ -330,33 +381,6 @@ return YES;
 <p>运行效果：</p>
 
 <p><img src="/images/2014/01/ios_tabbar_running.png" alt="ios_tabbar_running" /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[修复iOS中UIScrollView的scrollToTop设置后不生效的问题]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/"/>
-    <updated>2014-01-13T15:15:04+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working</id>
-    <content type="html"><![CDATA[<p>iOS中的<code>UIScrollView</code>有一个属性<code>scrollToTop</code>，设置为<code>YES</code>之后，点击设备的状态栏(StatusBar)即可将滚动试图的内容滚动到最顶端，在滚动列表很长的时候，这个特性十分有用。</p>
-
-<p>今日在使用这一属性的时候，发现部分情况下，一切正常；但是也有时候，点击状态栏，滚动条没反应！检查了代码，确定已经设置<code>scrollToTop = YES</code>，但是总是会有不起作用的情况。</p>
-
-<p>于是到万能的StackOverflow寻求答案，不失所望，找到了类似的问题：<a href="http://stackoverflow.com/questions/8951357/scroll-uitableview-to-top-when-tapping-top-of-the-screen">scroll UITableView to top when tapping top of the screen</a></p>
-
-<p>答案也解释得很清楚了，如下：</p>
-
-<!--more-->
-
-
-<p>如果同一个UIViewController中包含了多个UIScrollView，那么只能有一个ScrollView被设置为scrollToTop = YES; 另外的都要设置为NO，否则就会被系统忽略。
-比较坑爹的是，该属性默认为YES，在<code>UIScrollView.h</code>中可以看到声明如下：</p>
-
-<p><code>cpp
-  @property(nonatomic) BOOL  scrollsToTop;  // default is YES.
-</code></p>
-
-<p>所以我们需要显示设置其他的<code>scrollView.scrollToTop = NO</code>。</p>
 ]]></content>
   </entry>
   

@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>在一台电脑上使用两个Github账号 - 浮生猎趣</title>
+  <title>iOS通过宏定义快速调整View的Frame - 浮生猎趣</title>
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="有时候我们需要在一台电脑上push到两个github的repo，但是默认情况github只适用一个账号。本文介绍了如何在一台电脑使用两个Github提交更改的方法。">
-  <meta name="keywords" content="Github, ssh-key, Mac">
+  <meta name="description" content="在iOS开发中，使用宏定义快速调整View的Frame">
+  <meta name="keywords" content="iOS, Macro, UIView, Frame, Adjust">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.lessfun.com/blog/2014/06/11/two-github-account-in-one-client">
+  <link rel="canonical" href="http://blog.lessfun.com/blog/2014/10/15/ios-adjust-view-frame-quickly-with-macro">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
@@ -84,7 +84,7 @@
   
   <header>
     
-      <h1 class="entry-title">在一台电脑上使用两个Github账号</h1>
+      <h1 class="entry-title">iOS通过宏定义快速调整View的Frame</h1>
     
     
       <p class="meta">
@@ -100,7 +100,7 @@
   
 
 
-<time datetime="2014-06-11T01:30:09+08:00" pubdate data-updated="true">2014-06-11, Wed</time>
+<time datetime="2014-10-15T18:45:03+08:00" pubdate data-updated="true">2014-10-15, Wed</time>
         
 		
           | <a href="#comments">Comments</a>
@@ -110,43 +110,27 @@
   </header>
 
 
-<div class="entry-content"><p>有时候我们需要在一台电脑上push到两个github的repo，但是默认情况Github只适用一个账号。本文介绍了如何在一台电脑使用两个Github提交更改的方法。</p>
+<div class="entry-content"><p>在iOS开发中，经常需要在运行时动态修改View Frame，比如，theView的X坐标右移2个点，Y坐标下移2个点，常用的方法如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'>    <span class="n">CGRect</span> <span class="n">newFrame</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">theView</span><span class="p">.</span><span class="n">frame</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">newFrame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">newFrame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">theView</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">newFrame</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>逻辑很简单，就是代码繁琐了点，设想一下，假如有5个以上的子View需要调整位置与大小……</p>
 
 <!--more-->
 
 
-<p>前提：你已经在使用github的A账号，其ssh-key保存在~/.ssh/id_rsa中。<br/>
-现在，需要做的是添加另一个ssh-key，按照以下步骤操作。</p>
+<h3>解决方法</h3>
 
-<h4>1. 生成新的ssh-key</h4>
-
-<p>保存的时候，输入一个新的文件名，如：id_rsa_second</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ssh</span>-keygen -t rsa -C <span class="s2">&quot;your_email@example.com&quot;</span>
-</span><span class='line'>    <span class="c"># Creates a new ssh key, using the provided email as a label</span>
-</span><span class='line'>    <span class="c"># Generating public/private rsa key pair.</span>
-</span><span class='line'>    <span class="c"># Enter file in which to save the key (/Users/you/.ssh/id_rsa_second): [Press enter]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>2. 添加到ssh-agent（每次重启之后都需要调用这句）</h4>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ssh</span>-add ~/.ssh/id_rsa_second
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>3. 添加ssh key到github</h4>
-
-<p>见<a href="https://help.github.com/articles/generating-ssh-keys">配置ssh-key</a>。</p>
-
-<h4>4. 配置多个ssh-key</h4>
-
-<p>修改<code>~/.ssh/config</code>文件，如下：</p>
+<p>也很简单，就是封装为通用的宏，或者方法(有些人比较反感C语言样式的宏定义)。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -155,57 +139,32 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="c">#default github</span>
-</span><span class='line'>    Host github.com
-</span><span class='line'>      HostName github.com
-</span><span class='line'>      IdentityFile ~/.ssh/id_rsa
+</pre></td><td class='code'><pre><code class='c'><span class='line'>    <span class="err">#</span><span class="n">define</span> <span class="n">CGRectAdjust</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">w1</span><span class="p">,</span> <span class="n">h1</span><span class="p">)</span>    <span class="n">CGRectMake</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">x1</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">y1</span><span class="p">,</span>  <span class="n">r</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">w1</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">+</span> <span class="n">h1</span><span class="p">)</span>
+</span><span class='line'>    <span class="err">#</span><span class="n">define</span> <span class="n">CGRectSetSize</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>    <span class="n">CGRectMake</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+</span><span class='line'>    <span class="err">#</span><span class="n">define</span> <span class="n">CGRectSetOrigin</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>    <span class="n">CGRectMake</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">)</span>
 </span><span class='line'>
-</span><span class='line'>    Host github_second
-</span><span class='line'>      HostName github.com
-</span><span class='line'>      IdentityFile ~/.ssh/id_rsa_second
-</span><span class='line'>
+</span><span class='line'>    <span class="err">#</span><span class="n">define</span> <span class="n">ViewAdjustFrame</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">w1</span><span class="p">,</span> <span class="n">h1</span><span class="p">)</span>   <span class="n">view</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">CGRectAdjust</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">w1</span><span class="p">,</span> <span class="n">h1</span><span class="p">)</span>
+</span><span class='line'>    <span class="err">#</span><span class="n">define</span> <span class="n">ViewSetSize</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>   <span class="n">view</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">CGRectSetSize</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+</span><span class='line'>    <span class="err">#</span><span class="n">define</span> <span class="n">ViewSetOrigin</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>   <span class="n">view</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">CGRectSetOrigin</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>5. 使用别名pull/push代码</h4>
-
-<p>如：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>    git clone git@github_second:username/reponame
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>6. 为每个账号对应的项目配置email/name</h4>
+<p>然后，就可以这样调整UIView的Frame了：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>    1.取消global
-</span><span class='line'>    git config --global --unset user.name
-</span><span class='line'>    git config --global --unset user.email
-</span><span class='line'>
-</span><span class='line'>    2.设置每个项目repo的自己的user.email
-</span><span class='line'>    git config  user.email <span class="s2">&quot;xxxx@xx.com&quot;</span>
-</span><span class='line'>    git config  user.name <span class="s2">&quot;xxxx&quot;</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'>    <span class="c1">//大小不变，位置往右下方移动2个点</span>
+</span><span class='line'>    <span class="n">ViewAdjustFrame</span><span class="p">(</span><span class="n">theView</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p></p>
 
-<p>这样，以后每次在相应的repo下提交更改，都会自动匹配相应的ssh-key了。</p>
 
 <blockquote class='post_original_block'>
             原文作者：
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
-            <a href='http://blog.lessfun.com/blog/2014/06/11/two-github-account-in-one-client/'>http://blog.lessfun.com/blog/2014/06/11/two-github-account-in-one-client/</a><br/>
+            <a href='http://blog.lessfun.com/blog/2014/10/15/ios-adjust-view-frame-quickly-with-macro/'>http://blog.lessfun.com/blog/2014/10/15/ios-adjust-view-frame-quickly-with-macro/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>
@@ -232,12 +191,12 @@
   
 
 
-<time datetime="2014-06-11T01:30:09+08:00" pubdate data-updated="true">2014-06-11, Wed</time>
+<time datetime="2014-10-15T18:45:03+08:00" pubdate data-updated="true">2014-10-15, Wed</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/github/'>Github</a>, <a class='category' href='/blog/categories/mac/'>Mac</a>
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
   
 </span>
 
@@ -253,10 +212,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/05/20/clone-exists-octopress-blog-to-new-mac/" title="Previous Post: 将已存在的Octopress博客部署到一台新机器(OSX)">&laquo; 将已存在的Octopress博客部署到一台新机器(OSX)</a>
+        <a class="basic-alignment left" href="/blog/2014/09/24/ios8-issue-keyboard-orientation-and-idletimerdisabled-not-working/" title="Previous Post: App适配iOS8遇到的兼容问题：键盘方向与StatusBar方向不一致，阻止锁屏失效，OpenGL崩溃">&laquo; App适配iOS8遇到的兼容问题：键盘方向与StatusBar方向不一致，阻止锁屏失效，OpenGL崩溃</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/06/30/setup-a-simple-http-server-on-mac/" title="Next Post: 在Mac系统上简便地启用Http Server">在Mac系统上简便地启用Http Server &raquo;</a>
       
     </p>
   </footer>
@@ -266,7 +223,7 @@
   <section>
     <h1>发表评论</h1>
     <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
-	<div class="ds-thread" data-title="在一台电脑上使用两个Github账号"></div>
+	<div class="ds-thread" data-title="iOS通过宏定义快速调整View的Frame"></div>
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"lsfun"};
 	(function() {
