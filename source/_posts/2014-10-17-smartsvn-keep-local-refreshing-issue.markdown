@@ -5,7 +5,7 @@ date: 2014-10-17 11:00:22 +0800
 comments: true
 categories: [SVN]
 tags: [SmartSVN, SVN, MacOS]
-keywords: SmartSVN, SVN, MacOS
+keywords: SmartSVN, SVN, MacOS, SSLv3
 description: Mac系统下，SmartSVN 7.5.5一直是Local Refreshing状态，却无法Update/Commit/Check Out的解决方法
 ---
 
@@ -38,4 +38,10 @@ SmartSVN有两个版本，专业版和基础版。专业版可以免费试用30�
 实在是后知后觉啊，既然你那么Smart，就不能在出问题的时候直接弹提示吗？非得等到人家摸索并安装了最新版后才弹这个。
 
 好消息是，安装8.6版本后，问题解决。
+
+###更新：
+
+SmartSVN更新不了，问题不在于客户端本身，而是svn server端禁用了SSLv3引起的，为了避免这个问题： https://poodle.io/
+
+至于为什么更新为SmartSVN 8.6之后，问题解决，是因为8.6版本内置的是svn1.8，在SSLv3无法连接的时候，可能自动切换为tlsv模式。
 
