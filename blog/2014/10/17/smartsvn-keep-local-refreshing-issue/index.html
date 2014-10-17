@@ -10,7 +10,7 @@
 
   
   <meta name="description" content="Mac系统下，SmartSVN 7.5.5一直是Local Refreshing状态，却无法Update/Commit/Check Out的解决方法">
-  <meta name="keywords" content="SmartSVN, SVN, MacOS">
+  <meta name="keywords" content="SmartSVN, SVN, MacOS, SSLv3">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -139,6 +139,12 @@
 
 <p>好消息是，安装8.6版本后，问题解决。</p>
 
+<h3>更新：</h3>
+
+<p>SmartSVN更新不了，问题不在于客户端本身，而是svn server端禁用了SSLv3引起的，为了避免这个问题： <a href="https://poodle.io/">https://poodle.io/</a></p>
+
+<p>至于为什么更新为SmartSVN 8.6之后，问题解决，是因为8.6版本内置的是svn1.8，在SSLv3无法连接的时候，可能自动切换为tlsv模式。</p>
+
 <blockquote class='post_original_block'>
             原文作者：
             <a href='http://blog.lessfun.com'>lslin</a><br/>
@@ -194,6 +200,8 @@
         <a class="basic-alignment left" href="/blog/2014/10/15/ios-adjust-view-frame-quickly-with-macro/" title="Previous Post: iOS通过宏定义快速调整View的Frame">&laquo; iOS通过宏定义快速调整View的Frame</a>
       
       
+        <a class="basic-alignment right" href="/blog/2014/10/17/ios-autolayout-vs-autosizing/" title="Next Post: iOS AutoLayout与AutoSizing：自动布局，想说爱你真的好难">iOS AutoLayout与AutoSizing：自动布局，想说爱你真的好难 &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -224,7 +232,8 @@ var duoshuoQuery = {short_name:"lsfun"};
   
     <section>
 <h1>About Me</h1>
-<p>一个程序员只会写代码是不够的，他还应该拥有一个分享的博客。<br>——王小波</br></p>
+<p>一个程序员只会写代码是不够的，他还应该拥有一个分享的博客。<br>——王小波<br></p>
+<p>C++、iOS开发工程师，现就职于广州欢聚时代。<br></p>
 <p><a href="http://like.lessfun.com">大众点赞：沉迷的大多数</a></p>
 </section>
 <section>
@@ -242,13 +251,17 @@ var duoshuoQuery = {short_name:"lsfun"};
 <li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
 <li class='category'><a href='/blog/categories/svn/'>SVN (1)</a></li>
 <li class='category'><a href='/blog/categories/xcode/'>XCode (1)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (8)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (9)</a></li>
 
   </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/10/17/ios-autolayout-vs-autosizing/">iOS AutoLayout与AutoSizing：自动布局，想说爱你真的好难</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/10/17/smartsvn-keep-local-refreshing-issue/">SmartSVN一直是Local Refreshing状态，却无法Update/Commit/Check Out</a>
@@ -264,10 +277,6 @@ var duoshuoQuery = {short_name:"lsfun"};
     
       <li class="post">
         <a href="/blog/2014/09/18/xcode-not-load-all-headers-in-prefix-pch/">XCode无法正确import预编译文件.pch里的头文件</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/14/show-article-title-in-duoshuo-comment/">让Octopress博客侧边栏的多说评论显示文章标题</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-10-17T11:23:04+08:00</updated>
+  <updated>2014-10-17T18:31:20+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS AutoLayout与AutoSizing：自动布局，想说爱你真的好难]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/10/17/ios-autolayout-vs-autosizing/"/>
+    <updated>2014-10-17T14:31:20+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/10/17/ios-autolayout-vs-autosizing</id>
+    <content type="html"><![CDATA[<p>在iPhone Retina发布之前，还没有AutoLayout，因为屏幕只有一种尺寸。<br/>
+当iPhone Retina发布之后，我没有用上AutoLayout，因为屏幕尺寸是用点来表示，布局写起来没什么不同。<br/>
+当iPhone 5发布之后，屏幕尺寸终于加长了，但是由于有AutoSizing，所以我还是可以不用AutoLayout。<br/>
+现在，iPhone 6和6 Plus发布了，屏幕又大了，我不得不开始考虑是否要使用AutoLayout。</p>
+
+<!--more-->
+
+
+<p>未完待续。</p>
+
+<h3>参考链接</h3>
+
+<ul>
+<li><a href="http://www.raywenderlich.com/50317/beginning-auto-layout-tutorial-in-ios-7-part-1">Beginning Auto Layout Tutorial in iOS 7: Part 1</a></li>
+<li><a href="http://www.raywenderlich.com/50319/beginning-auto-layout-tutorial-in-ios-7-part-2">Beginning Auto Layout Tutorial in iOS 7: Part 2</a></li>
+<li><a href="http://www.cocoachina.com/industry/20131203/7462.html">开始iOS 7中自动布局教程 一</a></li>
+<li><a href="http://www.cnblogs.com/zer0Black/p/3977288.html">开始iOS 7中自动布局教程 二</a></li>
+<li><a href="http://segmentfault.com/blog/ilikewhite/1190000000646452">从此爱上iOS Autolayout</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS通过宏定义快速调整View的Frame]]></title>
@@ -326,61 +354,6 @@ $lipo -info xxFramework
 Architectures in the fat file: xxFramework are: armv7 armv7s i386</p>
 
 <p>```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[在UINavigationController中使用UITabBarController，处理Two-stage Rotation错误]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller/"/>
-    <updated>2014-01-15T12:12:51+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller</id>
-    <content type="html"><![CDATA[<p>写iOS应用时，经常需要将UITabBarController嵌入到一个根UINavigationController中，如果处理不好，我们会遇到这样的错误：</p>
-
-<pre><code>Two-stage rotation animation is deprecated. This application should use the smoother single-stage animation.
-</code></pre>
-
-<p>网上找了一下，StackOverFlow的<a href="http://stackoverflow.com/a/6637554">这个答案</a>说，不应该将UITabBarControllier嵌入到UINavigationController中作为rootViewController，但是，我们的确想要这样做，所以只好寻找其它办法。不过，至少我们可以确定的是，问题出在rootViewController同时包含UITabBarController和UINavigationController。</p>
-
-<!--more-->
-
-
-<p>几经尝试，最后发现，在设置为<code>window.rootViewController</code>之前，先指定<code>tabBarController.selectedIndex = 0</code>，问题解决。</p>
-
-<p>可以得出，出现上述错误，是因为XCode不知道你需要push哪个子viewController，在加载navigationController的时候，不知道要载入哪一个controller，于是无脑的将tabBarController的viewControllers都动画载入了。</p>
-
-<p>完整代码如下：</p>
-
-<p>``` cpp
-&ndash; (BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary </em>)launchOptions
-{</p>
-
-<pre><code>self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-
-UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-
-UINavigationController *navVC = [storyBoard instantiateInitialViewController];
-//MainViewController是UITabBarController的子类
-MainViewController *rootVC = (MainViewController *)navVC.visibleViewController;
-rootVC.delegate = self;
-rootVC.selectedIndex = 0;   //需要这样设置
-
-self.window.rootViewController = navVC;
-
-self.window.backgroundColor = [UIColor whiteColor];
-[self.window makeKeyAndVisible];
-return YES;
-</code></pre>
-
-<p>}
-```</p>
-
-<p>StoryBoard：</p>
-
-<p><img src="/images/2014/01/ios_tabbar_storyboard.png" alt="ios_tabbar_storyboard" /></p>
-
-<p>运行效果：</p>
-
-<p><img src="/images/2014/01/ios_tabbar_running.png" alt="ios_tabbar_running" /></p>
 ]]></content>
   </entry>
   
