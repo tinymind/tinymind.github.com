@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Xcode 6.1 iPhone Simulator 8.1 Keyboard Issue：键盘无法显示，设置inputAccessoryView崩溃 - 浮生猎趣</title>
+  <meta name="author" content="lslin">
+
+  
+  <meta name="description" content="如果升级到XCode 6.1，使用iPhone Simulator 8.1之后，发现原来在iOS 7.1上一切正常的键盘，突然就没法显示，或者会导致崩溃，可以试试本文的解决方法。">
+  <meta name="keywords" content="ios, xcode, simulator, keyboard, crash">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.lessfun.com/blog/2014/10/24/xcode-6-dot-1-iphone-simulator-8-dot-1-keyboard-issue">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://ajax.useso.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+<!--<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+
+<link href="http://fonts.useso.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.useso.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-46115267-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">浮生猎趣</a></h1>
+  
+    <h2>ls *.fun >> 罗列一切乐趣</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.lessfun.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <li><a href="http://like.lessfun.com">大众点赞</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Xcode 6.1 iPhone Simulator 8.1 Keyboard Issue：键盘无法显示，设置inputAccessoryView崩溃</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-24T14:42:51+08:00" pubdate data-updated="true">2014-10-24, Fri</time>
+        
+		
+          | <a href="#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>随着iPhone 6 &amp; Plus的发布，苹果也陆续更新了XCode和开发模拟器，目前最新的Xcode版本是6.1，内置的Simulator的iOS版本是8.1。也许你兴致冲冲迫不及待地一下子升级到了最新版的开发环境，那么可能会遇到一些键盘上的问题：无法弹出键盘，或者弹出键盘后会莫名其妙地崩溃。</p>
+
+<p>当然，不能怪你，你的项目在iOS7.1上是运行地好好的。只能怪苹果没有推出一个完美无Bug的开发工具。</p>
+
+<!--more-->
+
+
+<h2>1. 在XCode 6，iOS 8.1模拟器无法弹出键盘</h2>
+
+<p>解决方法很简单，在Simulator的系统菜单中，取消勾选：</p>
+
+<p><code>Hardware</code> &ndash;> <code>Keyboard</code> &ndash;> <code>Connect Hardware Keyboard</code>。</p>
+
+<p>取消选中之后，键盘可以正常弹出，但是，无法使用硬件的键盘输入了，自己慢慢用鼠标点击模拟器里的键盘吧……</p>
+
+<h2>2. 弹出键盘后会莫名其妙地崩溃</h2>
+
+<p>也许你键盘能正常显示了，但是一显示就崩溃，在堆栈中有这样的字样：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'> <span class="o">***</span> <span class="n">First</span> <span class="n">throw</span> <span class="n">call</span> <span class="nl">stack:</span>
+</span><span class='line'>  <span class="p">(</span>
+</span><span class='line'>      <span class="mi">0</span>   <span class="n">CoreFoundation</span>                      <span class="mh">0x02101df6</span> <span class="n">__exceptionPreprocess</span> <span class="o">+</span> <span class="mi">182</span>
+</span><span class='line'>      <span class="mi">1</span>   <span class="n">libobjc</span><span class="p">.</span><span class="n">A</span><span class="p">.</span><span class="n">dylib</span>                     <span class="mh">0x01d8ba97</span> <span class="n">objc_exception_throw</span> <span class="o">+</span> <span class="mi">44</span>
+</span><span class='line'>      <span class="mi">2</span>   <span class="n">CoreFoundation</span>                      <span class="mh">0x02101d1d</span> <span class="o">+</span><span class="p">[</span><span class="n">NSException</span> <span class="nl">raise:format:</span><span class="p">]</span> <span class="o">+</span> <span class="mi">141</span>
+</span><span class='line'>      <span class="mi">3</span>   <span class="n">UIKit</span>                               <span class="mh">0x008cff9c</span> <span class="o">-</span><span class="p">[</span><span class="n">UIViewController</span> <span class="nl">_addChildViewController:performHierarchyCheck:notifyWillMove:</span><span class="p">]</span> <span class="o">+</span> <span class="mi">210</span>
+</span><span class='line'>      <span class="mi">4</span>   <span class="n">UIKit</span>                               <span class="mh">0x00f4b44d</span> <span class="o">-</span><span class="p">[</span><span class="n">UIInputWindowController</span> <span class="nl">changeToInputViewSet:</span><span class="p">]</span> <span class="o">+</span> <span class="mi">576</span>
+</span><span class='line'>      <span class="mi">5</span>   <span class="n">UIKit</span>                               <span class="mh">0x00f4c1be</span> <span class="n">__43</span><span class="o">-</span><span class="p">[</span><span class="n">UIInputWindowController</span> <span class="nl">setInputViewSet:</span><span class="p">]</span><span class="n">_block_invoke</span> <span class="o">+</span> <span class="mi">103</span>
+</span><span class='line'>      <span class="mi">6</span>   <span class="n">UIKit</span>                               <span class="mh">0x007f73bf</span> <span class="o">+</span><span class="p">[</span><span class="n">UIView</span><span class="p">(</span><span class="n">Animation</span><span class="p">)</span> <span class="nl">performWithoutAnimation:</span><span class="p">]</span> <span class="o">+</span> <span class="mi">82</span>
+</span><span class='line'>      <span class="mi">7</span>   <span class="n">UIKit</span>                               <span class="mh">0x00f4bf9c</span> <span class="o">-</span><span class="p">[</span><span class="n">UIInputWindowController</span> <span class="nl">setInputViewSet:</span><span class="p">]</span> <span class="o">+</span> <span class="mi">374</span>
+</span><span class='line'>      <span class="mi">8</span>   <span class="n">UIKit</span>                               <span class="mh">0x00ce9101</span> <span class="n">__64</span><span class="o">-</span><span class="p">[</span><span class="n">UIPeripheralHost</span><span class="p">(</span><span class="n">UIKitInternal</span><span class="p">)</span> <span class="nl">setInputViews:animationStyle:</span><span class="p">]</span><span class="n">_block_invoke1459</span> <span class="o">+</span> <span class="mi">43</span>
+</span><span class='line'>      <span class="mi">9</span>   <span class="n">UIKit</span>                               <span class="mh">0x00f473af</span> <span class="o">-</span><span class="p">[</span><span class="n">UIInputWindowController</span> <span class="nl">performOperations:withAnimationStyle:</span><span class="p">]</span> <span class="o">+</span> <span class="mi">56</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="p">......</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上崩溃也只在XCode 6，iOS 8出现，在iOS 7一切正常。</p>
+
+<p>原因可能是你设置了<code>UITextField</code>或<code>UITextView</code>的<code>inputView</code>或<code>inputAccessoryView</code>为customView，比如这样：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'> <span class="c1">//在Xib或Storyboard中创建了一个自定义View</span>
+</span><span class='line'>  <span class="k">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="kt">IBOutlet</span> <span class="n">UIView</span> <span class="o">*</span><span class="n">switchKeyboardBar</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="n">self</span><span class="p">.</span><span class="n">textView</span><span class="p">.</span><span class="n">inputAccessoryView</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">switchKeyboardBar</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上述代码在iOS 8中是必定Crash的，因为<code>UITextView.inputAccessoryView</code>不能是其他View的子View。而上面的<code>switchKeyboardBar</code>先被添加到了当前<code>UIViewController</code>的<code>View</code>中，再被设置到<code>inputAccessoryView</code>，就会导致崩溃。</p>
+
+<h3>2.1 解决方法</h3>
+
+<p>不从Xib创建自定义View，而是在代码中手动创建，并且不添加到别的View中。</p>
+
+<p>如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'> <span class="c1">//注意这里没有 IBOutlet</span>
+</span><span class='line'>  <span class="k">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">UIView</span> <span class="o">*</span><span class="n">switchKeyboardBar</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="o">-</span> <span class="p">(</span><span class="n">UIView</span> <span class="o">*</span><span class="p">)</span><span class="n">switchKeyboardBar</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_switchKeyboardBar</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">_switchKeyboardBar</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CGRectGetWidth</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span><span class="p">),</span> <span class="mi">40</span><span class="p">)];</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="c1">//add other subviews</span>
+</span><span class='line'>          <span class="p">...</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">_switchKeyboardBar</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="n">self</span><span class="p">.</span><span class="n">textView</span><span class="p">.</span><span class="n">inputAccessoryView</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">switchKeyboardBar</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2014/10/24/xcode-6-dot-1-iphone-simulator-8-dot-1-keyboard-issue/'>http://blog.lessfun.com/blog/2014/10/24/xcode-6-dot-1-iphone-simulator-8-dot-1-keyboard-issue/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">lslin</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-24T14:42:51+08:00" pubdate data-updated="true">2014-10-24, Fri</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/10/17/ios-autolayout-vs-autosizing/" title="Previous Post: iOS AutoLayout与AutoSizing：自动布局，想说爱你真的好难">&laquo; iOS AutoLayout与AutoSizing：自动布局，想说爱你真的好难</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+
+  <section>
+    <h1>发表评论</h1>
+    <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread" data-title="Xcode 6.1 iPhone Simulator 8.1 Keyboard Issue：键盘无法显示，设置inputAccessoryView崩溃"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lsfun"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>About Me</h1>
+<p>一个程序员只会写代码是不够的，他还应该拥有一个分享的博客。<br>——王小波<br></p>
+<p>C++、iOS开发工程师，现就职于广州欢聚时代。<br></p>
+<p><a href="http://like.lessfun.com">大众点赞：沉迷的大多数</a></p>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/bitcoin/'>Bitcoin (2)</a></li>
+<li class='category'><a href='/blog/categories/book/'>Book (1)</a></li>
+<li class='category'><a href='/blog/categories/c-/'>C++ (2)</a></li>
+<li class='category'><a href='/blog/categories/financial/'>Financial (1)</a></li>
+<li class='category'><a href='/blog/categories/github/'>Github (1)</a></li>
+<li class='category'><a href='/blog/categories/godaddy/'>Godaddy (1)</a></li>
+<li class='category'><a href='/blog/categories/http/'>Http (1)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (2)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (4)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
+<li class='category'><a href='/blog/categories/svn/'>SVN (1)</a></li>
+<li class='category'><a href='/blog/categories/xcode/'>XCode (1)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (10)</a></li>
+
+  </ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/10/24/xcode-6-dot-1-iphone-simulator-8-dot-1-keyboard-issue/">Xcode 6.1 iPhone Simulator 8.1 Keyboard Issue：键盘无法显示，设置inputAccessoryView崩溃</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/17/ios-autolayout-vs-autosizing/">iOS AutoLayout与AutoSizing：自动布局，想说爱你真的好难</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/17/smartsvn-keep-local-refreshing-issue/">SmartSVN一直是Local Refreshing状态，却无法Update/Commit/Check Out</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/15/ios-adjust-view-frame-quickly-with-macro/">iOS通过宏定义快速调整View的Frame</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/24/ios8-issue-keyboard-orientation-and-idletimerdisabled-not-working/">App适配iOS8遇到的兼容问题：键盘方向与StatusBar方向不一致，阻止锁屏失效，OpenGL崩溃</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section>
+<h1>Recent Comments</h1>
+<ul class="ds-recent-comments" data-num-items="10" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="20">
+</ul>
+<!--多说js加载开始，一个页面只需要加载一次 -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lsfun"};
+(function() {
+var ds = document.createElement('script');
+ds.type = 'text/javascript';
+ds.async = true;ds.src = 'http://static.duoshuo.com/embed.js';
+ds.charset = 'UTF-8';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
+<!--多说js加载结束，一个页面只需要加载一次 -->
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - lslin -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

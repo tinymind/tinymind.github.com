@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-10-17T18:31:20+08:00</updated>
+  <updated>2014-10-24T15:17:31+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,108 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Xcode 6.1 iPhone Simulator 8.1 Keyboard Issue：键盘无法显示，设置inputAccessoryView崩溃]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/10/24/xcode-6-dot-1-iphone-simulator-8-dot-1-keyboard-issue/"/>
+    <updated>2014-10-24T14:42:51+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/10/24/xcode-6-dot-1-iphone-simulator-8-dot-1-keyboard-issue</id>
+    <content type="html"><![CDATA[<p>随着iPhone 6 &amp; Plus的发布，苹果也陆续更新了XCode和开发模拟器，目前最新的Xcode版本是6.1，内置的Simulator的iOS版本是8.1。也许你兴致冲冲迫不及待地一下子升级到了最新版的开发环境，那么可能会遇到一些键盘上的问题：无法弹出键盘，或者弹出键盘后会莫名其妙地崩溃。</p>
+
+<p>当然，不能怪你，你的项目在iOS7.1上是运行地好好的。只能怪苹果没有推出一个完美无Bug的开发工具。</p>
+
+<!--more-->
+
+
+<h2>1. 在XCode 6，iOS 8.1模拟器无法弹出键盘</h2>
+
+<p>解决方法很简单，在Simulator的系统菜单中，取消勾选：</p>
+
+<p><code>Hardware</code> &ndash;> <code>Keyboard</code> &ndash;> <code>Connect Hardware Keyboard</code>。</p>
+
+<p>取消选中之后，键盘可以正常弹出，但是，无法使用硬件的键盘输入了，自己慢慢用鼠标点击模拟器里的键盘吧……</p>
+
+<h2>2. 弹出键盘后会莫名其妙地崩溃</h2>
+
+<p>也许你键盘能正常显示了，但是一显示就崩溃，在堆栈中有这样的字样：</p>
+
+<p>``` m</p>
+
+<pre><code>*** First throw call stack:
+(
+    0   CoreFoundation                      0x02101df6 __exceptionPreprocess + 182
+    1   libobjc.A.dylib                     0x01d8ba97 objc_exception_throw + 44
+    2   CoreFoundation                      0x02101d1d +[NSException raise:format:] + 141
+    3   UIKit                               0x008cff9c -[UIViewController _addChildViewController:performHierarchyCheck:notifyWillMove:] + 210
+    4   UIKit                               0x00f4b44d -[UIInputWindowController changeToInputViewSet:] + 576
+    5   UIKit                               0x00f4c1be __43-[UIInputWindowController setInputViewSet:]_block_invoke + 103
+    6   UIKit                               0x007f73bf +[UIView(Animation) performWithoutAnimation:] + 82
+    7   UIKit                               0x00f4bf9c -[UIInputWindowController setInputViewSet:] + 374
+    8   UIKit                               0x00ce9101 __64-[UIPeripheralHost(UIKitInternal) setInputViews:animationStyle:]_block_invoke1459 + 43
+    9   UIKit                               0x00f473af -[UIInputWindowController performOperations:withAnimationStyle:] + 56
+
+......
+}
+</code></pre>
+
+<p>```</p>
+
+<p>以上崩溃也只在XCode 6，iOS 8出现，在iOS 7一切正常。</p>
+
+<p>原因可能是你设置了<code>UITextField</code>或<code>UITextView</code>的<code>inputView</code>或<code>inputAccessoryView</code>为customView，比如这样：</p>
+
+<p>``` m</p>
+
+<pre><code>//在Xib或Storyboard中创建了一个自定义View
+@property (strong, nonatomic) IBOutlet UIView *switchKeyboardBar;
+
+...
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    self.textView.inputAccessoryView = self.switchKeyboardBar;
+}
+</code></pre>
+
+<p>```</p>
+
+<p>上述代码在iOS 8中是必定Crash的，因为<code>UITextView.inputAccessoryView</code>不能是其他View的子View。而上面的<code>switchKeyboardBar</code>先被添加到了当前<code>UIViewController</code>的<code>View</code>中，再被设置到<code>inputAccessoryView</code>，就会导致崩溃。</p>
+
+<h3>2.1 解决方法</h3>
+
+<p>不从Xib创建自定义View，而是在代码中手动创建，并且不添加到别的View中。</p>
+
+<p>如下：</p>
+
+<p>``` m</p>
+
+<pre><code>//注意这里没有 IBOutlet
+@property (strong, nonatomic) UIView *switchKeyboardBar;
+
+- (UIView *)switchKeyboardBar
+{
+    if (!_switchKeyboardBar) {
+        _switchKeyboardBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40)];
+
+        //add other subviews
+        ...
+    }
+    return _switchKeyboardBar;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    self.textView.inputAccessoryView = self.switchKeyboardBar;
+}
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS AutoLayout与AutoSizing：自动布局，想说爱你真的好难]]></title>
@@ -302,58 +404,6 @@ ViewAdjustFrame(theView, 2, 2, 0, 0);
 <h3>结论</h3>
 
 <p>与XCode相关的Bug，比如变量无法正确被加载，头文件没有被import，修改了xib文件但是在模拟器中不起作用，等等，都可以通过删除<code>DerivedData</code>的中间文件解决。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Invalid Binary, the Binary Is Missing Architectures[arm64] - iTunes Connect的Bug]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/09/11/invalid-binary-the-binary-is-missing-architectures-arm64/"/>
-    <updated>2014-09-11T14:51:58+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/09/11/invalid-binary-the-binary-is-missing-architectures-arm64</id>
-    <content type="html"><![CDATA[<p>从昨天开始，网上iOS开发者哀鸿一片，因为提交App到AppStore的时候，都遇到了这样一个错误：</p>
-
-<blockquote><p>「Today I cannot submit the binary to App Store, with the error &ldquo;Invalid binary, the binary is missing architectures[arm64]&rdquo;.」</p></blockquote>
-
-<p>国内开发者也遇到了同样的问题：<br/>
-<a href="http://bbs.lbsyun.baidu.com/redirect.php?tid=12550&amp;goto=lastpost">现在提交的新应用貌似必须支持arm64了</a></p>
-
-<p><a href="http://www.cocoachina.com/ask/questions/show/119687">上传项目到APPstore，遇到的问题</a></p>
-
-<p>公司内部这两天可能刚好不需要提交App，但是这是迟早的事，而项目中大部分引用的库都不支持arm64，未免开始紧张地修改工程编译选项，推动依赖库支持64位架构，沟通、协调、改错，乱成一团蚂蚁。</p>
-
-<p>结果……苹果告诉我们，不好意思，让你们受惊了，这是我们的一个Bug！</p>
-
-<!--more-->
-
-
-<p>坑爹呢这是！<br/>
-<img src="/images/2014/09/keng_die_ne.jpg" alt="ios_tabbar_running" /></p>
-
-<p>苹果开发者论坛里的员工TimT如是说：</p>
-
-<blockquote><p>「Yes, there was a fix recently applied to the server. Everyone should be able to submit 32-bit apps again.」</p></blockquote>
-
-<p><img src="/images/2014/09/invalid_arm64.png" alt="ios_tabbar_running" /> <br/>
-<a href="https://devforums.apple.com/message/1039265#1039265">32. Re: Invalid binary, the binary is missing architectures[arm64]</a></p>
-
-<p>居然Sorry也没一句！任你乱如蚂蚁，我自泰然自若。</p>
-
-<p>好了，没啥事了，还不能洗洗睡，继续提交32位App去吧~</p>
-
-<p>PS: 查看.a库或.framework文件支持那些架构的方法如下：</p>
-
-<p>``` bash
-; .a
-$cd libs
-$lipo -info *.a
-Architectures in the fat file: libssl.a are: i386 armv7 armv7s</p>
-
-<p>; .framework
-$cd xxFramework.framework
-$lipo -info xxFramework
-Architectures in the fat file: xxFramework are: armv7 armv7s i386</p>
-
-<p>```</p>
 ]]></content>
   </entry>
   
