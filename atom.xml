@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-10-24T15:17:31+08:00</updated>
+  <updated>2014-10-25T16:16:44+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -177,7 +177,209 @@
 <!--more-->
 
 
-<p>未完待续。</p>
+<h2>1. Autolayout 与 Autosizing的区别</h2>
+
+<p>虽然自iOS6之后，苹果推荐我们使用Autolayout布局，并且在Xib和Storyboard中默认帮我们打开了这个选项，但是在开发过程中，我们偏向于使用<code>Autosizing</code>，并且手动取消掉<code>Autolayout</code>，原因在于，Autolayout太繁琐复杂，而Autosizing简单并且能满足大部分的需求。</p>
+
+<h3>Autosizing适用的情况</h3>
+
+<p>当父视图被拉伸的时候，子视图能够适配父视图的新大小。其原理是，子视图有一个masks，用于指定与父视图上下左右边缘的距离，以及自身宽高的关系。</p>
+
+<p>比如，指定子视图的右边缘紧跟着父视图的右边缘，那么父视图变大之后，子视图还是贴在父视图的右边。</p>
+
+<p>这在大部分简单布局情况下非常有效。</p>
+
+<h3>Autosizing的不足</h3>
+
+<p>使用Autosizing，有一个前提，就是子视图的Frame是固定的，至少宽高是固定的，或者跟随着父视图的Frame变化。但是，如果希望多个子视图与父视图的边距固定，大小自动调整，Autosizing就爱莫能助了。</p>
+
+<p>原因在于：<strong>Autosizing无法智能计算多个子View各自的Frame</strong>。</p>
+
+<p>比如，我们希望在竖屏下布局是这样：</p>
+
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2013/09/StrutsProblem-portrait-design-423x500.png" alt="autosizing portrait" /></p>
+
+<p>并且在横屏下布局是这样：</p>
+
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2013/09/StrutsProblem-landscape-looks-good-480x289.png" alt="autosizing landscape" /></p>
+
+<p>除了手写代码调整Frame，单独用Autosizing是无法做到的。这时候就需要借助强大的Autolayout了。</p>
+
+<h3>Autolayout的优点</h3>
+
+<p>Autolayout使用约束来决定每个View的坐标、大小，约束可以针对SuperView，也可以针对其他任意一个SubView。</p>
+
+<p>使用自动布局，你可以表达出视图与视图之间的关系，而不是明确地指定每个视图的Frame。通过约束，视图会自动计算它们应该呆在哪个位置，只要约束足够多，它们也能自动计算自己的大小。</p>
+
+<p>只要指定了约束，无论屏幕大小怎么变化，它们都能自适应，这就是Autolayout的优点：妈妈再也不用担心你手写布局代码啦！也不用担心你为了适配各种屏幕大小而加班了。</p>
+
+<h3>Autolayout的缺点</h3>
+
+<p>Autolayout唯一的缺点就在于：过于复杂，较难上手。</p>
+
+<h3>使用Autolayout，还是Autosizing？</h3>
+
+<p>取决于项目需求。如果Autosizing完全能满足开发需求，那么就没必要使用复杂的Autolayout。但是，如果你已经被适配各种屏幕大小折腾得不成人形了，那么就要早日投入到Autolayout的怀抱了。</p>
+
+<h2>Autolayout的使用</h2>
+
+<p>首先要改变自己对布局的思考方式。你应该忘掉Frame，需要考虑的是subView A与subView B的上下左右的关系，以及与superView的关系。</p>
+
+<h3>借助XCode</h3>
+
+<p>在Xcode5之后，苹果已经尽力让开发者能更方便地使用Autolayout了。<br/>
+通过<code>Xcode</code>&ndash;><code>Editor</code>&ndash;><code>Pin/Align</code>菜单为视图添加约束即可。</p>
+
+<p>在XCode中除了通过菜单，还可以通过可视化的方式添加约束：</p>
+
+<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2013/09/Pin-green-view.png" alt="autolayout add constraint" /></p>
+
+<p>如果你添加的约束不足以表达某个View的位置大小，XCode还会以黄色的辅助线发出警告，十分好用。</p>
+
+<h3>手写约束Constraint</h3>
+
+<p>XCode虽然强大，但是有时候我们也许希望借助代码来写Constraint。</p>
+
+<p>加入你希望一个子view跟随父view的大小，但是与边距有10个点的距离：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">UIView</span> <span class="o">*</span><span class="n">superview</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">UIView</span> <span class="o">*</span><span class="n">view1</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="n">view1</span><span class="p">.</span><span class="n">translatesAutoresizingMaskIntoConstraints</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'><span class="n">view1</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">greenColor</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">superview</span> <span class="nl">addSubview:</span><span class="n">view1</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">UIEdgeInsets</span> <span class="n">padding</span> <span class="o">=</span> <span class="n">UIEdgeInsetsMake</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="n">superview</span> <span class="nl">addConstraints:</span><span class="err">@</span><span class="p">[</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//view1 constraints</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">NSLayoutConstraint</span> <span class="nl">constraintWithItem:</span><span class="n">view1</span>
+</span><span class='line'>                                 <span class="nl">attribute:</span><span class="n">NSLayoutAttributeTop</span>
+</span><span class='line'>                                 <span class="nl">relatedBy:</span><span class="n">NSLayoutRelationEqual</span>
+</span><span class='line'>                                    <span class="nl">toItem:</span><span class="n">superview</span>
+</span><span class='line'>                                 <span class="nl">attribute:</span><span class="n">NSLayoutAttributeTop</span>
+</span><span class='line'>                                <span class="nl">multiplier:</span><span class="mf">1.0</span>
+</span><span class='line'>                                  <span class="nl">constant:</span><span class="n">padding</span><span class="p">.</span><span class="n">top</span><span class="p">],</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">NSLayoutConstraint</span> <span class="nl">constraintWithItem:</span><span class="n">view1</span>
+</span><span class='line'>                                 <span class="nl">attribute:</span><span class="n">NSLayoutAttributeLeft</span>
+</span><span class='line'>                                 <span class="nl">relatedBy:</span><span class="n">NSLayoutRelationEqual</span>
+</span><span class='line'>                                    <span class="nl">toItem:</span><span class="n">superview</span>
+</span><span class='line'>                                 <span class="nl">attribute:</span><span class="n">NSLayoutAttributeLeft</span>
+</span><span class='line'>                                <span class="nl">multiplier:</span><span class="mf">1.0</span>
+</span><span class='line'>                                  <span class="nl">constant:</span><span class="n">padding</span><span class="p">.</span><span class="n">left</span><span class="p">],</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">NSLayoutConstraint</span> <span class="nl">constraintWithItem:</span><span class="n">view1</span>
+</span><span class='line'>                                 <span class="nl">attribute:</span><span class="n">NSLayoutAttributeBottom</span>
+</span><span class='line'>                                 <span class="nl">relatedBy:</span><span class="n">NSLayoutRelationEqual</span>
+</span><span class='line'>                                    <span class="nl">toItem:</span><span class="n">superview</span>
+</span><span class='line'>                                 <span class="nl">attribute:</span><span class="n">NSLayoutAttributeBottom</span>
+</span><span class='line'>                                <span class="nl">multiplier:</span><span class="mf">1.0</span>
+</span><span class='line'>                                  <span class="nl">constant:</span><span class="o">-</span><span class="n">padding</span><span class="p">.</span><span class="n">bottom</span><span class="p">],</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">NSLayoutConstraint</span> <span class="nl">constraintWithItem:</span><span class="n">view1</span>
+</span><span class='line'>                                 <span class="nl">attribute:</span><span class="n">NSLayoutAttributeRight</span>
+</span><span class='line'>                                 <span class="nl">relatedBy:</span><span class="n">NSLayoutRelationEqual</span>
+</span><span class='line'>                                    <span class="nl">toItem:</span><span class="n">superview</span>
+</span><span class='line'>                                 <span class="nl">attribute:</span><span class="n">NSLayoutAttributeRight</span>
+</span><span class='line'>                                <span class="nl">multiplier:</span><span class="mi">1</span>
+</span><span class='line'>                                  <span class="nl">constant:</span><span class="o">-</span><span class="n">padding</span><span class="p">.</span><span class="n">right</span><span class="p">],</span>
+</span><span class='line'>
+</span><span class='line'> <span class="p">]];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>每个约束都是这样的长长一串代码，设想一下需要添加6个约束的话……</p>
+
+<p>幸好有了这个开源库：<a href="https://github.com/Masonry/Masonry">Masonry</a>。</p>
+
+<p>使用这个库，代码添加约束就可以简介如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">view1</span> <span class="nl">mas_makeConstraints:</span><span class="o">^</span><span class="p">(</span><span class="n">MASConstraintMaker</span> <span class="o">*</span><span class="n">make</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">make</span><span class="p">.</span><span class="n">edges</span><span class="p">.</span><span class="n">equalTo</span><span class="p">(</span><span class="n">superview</span><span class="p">).</span><span class="n">with</span><span class="p">.</span><span class="n">insets</span><span class="p">(</span><span class="n">padding</span><span class="p">);</span>
+</span><span class='line'><span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>更新约束</h3>
+
+<p>比如，我们自己实现了一个图文混排的TextView，添加到Xib时我们还不知道其高度，需要在代码中计算，那么就需要在代码里更新约束，如：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="kt">IBOutlet</span> <span class="n">NSLayoutConstraint</span> <span class="o">*</span><span class="n">richTextHeightConstraint</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">relayout</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">richTextHeightConstraint</span><span class="p">.</span><span class="n">constant</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">richTextView</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="n">needsUpdateConstraints</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>关键还是实践</h2>
+
+<p>多说无益，贵在实践。只要有意识地去使用了一次，自然就会了。</p>
 
 <h3>参考链接</h3>
 
