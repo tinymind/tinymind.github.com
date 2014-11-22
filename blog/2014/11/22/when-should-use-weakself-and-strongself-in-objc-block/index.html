@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>修复iOS中UIScrollView的scrollToTop设置后不生效的问题 - 浮生猎趣</title>
+  <title>到底什么时候才需要在ObjC的Block中使用weakSelf/strongSelf - 浮生猎趣</title>
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="修复iOS中UIScrollView的scrollToTop设置后不生效的问题">
-  <meta name="keywords" content="ios, uiscrollview, scrolltotop">
+  <meta name="description" content="解决Objective C中Block的循环引用：到底什么时候才需要声明weakSelf和strongSelf？">
+  <meta name="keywords" content="ios, objective c, block, weakself, strongself">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.lessfun.com/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working">
+  <link rel="canonical" href="http://blog.lessfun.com/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
@@ -84,7 +84,7 @@
   
   <header>
     
-      <h1 class="entry-title">修复iOS中UIScrollView的scrollToTop设置后不生效的问题</h1>
+      <h1 class="entry-title">到底什么时候才需要在ObjC的Block中使用weakSelf/strongSelf</h1>
     
     
       <p class="meta">
@@ -100,7 +100,7 @@
   
 
 
-<time datetime="2014-01-13T15:15:04+08:00" pubdate data-updated="true">2014-01-13, Mon</time>
+<time datetime="2014-11-22T15:59:18+08:00" pubdate data-updated="true">2014-11-22, Sat</time>
         
 		
           | <a href="#comments">Comments</a>
@@ -110,32 +110,83 @@
   </header>
 
 
-<div class="entry-content"><p>iOS中的<code>UIScrollView</code>有一个属性<code>scrollToTop</code>，设置为<code>YES</code>之后，点击设备的状态栏(StatusBar)即可将滚动试图的内容滚动到最顶端，在滚动列表很长的时候，这个特性十分有用。</p>
-
-<p>今日在使用这一属性的时候，发现部分情况下，一切正常；但是也有时候，点击状态栏，滚动条没反应！检查了代码，确定已经设置<code>scrollToTop = YES</code>，但是总是会有不起作用的情况。</p>
-
-<p>于是到万能的StackOverflow寻求答案，不失所望，找到了类似的问题：<a href="http://stackoverflow.com/questions/8951357/scroll-uitableview-to-top-when-tapping-top-of-the-screen">scroll UITableView to top when tapping top of the screen</a></p>
-
-<p>答案也解释得很清楚了，如下：</p>
+<div class="entry-content"><p>Objective C 的 <code>Block</code> 是一个很实用的语法，特别是与GCD结合使用，可以很方便地实现并发、异步任务。但是，如果使用不当，Block 也会引起一些循环引用问题(<code>retain cycle</code>)—— Block 会 retain ‘self’，而 ‘self‘ 又 retain 了 Block。因为在 ObjC 中，直接调用一个实例变量，会被编译器处理成 &lsquo;self->theVar&#8217;，&#8217;self&rsquo; 是一个 strong 类型的变量，引用计数会加 1，于是，self retains queue， queue retains block，block retains self。</p>
 
 <!--more-->
 
 
-<p>如果同一个UIViewController中包含了多个UIScrollView，那么只能有一个ScrollView被设置为scrollToTop = YES; 另外的都要设置为NO，否则就会被系统忽略。
-比较坑爹的是，该属性默认为YES，在<code>UIScrollView.h</code>中可以看到声明如下：</p>
+<h3>解决 retain circle</h3>
+
+<p>Apple 官方的建议是，传进 Block 之前，把 &lsquo;self&rsquo; 转换成 weak automatic 的变量，这样在 Block 中就不会出现对 self 的强引用。如果在 Block 执行完成之前，self 被释放了，weakSelf 也会变为 nil。</p>
+
+<p>示例代码：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'>  <span class="err">@</span><span class="n">property</span><span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span>  <span class="n">scrollsToTop</span><span class="p">;</span>  <span class="c1">// default is YES.</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">__weak</span> <span class="n">__typeof__</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="n">weakSelf</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">weakSelf</span> <span class="n">doSomething</span><span class="p">];</span>
+</span><span class='line'><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>所以我们需要显示设置其他的<code>scrollView.scrollToTop = NO</code>。</p>
+<p>clang 的文档表示，在 doSomething 内，weakSelf 不会被释放。但，下面的情况除外：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">__weak</span> <span class="n">__typeof__</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="n">weakSelf</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">weakSelf</span> <span class="n">doSomething</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">weakSelf</span> <span class="n">doOtherThing</span><span class="p">];</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在 doSomething 中，weakSelf 不会变成 nil，不过在 doSomething 执行完成，调用第二个方法 doOtherThing 的时候，weakSelf 有可能被释放，于是，strongSelf 就派上用场了：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">__weak</span> <span class="n">__typeof__</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="n">weakSelf</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">__strong</span> <span class="n">__typeof</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="n">strongSelf</span> <span class="o">=</span> <span class="n">weakSelf</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">strongSelf</span> <span class="n">doSomething</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">strongSelf</span> <span class="n">doOtherThing</span><span class="p">];</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>__strong</code> 确保在 Block 内，strongSelf 不会被释放。</p>
+
+<h3>总结</h3>
+
+<ul>
+<li>在 Block 内如果需要访问 self 的方法、变量，建议使用 weakSelf。</li>
+<li>如果在 Block 内需要多次 访问 self，则需要使用 strongSelf。</li>
+</ul>
+
+
+<h3>参考</h3>
+
+<ul>
+<li><a href="http://dhoerl.wordpress.com/2013/04/23/i-finally-figured-out-weakself-and-strongself/">I finally figured out weakSelf and strongSelf</a></li>
+<li><a href="http://stackoverflow.com/questions/21113963/is-the-weakself-strongself-dance-really-necessary-when-referencing-self-inside-a?rq=1">Is the weakSelf/strongSelf dance really necessary when referencing self inside a non-retained completion called from a UIViewController?</a></li>
+</ul>
+
 
 <blockquote class='post_original_block'>
             原文作者：
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
-            <a href='http://blog.lessfun.com/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/'>http://blog.lessfun.com/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/</a><br/>
+            <a href='http://blog.lessfun.com/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/'>http://blog.lessfun.com/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>
@@ -162,7 +213,7 @@
   
 
 
-<time datetime="2014-01-13T15:15:04+08:00" pubdate data-updated="true">2014-01-13, Mon</time>
+<time datetime="2014-11-22T15:59:18+08:00" pubdate data-updated="true">2014-11-22, Sat</time>
       
 
 <span class="categories">
@@ -183,10 +234,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/" title="Previous Post: 通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6">&laquo; 通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6</a>
+        <a class="basic-alignment left" href="/blog/2014/10/24/xcode-6-dot-1-iphone-simulator-8-dot-1-keyboard-issue/" title="Previous Post: Xcode 6.1 iPhone Simulator 8.1 Keyboard Issue：键盘无法显示，设置inputAccessoryView崩溃">&laquo; Xcode 6.1 iPhone Simulator 8.1 Keyboard Issue：键盘无法显示，设置inputAccessoryView崩溃</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller/" title="Next Post: 在UINavigationController中使用UITabBarController，处理Two-stage rotation错误">在UINavigationController中使用UITabBarController，处理Two-stage rotation错误 &raquo;</a>
       
     </p>
   </footer>
@@ -196,7 +245,7 @@
   <section>
     <h1>发表评论</h1>
     <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
-	<div class="ds-thread" data-title="修复iOS中UIScrollView的scrollToTop设置后不生效的问题"></div>
+	<div class="ds-thread" data-title="到底什么时候才需要在ObjC的Block中使用weakSelf/strongSelf"></div>
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"lsfun"};
 	(function() {

@@ -87,6 +87,79 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/">iOS中检测UIScrollView滚动动画是否结束</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-06T00:34:00+08:00" pubdate data-updated="true">2013-12-06, Fri</time>
+        
+		
+          | <a href="/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>在iOS中使用UITableView的时候，有时候需要检测UITableView的滚动动画是否结束，但是很遗憾，iOS没有直接提供这样的API。
+先看一下现有的几个方法是怎样的：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndDragging:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span> <span class="nl">willDecelerate:</span><span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="n">decelerate</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个方法表示手指离开了scrollview，第二个参数用于判断滚动速度是否慢慢下降。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndDecelerating:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span><span class="p">;</span>      <span class="c1">// called when scroll view grinds to a halt</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个方法看上去挺像我们要找的：停止减速。但是，从注释看，“嘎然而止”的时候才会被调用，很明显，我们要的是“自然停止”时被调的方法。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndScrollingAnimation:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span><span class="p">;</span> <span class="c1">// called when setContentOffset scrollRectVisible:animated: finishes. not called if not animating</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个是指scrollview停止滚动动画，嗯，这下是我们想要的了吧！</p>
+
+<p>抱歉，不是！！！
+试验一下就会发现，无论怎么滚动怎么停止，这个方法都不会被调！处分用代码的方式调用了<code>setContentOffset scrollRectVisible:animated: finishes</code>，但是，我们手指触发试图滚动是不会调该方法的……</p>
+
+<p>一堆似是而非的方法绕得头晕啊……</p>
+
+<h3>解决方法</h3>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/12/05/config-the-octopress-blog-after-deployed/">Octopress博客发布后的基本配置、继续阅读、自动打开、代码高亮、插入图片、分类标签、修改样式</a></h1>
     
     
@@ -318,13 +391,17 @@
 <li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
 <li class='category'><a href='/blog/categories/svn/'>SVN (1)</a></li>
 <li class='category'><a href='/blog/categories/xcode/'>XCode (1)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (10)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (11)</a></li>
 
   </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/">到底什么时候才需要在ObjC的Block中使用weakSelf/strongSelf</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/10/24/xcode-6-dot-1-iphone-simulator-8-dot-1-keyboard-issue/">Xcode 6.1 iPhone Simulator 8.1 Keyboard Issue：键盘无法显示，设置inputAccessoryView崩溃</a>
@@ -340,10 +417,6 @@
     
       <li class="post">
         <a href="/blog/2014/10/15/ios-adjust-view-frame-quickly-with-macro/">iOS通过宏定义快速调整View的Frame</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/24/ios8-issue-keyboard-orientation-and-idletimerdisabled-not-working/">App适配iOS8遇到的兼容问题：键盘方向与StatusBar方向不一致，阻止锁屏失效，OpenGL崩溃</a>
       </li>
     
   </ul>

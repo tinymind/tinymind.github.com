@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-10-25T16:16:44+08:00</updated>
+  <updated>2014-11-22T16:35:02+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[到底什么时候才需要在ObjC的Block中使用weakSelf/strongSelf]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/"/>
+    <updated>2014-11-22T15:59:18+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block</id>
+    <content type="html"><![CDATA[<p>Objective C 的 <code>Block</code> 是一个很实用的语法，特别是与GCD结合使用，可以很方便地实现并发、异步任务。但是，如果使用不当，Block 也会引起一些循环引用问题(<code>retain cycle</code>)—— Block 会 retain ‘self’，而 ‘self‘ 又 retain 了 Block。因为在 ObjC 中，直接调用一个实例变量，会被编译器处理成 &lsquo;self->theVar&#8217;，&#8217;self&rsquo; 是一个 strong 类型的变量，引用计数会加 1，于是，self retains queue， queue retains block，block retains self。</p>
+
+<!--more-->
+
+
+<h3>解决 retain circle</h3>
+
+<p>Apple 官方的建议是，传进 Block 之前，把 &lsquo;self&rsquo; 转换成 weak automatic 的变量，这样在 Block 中就不会出现对 self 的强引用。如果在 Block 执行完成之前，self 被释放了，weakSelf 也会变为 nil。</p>
+
+<p>示例代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">__weak</span> <span class="n">__typeof__</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="n">weakSelf</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">weakSelf</span> <span class="n">doSomething</span><span class="p">];</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>clang 的文档表示，在 doSomething 内，weakSelf 不会被释放。但，下面的情况除外：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">__weak</span> <span class="n">__typeof__</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="n">weakSelf</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">weakSelf</span> <span class="n">doSomething</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">weakSelf</span> <span class="n">doOtherThing</span><span class="p">];</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在 doSomething 中，weakSelf 不会变成 nil，不过在 doSomething 执行完成，调用第二个方法 doOtherThing 的时候，weakSelf 有可能被释放，于是，strongSelf 就派上用场了：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">__weak</span> <span class="n">__typeof__</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="n">weakSelf</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">__strong</span> <span class="n">__typeof</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="n">strongSelf</span> <span class="o">=</span> <span class="n">weakSelf</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">strongSelf</span> <span class="n">doSomething</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">strongSelf</span> <span class="n">doOtherThing</span><span class="p">];</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>__strong</code> 确保在 Block 内，strongSelf 不会被释放。</p>
+
+<h3>总结</h3>
+
+<ul>
+<li>在 Block 内如果需要访问 self 的方法、变量，建议使用 weakSelf。</li>
+<li>如果在 Block 内需要多次 访问 self，则需要使用 strongSelf。</li>
+</ul>
+
+
+<h3>参考</h3>
+
+<ul>
+<li><a href="http://dhoerl.wordpress.com/2013/04/23/i-finally-figured-out-weakself-and-strongself/">I finally figured out weakSelf and strongSelf</a></li>
+<li><a href="http://stackoverflow.com/questions/21113963/is-the-weakself-strongself-dance-really-necessary-when-referencing-self-inside-a?rq=1">Is the weakSelf/strongSelf dance really necessary when referencing self inside a non-retained completion called from a UIViewController?</a></li>
+</ul>
+
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/'>http://blog.lessfun.com/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Xcode 6.1 iPhone Simulator 8.1 Keyboard Issue：键盘无法显示，设置inputAccessoryView崩溃]]></title>
@@ -1966,90 +2055,6 @@ iOS6：<br/>
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
             <a href='http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading/'>http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名 | 
-            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
-            </blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS中检测UIScrollView滚动动画是否结束]]></title>
-    <link href="http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/"/>
-    <updated>2013-12-06T00:34:00+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate</id>
-    <content type="html"><![CDATA[<p>在iOS中使用UITableView的时候，有时候需要检测UITableView的滚动动画是否结束，但是很遗憾，iOS没有直接提供这样的API。
-先看一下现有的几个方法是怎样的：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndDragging:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span> <span class="nl">willDecelerate:</span><span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="n">decelerate</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个方法表示手指离开了scrollview，第二个参数用于判断滚动速度是否慢慢下降。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndDecelerating:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span><span class="p">;</span>      <span class="c1">// called when scroll view grinds to a halt</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个方法看上去挺像我们要找的：停止减速。但是，从注释看，“嘎然而止”的时候才会被调用，很明显，我们要的是“自然停止”时被调的方法。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndScrollingAnimation:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span><span class="p">;</span> <span class="c1">// called when setContentOffset scrollRectVisible:animated: finishes. not called if not animating</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这个是指scrollview停止滚动动画，嗯，这下是我们想要的了吧！</p>
-
-<p>抱歉，不是！！！
-试验一下就会发现，无论怎么滚动怎么停止，这个方法都不会被调！处分用代码的方式调用了<code>setContentOffset scrollRectVisible:animated: finishes</code>，但是，我们手指触发试图滚动是不会调该方法的……</p>
-
-<p>一堆似是而非的方法绕得头晕啊……</p>
-
-<h3>解决方法</h3>
-
-<!--more-->
-
-
-<p>我们自己主动去调<code>scrollViewDidEndScrollingAnimation</code>。</p>
-
-<p>原理：在<code>- (void)scrollViewDidScroll:(UIScrollView *)scrollView</code>内，创建一个异步调用，等待0.1秒后调<code>scrollViewDidEndScrollingAnimation</code>。由于<code>scrollViewDidScroll</code>会不断被调用，再次触发时取消上一次的异步请求。等到不再滚动时，最后一次的请求不会被取消，最终会跑到<code>scrollViewDidScroll</code>，然后，添加想要在滚动停止时调用的代码即可。</p>
-
-<p>代码如下：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidScroll:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">sender</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">NSObject</span> <span class="nl">cancelPreviousPerformRequestsWithTarget:</span><span class="n">self</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">performSelector:</span><span class="err">@</span><span class="n">selector</span><span class="p">(</span><span class="nl">scrollViewDidEndScrollingAnimation:</span><span class="p">)</span> <span class="nl">withObject:</span><span class="n">nil</span> <span class="nl">afterDelay:</span><span class="mf">0.1</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">scrollViewDidEndScrollingAnimation:</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">scrollView</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">NSObject</span> <span class="nl">cancelPreviousPerformRequestsWithTarget:</span><span class="n">self</span><span class="p">];</span>
-</span><span class='line'>    <span class="c1">//这里添加你的逻辑，比如，触发上拉加载更多</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<blockquote class='post_original_block'>
-            原文作者：
-            <a href='http://blog.lessfun.com'>lslin</a><br/>
-            原文链接：
-            <a href='http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/'>http://blog.lessfun.com/blog/2013/12/06/detect-uiscrollview-did-end-scrolling-animate/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>

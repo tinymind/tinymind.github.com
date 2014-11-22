@@ -117,12 +117,18 @@
         <lastmod>2014-10-24T15:17:31+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://blog.lessfun.com/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/
+        </loc>
+        <lastmod>2014-11-22T16:35:02+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://blog.lessfun.com/blog/archives/</loc>
-        <lastmod>2014-10-25T16:16:44+08:00</lastmod>
+        <lastmod>2014-11-22T16:35:02+08:00</lastmod>
     </url>
     <url>
         <loc>http://blog.lessfun.com/</loc>
-        <lastmod>2014-10-25T16:16:44+08:00</lastmod>
+        <lastmod>2014-11-22T16:35:02+08:00</lastmod>
     </url>
     <url>
         <loc>http://blog.lessfun.com/robots.txt</loc>

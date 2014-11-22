@@ -87,6 +87,50 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/">到底什么时候才需要在ObjC的Block中使用weakSelf/strongSelf</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-22T15:59:18+08:00" pubdate data-updated="true">2014-11-22, Sat</time>
+        
+		
+          | <a href="/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Objective C 的 <code>Block</code> 是一个很实用的语法，特别是与GCD结合使用，可以很方便地实现并发、异步任务。但是，如果使用不当，Block 也会引起一些循环引用问题(<code>retain cycle</code>)—— Block 会 retain ‘self’，而 ‘self‘ 又 retain 了 Block。因为在 ObjC 中，直接调用一个实例变量，会被编译器处理成 &lsquo;self->theVar&#8217;，&#8217;self&rsquo; 是一个 strong 类型的变量，引用计数会加 1，于是，self retains queue， queue retains block，block retains self。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/10/24/xcode-6-dot-1-iphone-simulator-8-dot-1-keyboard-issue/">Xcode 6.1 iPhone Simulator 8.1 Keyboard Issue：键盘无法显示，设置inputAccessoryView崩溃</a></h1>
     
     
@@ -515,56 +559,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/">在Godaddy上使用PHPMailer通过SMTP发送邮件的方法</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-07-16T13:51:29+08:00" pubdate data-updated="true">2014-07-16, Wed</time>
-        
-		
-          | <a href="/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>对于个人站点的“留言”、“评论”功能，除了把用户的发言保存到MySQL数据库中以外，管理员往往还希望在用户留言的同时发送一封邮件到指定邮箱，方便查看。</p>
-
-<p>这个功能用PHP+MySQL实现很简单，PHP语言有一个mail()方法，只需配置好SMTP服务器、发件人的邮箱密码、收件人的邮箱，就可以自动发送邮件。</p>
-
-<p>但是，mail()方法过于简洁，需要用户作很多其他配置，比如在php.ini里设置stmp服务器地址、端口等信息，同时使用也不太方便，比如没法便捷地使用抄送、添加附件等功能。</p>
-
-<p>于是有了<a href="http://phpmailer.worxware.com">PHPMailer</a>，简化了发送邮件的配置。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -596,13 +590,17 @@
 <li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
 <li class='category'><a href='/blog/categories/svn/'>SVN (1)</a></li>
 <li class='category'><a href='/blog/categories/xcode/'>XCode (1)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (10)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (11)</a></li>
 
   </ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/">到底什么时候才需要在ObjC的Block中使用weakSelf/strongSelf</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/10/24/xcode-6-dot-1-iphone-simulator-8-dot-1-keyboard-issue/">Xcode 6.1 iPhone Simulator 8.1 Keyboard Issue：键盘无法显示，设置inputAccessoryView崩溃</a>
@@ -618,10 +616,6 @@
     
       <li class="post">
         <a href="/blog/2014/10/15/ios-adjust-view-frame-quickly-with-macro/">iOS通过宏定义快速调整View的Frame</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/24/ios8-issue-keyboard-orientation-and-idletimerdisabled-not-working/">App适配iOS8遇到的兼容问题：键盘方向与StatusBar方向不一致，阻止锁屏失效，OpenGL崩溃</a>
       </li>
     
   </ul>
