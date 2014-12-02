@@ -1,0 +1,29 @@
+---
+layout: page
+title: App (Coming soon...)
+footer: false
+---
+
+<div class="blog-index">
+    {% assign index = true %}
+
+    {% for category in site.categories %}
+
+      {% if category.first  == "App" %}
+
+        {% for posts in category %}
+          {% for post in posts %}
+              {% assign content = post.content %}
+              <article>
+                {% include article.html %}
+              </article>
+              {% unless post == paginator.posts.last %}
+              <hr>
+              {% endunless %}
+          {% endfor %}
+        {% endfor %}
+        
+      {% endif %}
+
+    {% endfor %}
+
