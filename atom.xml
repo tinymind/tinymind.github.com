@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-12-02T20:57:09+08:00</updated>
+  <updated>2014-12-04T00:06:51+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,102 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[2014年在Apple Store申请iOS个人开发者账号详细流程]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/12/03/ios-developer-program-tutorial-2014/"/>
+    <updated>2014-12-03T19:20:56+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/12/03/ios-developer-program-tutorial-2014</id>
+    <content type="html"><![CDATA[<p><img src="http://blog.lessfun.com/images/2014/12/idp_intro.png" alt="idp intro" /></p>
+
+<!--more-->
+
+
+<p>想要在AppStore上发布个人App从来都不是一件简单的事，光是申请开发者账号就可以折腾好久了。这是加入个人开发者计划，申请iOS开发者账号的最新教程，2014年版，供参考。什么时候，苹果才能为开发者考虑一下，减少各种繁琐的流程呢？</p>
+
+<h2>前期准备</h2>
+
+<ul>
+<li>需要有一张支持美元支付的信用卡。</li>
+</ul>
+
+
+<h2>注册Apple ID</h2>
+
+<ol>
+<li><p>访问<a href="https://developer.apple.com/cn/programs/ios/">https://developer.apple.com/cn/programs/ios/</a> ，点击<code>立即注册</code>。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_register.png" alt="apple register" /></p></li>
+<li><p>按照提示，选择注册类型：公司或个人。这里以「个人」为例，点击继续。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_register_continue.png" alt="register continue" /></p></li>
+<li><p>注册或创建Apple ID。如果已有，可以继续使用。我选了新建。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_create_apple_id.png" alt="create apple id" /></p></li>
+<li><p>按照要求填写接口。需要注意的地方：FirstName 和 LastName 要是自己的名字拼音，由于涉及到审核、支付、收款等操作，不要乱填。另外，中英文的姓名顺序一直都可以把人绕晕，总之，我在 FirstName 填了名字拼音，在 LastName 填姓氏拼音。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_fill_apple_id.png" alt="fill apple id" /></p></li>
+<li><p>设置安全问题答案，找回密码需要。</p></li>
+<li>验证邮箱，之后就可以使用新的AppleID了，如果在上面填错了资料，可以登录修改，比如姓名。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_verify_email.png" alt="verify email" /></li>
+</ol>
+
+
+<h2>填写开发者信息</h2>
+
+<ol>
+<li><p>在协议这里打钩，点击<code>Agree</code>。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_develop_agreement.png" alt="develop agreement" /></p></li>
+<li><p>完善个人的一些信息。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_self_info.png" alt="self info" /></p></li>
+<li><p>至此，Apple ID创建完成。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_register_finished.png" alt="register finished" /></p></li>
+</ol>
+
+
+<h2>加入开发者计划</h2>
+
+<ol>
+<li><p>这时候已有新的Apple ID，再次打开<a href="https://developer.apple.com/programs/ios">https://developer.apple.com/programs/ios</a> ，正式加入$99/年的个人开发者计划。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_enroll_now.png" alt="enroll now" /></p></li>
+<li><p>选择刚刚创建的Apple ID：<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_select_apple_id.png" alt="select apple id" /></p></li>
+<li><p>提示选择注册类型，个人或公司。这里选择个人。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_select_individual.png" alt="select individual" /></p></li>
+<li><p>输入账单地址等信息，这里需要与信用卡账单显示的地址完全一致，中英文各输入一遍，注意输入手机号时，区号填<code>86</code>。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_credit_card_address.png" alt="credit card address" /></p></li>
+<li><p>选择开发者计划类型。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_select_program.png" alt="select program" /></p></li>
+<li><p>Review，检查没问题后，提交。</p></li>
+<li>继续同意协议。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_program_license.png" alt="program license" /></li>
+</ol>
+
+
+<h2>提交订单、付款</h2>
+
+<ol>
+<li><p>终于到了付款这一步骤了，点击<code>Buy now</code>。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_buy_now.png" alt="buy now" /></p></li>
+<li><p>再次要求登录Apple ID。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_login_again.png" alt="login again" /></p></li>
+<li><p>输入信用卡信息进行付款。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_credit_card_info.png" alt="credit card info" /></p></li>
+<li><p>提交订单。<br/>
+<img src="http://blog.lessfun.com/images/2014/12/idp_commit_order.png" alt="commit order" /></p></li>
+<li><p>付款完成提示，等待苹果发送激活的邮件吧。</p></li>
+</ol>
+
+
+<p><img src="http://blog.lessfun.com/images/2014/12/idp_order_tips.png" alt="order tips" /></p>
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2014/12/03/ios-developer-program-tutorial-2014/'>http://blog.lessfun.com/blog/2014/12/03/ios-developer-program-tutorial-2014/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[到底什么时候才需要在ObjC的Block中使用weakSelf/strongSelf]]></title>
@@ -2013,48 +2109,6 @@ iOS6：<br/>
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
             <a href='http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/'>http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名 | 
-            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
-            </blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[比特币交易的一点感想]]></title>
-    <link href="http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading/"/>
-    <updated>2013-12-13T10:14:00+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading</id>
-    <content type="html"><![CDATA[<p>我接触比特币比较晚，13年10月末才知道有比特币这个东西存在，当时是逛知乎，发现了这个问题：<a href="http://www.zhihu.com/question/19982269/answer/13554085">大三的学生，手头有6000元的钱，想要做些小投资赚点儿钱，有什么好建议么？</a></p>
-
-<p>该问题的答案如下：</p>
-
-<p><img src="http://blog.lessfun.com/images/2013/12/bitcoin_trading_answer.png" alt="关于小投资的回答" /></p>
-
-<!--more-->
-
-
-<p>事实上，我在知乎上遇见了几次这条答案，但没放在心上，因为我不知道比特币是什么东西。后来，我看到这条回答的评论有很多，于是点开了评论，看到“收益率简直太疯狂了”，开始觉得这是个靠谱的可以让人致富的回答，于是，开始搜索比特币的资料。</p>
-
-<p>然后就大概了解了比特币是什么东西，当然，对于其复杂的算法是不懂的，只知道，比特币是去中心化的总数量固定的可以无限分割的虚拟货币，本身无价值，靠众多持有者用现实货币交易而定价。</p>
-
-<p>由于本身无价值，导致它利润极高，如果在刚提出来的时候就开始了挖矿，成本几乎为零，等到交易价为现在的500+美元的时候卖出，收益翻了N倍。也由于本身无价值，靠交易者自由交易而定价，导致它风险极高，如果不是免费获得，而是通过现实货币买入，则很可能买入之后价格一路下降，血本无归……</p>
-
-<p>风险与收益并存而且都那么高，所以，刚开始我是不准备买入的，因为那时候单个比特币的价格已经是200+美元了。不过我也相信这是一个会增值的虚拟货币，所以我开始寻找免费获得比特币的方法。然后就找到了一些点击广告获得赠送的比特币的方法，刚开始还好，三四天就可以收到0.0003个比特币。后来，单价上涨之后，免费获得的比特币越来越少，我终于绝望了。同时想到如果当初200美元买入了，那么现在就涨了几倍……于是决定直接买入。</p>
-
-<p>我用了3000元人民币，在两个平台分别充值1500，以4600和4700的价格买入。本想着长期持有等待升值的，但是，事实证明情绪没那么容易稳定。买入之后，看到单价上升，就会内心窃喜，同时有卖出再买入的打算；看到单价下降，忍不住彷徨紧张，后悔买入太早。这样一折腾，终于沦为短线操作。短线操作也有问题，如果买入之后，价格继续下跌，就会后悔买入太早；如果卖出之后价格上涨，就会后悔卖出太早。总之，一入比特深似海，从此安宁是路人。</p>
-
-<p>不过，几手交易下来，总值还是有所增长的，只是，心态不稳，收益只有几十块。后来看到莱特币利润更大，就在一个平台卖出比特币，买入莱特币。</p>
-
-<p>现在的情况是，分别在5800买入了比特币、在213.5买入了莱特币。此时（2013.12.15 15:50）比特币价格是5111元人民币，莱特币是175.33元人民币，也就是说，我开始赚到的那几十块亏了，本金也缩水不少，总投3000元，现值2760元。</p>
-
-<p>也许过一段时间，价格还会涨回去。但是，实时关注价格走势，心情跟着一路起伏，严重影响身心健康。我开始怀疑是否值得进行虚拟货币交易。诚然，那么点钱，亏了也不是大问题，只是，赚了也不会发什么财。如论哪里，都是土豪的世界。</p>
-
-<blockquote class='post_original_block'>
-            原文作者：
-            <a href='http://blog.lessfun.com'>lslin</a><br/>
-            原文链接：
-            <a href='http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading/'>http://blog.lessfun.com/blog/2013/12/13/some-feeling-about-bitcoin-trading/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>

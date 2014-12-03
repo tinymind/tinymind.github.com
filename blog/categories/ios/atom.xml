@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-12-02T20:57:09+08:00</updated>
+  <updated>2014-12-04T00:06:51+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[2014年在Apple Store申请iOS个人开发者账号详细流程]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/12/03/ios-developer-program-tutorial-2014/"/>
+    <updated>2014-12-03T19:20:56+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/12/03/ios-developer-program-tutorial-2014</id>
+    <content type="html"><![CDATA[<p><img src="/images/2014/12/idp_intro.png" alt="idp intro" /></p>
+
+<!--more-->
+
+
+<p>想要在AppStore上发布个人App从来都不是一件简单的事，光是申请开发者账号就可以折腾好久了。这是加入个人开发者计划，申请iOS开发者账号的最新教程，2014年版，供参考。什么时候，苹果才能为开发者考虑一下，减少各种繁琐的流程呢？</p>
+
+<h2>前期准备</h2>
+
+<ul>
+<li>需要有一张支持美元支付的信用卡。</li>
+</ul>
+
+
+<h2>注册Apple ID</h2>
+
+<ol>
+<li><p>访问<a href="https://developer.apple.com/cn/programs/ios/">https://developer.apple.com/cn/programs/ios/</a> ，点击<code>立即注册</code>。<br/>
+<img src="/images/2014/12/idp_register.png" alt="apple register" /></p></li>
+<li><p>按照提示，选择注册类型：公司或个人。这里以「个人」为例，点击继续。<br/>
+<img src="/images/2014/12/idp_register_continue.png" alt="register continue" /></p></li>
+<li><p>注册或创建Apple ID。如果已有，可以继续使用。我选了新建。<br/>
+<img src="/images/2014/12/idp_create_apple_id.png" alt="create apple id" /></p></li>
+<li><p>按照要求填写接口。需要注意的地方：FirstName 和 LastName 要是自己的名字拼音，由于涉及到审核、支付、收款等操作，不要乱填。另外，中英文的姓名顺序一直都可以把人绕晕，总之，我在 FirstName 填了名字拼音，在 LastName 填姓氏拼音。<br/>
+<img src="/images/2014/12/idp_fill_apple_id.png" alt="fill apple id" /></p></li>
+<li><p>设置安全问题答案，找回密码需要。</p></li>
+<li>验证邮箱，之后就可以使用新的AppleID了，如果在上面填错了资料，可以登录修改，比如姓名。<br/>
+<img src="/images/2014/12/idp_verify_email.png" alt="verify email" /></li>
+</ol>
+
+
+<h2>填写开发者信息</h2>
+
+<ol>
+<li><p>在协议这里打钩，点击<code>Agree</code>。<br/>
+<img src="/images/2014/12/idp_develop_agreement.png" alt="develop agreement" /></p></li>
+<li><p>完善个人的一些信息。<br/>
+<img src="/images/2014/12/idp_self_info.png" alt="self info" /></p></li>
+<li><p>至此，Apple ID创建完成。<br/>
+<img src="/images/2014/12/idp_register_finished.png" alt="register finished" /></p></li>
+</ol>
+
+
+<h2>加入开发者计划</h2>
+
+<ol>
+<li><p>这时候已有新的Apple ID，再次打开<a href="https://developer.apple.com/programs/ios">https://developer.apple.com/programs/ios</a> ，正式加入$99/年的个人开发者计划。<br/>
+<img src="/images/2014/12/idp_enroll_now.png" alt="enroll now" /></p></li>
+<li><p>选择刚刚创建的Apple ID：<br/>
+<img src="/images/2014/12/idp_select_apple_id.png" alt="select apple id" /></p></li>
+<li><p>提示选择注册类型，个人或公司。这里选择个人。<br/>
+<img src="/images/2014/12/idp_select_individual.png" alt="select individual" /></p></li>
+<li><p>输入账单地址等信息，这里需要与信用卡账单显示的地址完全一致，中英文各输入一遍，注意输入手机号时，区号填<code>86</code>。<br/>
+<img src="/images/2014/12/idp_credit_card_address.png" alt="credit card address" /></p></li>
+<li><p>选择开发者计划类型。<br/>
+<img src="/images/2014/12/idp_select_program.png" alt="select program" /></p></li>
+<li><p>Review，检查没问题后，提交。</p></li>
+<li>继续同意协议。<br/>
+<img src="/images/2014/12/idp_program_license.png" alt="program license" /></li>
+</ol>
+
+
+<h2>提交订单、付款</h2>
+
+<ol>
+<li><p>终于到了付款这一步骤了，点击<code>Buy now</code>。<br/>
+<img src="/images/2014/12/idp_buy_now.png" alt="buy now" /></p></li>
+<li><p>再次要求登录Apple ID。<br/>
+<img src="/images/2014/12/idp_login_again.png" alt="login again" /></p></li>
+<li><p>输入信用卡信息进行付款。<br/>
+<img src="/images/2014/12/idp_credit_card_info.png" alt="credit card info" /></p></li>
+<li><p>提交订单。<br/>
+<img src="/images/2014/12/idp_commit_order.png" alt="commit order" /></p></li>
+<li><p>付款完成提示，等待苹果发送激活的邮件吧。</p></li>
+</ol>
+
+
+<p><img src="/images/2014/12/idp_order_tips.png" alt="order tips" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[到底什么时候才需要在ObjC的Block中使用weakSelf/strongSelf]]></title>
@@ -427,163 +513,6 @@ ViewAdjustFrame(theView, 2, 2, 0, 0);
 </code></pre>
 
 <p>```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[App适配iOS8遇到的兼容问题：键盘方向与StatusBar方向不一致，阻止锁屏失效，OpenGL崩溃]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/09/24/ios8-issue-keyboard-orientation-and-idletimerdisabled-not-working/"/>
-    <updated>2014-09-24T13:59:29+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/09/24/ios8-issue-keyboard-orientation-and-idletimerdisabled-not-working</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/2014/09/lessfun_ios8_adapt.png" title="&lsquo;ios8 adapt&rsquo; &lsquo;ios8 adapt&rsquo;" >
-苹果正式发布iOS8系统，到现在安装覆盖率已达48%，而iOS7的安装率是49%。所以，各位开发者又有得忙了，把所有的App都升级并适配到iOS8系统可不是一件轻松的事。</p>
-
-<p>下面罗列一下我在适配iOS8过程中遇到的兼容问题——而同样的代码在iOS6/7是完全没问题的。</p>
-
-<!--more-->
-
-
-<h2>1. 键盘弹出方向与StatusBar方向不一致</h2>
-
-<p>在App中，第一个ViewController是只支持竖屏方向(Portrait)的，切换到第二个页面，默认也是Portrait，但用户可以点击按钮切换为横屏(Landscape)。</p>
-
-<p>所以，我把App-Info.plist只选中了<code>Portrait</code>一项，并且在<code>Root ViewController</code>重载了以下方法：</p>
-
-<p>``` c</p>
-
-<pre><code>- (BOOL)shouldAutorotate
-{
-    return NO;
-}
-
-- (NSUInteger)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskPortrait;
-}
-
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
-{
-    return UIInterfaceOrientationPortrait;
-}
-</code></pre>
-
-<p>```</p>
-
-<p>然后在需要切换到横屏的时候，调用以下代码：</p>
-
-<p>``` c</p>
-
-<ul>
-<li>(void)onFullScreenButtonTouchUpInside:(id)sender
-{
-  [self adjustViewFrameToFullScreen];
-  [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];
-}</li>
-</ul>
-
-
-<p>```</p>
-
-<p>由于在iOS6、7中，键盘方向是跟随状态栏方向的，所以一切表现正常，横屏下，无论设备方向怎样，键盘都是横着弹出。</p>
-
-<p>但是，在iOS8中，键盘却随着设备方向弹出了。换言之，<strong>即使Interface Orientation为Landscape，但Device Orientation为Portrait，键盘就会以Portrait的方向弹出</strong>。<br/>
-如下图：</p>
-
-<p><img class="center" src="/images/2014/09/lessfun_ios8_adapt_keyboard.png" title="&lsquo;ios8 adapt keyboard&rsquo; &lsquo;ios8 adapt keyboard&rsquo;" ></p>
-
-<h3>1.1 解决方法</h3>
-
-<p>我想要的是键盘不管设备方向，只关注状态栏方向，也就是StatusBarOrientation。由于iOS8新出不久，在网上没找到解决方案。后来我一同事发现手动更改设备方向可以解决这一问题：</p>
-
-<p>``` c</p>
-
-<ul>
-<li>(void)onFullScreenButtonTouchUpInside:(id)sender
-{
-  [self adjustViewFrameToFullScreen];
-  [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];
-  //改设备方向
-  if (IsIOS8) {
-      [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:@&ldquo;orientation&rdquo;];
-  }
-}</li>
-</ul>
-
-
-<p>```</p>
-
-<h2>2. 禁用屏幕自动锁定失效</h2>
-
-<p>本来，防止屏幕锁定只需一句代码：</p>
-
-<p>``` c</p>
-
-<pre><code>[[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-</code></pre>
-
-<p>```</p>
-
-<p>但是，在iOS8中，偶尔会失效。测试人员发现了这个问题是在弹出键盘点击发送后必现，而原因不明。因为键盘出现与隐藏，理论上不应该影响这个<code>idleTimerDisabled</code>的属性。暂且认为是iOS8的Bug吧。</p>
-
-<h3>2.1 解决方法</h3>
-
-<p>在键盘收起的时候，重设<code>IdleTimerDisabled</code>。</p>
-
-<p>``` c</p>
-
-<pre><code>- (void)onKeyboardDidHide:(NSNotification *)notification
-{
-    if (IsIOS8) {
-        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-    }
-}
-</code></pre>
-
-<p>```</p>
-
-<h2>3. OpenGL ES渲染时崩溃</h2>
-
-<p>在iOS中使用OpenGL ES渲染，切换到后台时需要停止渲染，否则会引起崩溃。见这里：<a href="https://developer.apple.com/library/ios/qa/qa1766/_index.html">How to fix OpenGL ES application crashes when moving to the background</a></p>
-
-<p>但是在iOS8中，即使不是切换到后台，而是通过<code>NavigationController</code>切换到另一个ViewController再切回来，也会引起崩溃，崩溃点在：</p>
-
-<p>``` c</p>
-
-<pre><code>[EAGLContext presentRenderbuffer:GL_RENDERBUFFER];
-</code></pre>
-
-<p>```</p>
-
-<p>猜测可能是，在iOS 8中，如果OpenGL的视图如果切换到不可见的ViewController，也需要停止绘制，否则也会引起在后台渲染OpenGL类似的崩溃。</p>
-
-<h3>3.1 解决方法</h3>
-
-<p>在ViewWillDisapper的时候停止渲染。</p>
-
-<p>``` c</p>
-
-<pre><code>- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-
-    if (_videoView &amp;&amp; IsIOS8) {
-        [_videoView pauseVideo];
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    if (_videoView &amp;&amp; IsIOS8) {
-        [_videoView resumeVideo];
-    }
-}
-</code></pre>
-
-<p>```</p>
-
-<p>iOS的兼容真是个蛋疼的问题。</p>
 ]]></content>
   </entry>
   
