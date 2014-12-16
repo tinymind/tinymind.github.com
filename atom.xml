@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2014-12-04T00:06:51+08:00</updated>
+  <updated>2014-12-16T21:06:43+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,76 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[MarkText - iOS 上支持语法高亮、HTML预览、文件导出的Markdown文本编辑器]]></title>
+    <link href="http://blog.lessfun.com/blog/2014/12/10/marktext-a-markdown-text-editor-for-ios/"/>
+    <updated>2014-12-10T21:29:06+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2014/12/10/marktext-a-markdown-text-editor-for-ios</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://blog.lessfun.com/images/app/marktext/marktext_appicon.png" width="120" height="120" title="MarkText App" alt="A Markdown Text Editor"></p>
+
+<p>MarkText是iPhone上的Markdown文本编辑器。支持实时语法高亮、带CSS的HTML预览、文件导出为HTML/PNG/PDF, 分享到Evernote，Dropbox或 Email。</p>
+
+<p>当前版本：1.0.0<br/>
+更新时间：2014.12.16</p>
+
+<h2>iPhone 屏幕截图</h2>
+
+<div style="margin-top:30px;font-size:16px;line-height:20px;background:rgb(78,81,85);border-radius:4px;padding:4px;">
+<div style="margin: 0 14px; max-height: 640px; min-height: 320px; overflow-x: auto; overflow-y: hidden; padding-bottom: 16px; white-space: nowrap;"><img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_1.png" alt="1"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_2.png" alt="2"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_3.png" alt="3"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_4.png" alt="4"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_5.png" alt="5"></div>
+</div>
+
+
+<h2>下载</h2>
+
+<p><a href="https://itunes.apple.com/cn/app/marktext-markdown-text-editor/id948768793?mt=8"><img src="http://blog.lessfun.com/images/app/appstore.png" alt="从AppStore下载" /></a></p>
+
+<h2>应用介绍</h2>
+
+<!--more-->
+
+
+<p>MarkText是iPhone上的一款Markdown文本编辑器.</p>
+
+<h3>编辑 &amp; 分享</h3>
+
+<p>通过MarkText，你可以导入或创建markdown格式的文本文件，编辑的时候支持实时语法高亮显示。
+支持将markdown的纯文本转换为HTML、PNG或PDF文件。当编辑完成之后，你可以MD、HTML、PNG或PDF的格式将文稿分享出去。可以通过iTunes导出到电脑，或者发送到Evernote、Dropbox或Email。</p>
+
+<h3>光标增强</h3>
+
+<p>通过输入辅助工具条，你可以很方便地点击按钮插入Tabs、标题、列表、代码块，或者超链接。左右滑动工具条可以迅速移动光标；双指选择可以快速选择文本。</p>
+
+<h3>HTML预览</h3>
+
+<p>与语法高亮一样，你也可以使用CSS语法高亮地预览HTML内容。HTML预览支持以下语法特性：常规Markdown、MultiMarkdown、脚注、图片、表格和代码块。</p>
+
+<h2>版本1.0.0 特性</h2>
+
+<ul>
+<li>创建、编辑markdown格式的文本；</li>
+<li>实时语法高亮；</li>
+<li>带有样式的HTML预览；</li>
+<li>修改主题配色；</li>
+<li>从iTunes导入文稿；</li>
+<li>导出文稿为HTML、PNG和PDF格式的文件；</li>
+<li>分享内容到Evernote、Dropbox和Email；</li>
+<li>光标增强：滑动输入工具栏，快速移动光标；</li>
+<li>支持的文件后缀类型：md、mmd、markdown、markdn、mdown、mkdn、markd、txt、text。</li>
+</ul>
+
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2014/12/10/marktext-a-markdown-text-editor-for-ios/'>http://blog.lessfun.com/blog/2014/12/10/marktext-a-markdown-text-editor-for-ios/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2014年在Apple Store申请iOS个人开发者账号详细流程]]></title>
@@ -2015,100 +2085,6 @@
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
             <a href='http://blog.lessfun.com/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/'>http://blog.lessfun.com/blog/2014/01/13/fix-uiscrollview-scrolltotop-not-working/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名 | 
-            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
-            </blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/"/>
-    <updated>2014-01-10T15:07:24+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7</id>
-    <content type="html"><![CDATA[<h3>设置view从导航栏下方开始布局</h3>
-
-<p>在iOS6及以前的版本中，UIViewController的高度和位置都是从导航栏下方开始的。但是在iOS7中，UIViewController不再提供wantsFullScreenLayout属性，UIViewController创建后默认就是Full Screen的，因此如果带导航栏的应用界面中的部分控件会与导航栏重叠在一起。</p>
-
-<p>我们的应用大都要兼容低于iOS7的版本，所以必须解决这种不兼容的现象。
-思路是，还是按照iOS6的布局方式，因为被导航栏覆盖部分界面实在看不出有什么好处。所以，我们需要判断iOS版本，如果是iOS6，一切照旧，如果是iOS7，则设置view从导航栏下方开始布局。</p>
-
-<p>简单的方法，在ViewDidLoad里面增加几句代码即可，如下：</p>
-
-<!--more-->
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'> <span class="err">#</span><span class="n">define</span> <span class="n">SystemVersionLessThan</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="p">([[[</span><span class="n">UIDevice</span> <span class="n">currentDevice</span><span class="p">]</span> <span class="n">systemVersion</span><span class="p">]</span> <span class="nl">compare:</span><span class="n">v</span> <span class="nl">options:</span><span class="n">NSNumericSearch</span><span class="p">]</span> <span class="o">==</span> <span class="n">NSOrderedAscending</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">SystemVersionLessThan</span><span class="p">(</span><span class="err">@</span><span class="s">&quot;7.0&quot;</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">self</span><span class="p">.</span><span class="n">edgesForExtendedLayout</span> <span class="o">=</span> <span class="n">UIRectEdgeNone</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">self</span><span class="p">.</span><span class="n">extendedLayoutIncludesOpaqueBars</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样设置之后，可以看到在iOS7中布局跟iOS显示一样了。</p>
-
-<p>如果有很多个UIViewController，只需要新建一个UIViewController的子类，比如<code>MyUIViewController</code>，把上面代码放到MyUIViewController的<code>ViewDidLoad</code>中，然后修改所有的UIViewController为MyUIViewController即可。</p>
-
-<h3>修改iOS7中UITableViewCell的分隔线</h3>
-
-<p>只是还有一个问题，如果添加了UITableView，会发现cell的分隔线短了一小部分，还需设置如下：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'>  <span class="n">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">separatorInset</span> <span class="o">=</span> <span class="n">UIEdgeInsetsZero</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>修改后的效果如图：
-iOS6：<br/>
-<img src="http://blog.lessfun.com/images/2014/01/ios_adjust_ios6.png" alt="ios_adjust_ios6" /></p>
-
-<p>iOS7:<br/>
-<img src="http://blog.lessfun.com/images/2014/01/ios_adjust_ios7.png" alt="ios_adjust_ios6" /></p>
-
-<p>iOS7表格分隔线：<br/>
-<img src="http://blog.lessfun.com/images/2014/01/ios_adjust_ios7_tableviewcell.png" alt="ios_adjust_ios6" /></p>
-
-<p>搞定！</p>
-
-<h3>去掉iOS6中导航栏的阴影</h3>
-
-<p>iOS6的UINavigationBar默认加了一层阴影，而iOS7中则默认没有，我们可以通过下面的代码去掉iOS6的导航栏阴影：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">SystemVersionLessThan</span><span class="p">(</span><span class="err">@</span><span class="s">&quot;6.0&quot;</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>      <span class="p">[[</span><span class="n">UINavigationBar</span> <span class="n">appearance</span><span class="p">]</span> <span class="nl">setShadowImage:</span><span class="p">[[</span><span class="n">UIImage</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">]];</span>
-</span><span class='line'>  <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote class='post_original_block'>
-            原文作者：
-            <a href='http://blog.lessfun.com'>lslin</a><br/>
-            原文链接：
-            <a href='http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/'>http://blog.lessfun.com/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>
