@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2015-01-22T18:44:59+08:00</updated>
+  <updated>2015-04-01T14:57:11+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,131 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[UITableView性能优化，提升列表滚动的流畅性]]></title>
+    <link href="http://blog.lessfun.com/blog/2015/04/01/uitableview-performence-improve/"/>
+    <updated>2015-04-01T12:13:46+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2015/04/01/uitableview-performence-improve</id>
+    <content type="html"><![CDATA[<p>UITableView是iOS开发中最常用也很实用并且最容易出现性能问题的的一个控件，本文列出了一些性能优化点，用于提高列表滚动的流畅性。</p>
+
+<!--more-->
+
+
+<h2>1. 重用</h2>
+
+<p>当TableView需要显示一个Cell时，会先从已创建的Cell中找一个可以重用的，然后展现到屏幕。一般情况下，可以被重用的Cell都滚到了屏幕区域外。如果慢慢地拖动TableView，就可以看到Cell不断地被重用（通过断点可以看到Cell的init或awakeFromNib没有被调用）。但是如果快速滚动，还是可能会看到Cell被创建。</p>
+
+<h3>1.1 已经在StoryBoard的TableView中定义Cell的ProtoType</h3>
+
+<p>则指定其ReuseIdentify，在delegate返回Cell的时候，调用：
+``` c</p>
+
+<pre><code> [tableView dequeueReusableCellWithIdentifier:kCellID];
+</code></pre>
+
+<p>```</p>
+
+<h3>1.2 Cell是从单独的xib加载</h3>
+
+<p>则需要先注册：
+``` c</p>
+
+<pre><code> [tableView registerNib:[UINib nibWithNibName:kCellID bundle:nil] forCellReuseIdentifier:kCellID];
+</code></pre>
+
+<p>```</p>
+
+<h3>1.3 Cell的ProtoType个数尽可能少，因为Cell的种类越多，TableView创建的Cell个数就越多，并且是成倍增长。</h3>
+
+<h2>2. 缓存</h2>
+
+<p>缓存基本上可以解决大部分性能问题。TableView需要知道Cell的高度，才能对Cell进行布局；需要知道所有的Cell的高度，才能知道TableView本身的高度，所以，每次调用reloadData，都需要计算所有Cell的高度。我们要尽量减小高度计算的复杂度。</p>
+
+<h3>2.1 缓存Cell的高度</h3>
+
+<h4>2.1.1 高度固定、类型单一的Cell</h4>
+
+<p>在创建TableView的时候，直接设置其rowHeight属性。</p>
+
+<h4>2.1.2 对于高度固定、类型多样的Cell</h4>
+
+<p>实现代理方法，根据Cell的类型返回不同的高度：
+<code>c
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+</code></p>
+
+<h4>2.1.3 对于高度不固定的Cell</h4>
+
+<p><img src="/images/2015/04/tableview_dynamic_cell.png" alt="dynamic uitableviewcell" /></p>
+
+<p>由于需要动态计算高度，所以运算量必然会增大，但是还是存在优化的空间。常见的优化方式是，把cellHeight作为data的一个属性缓存起来，对于每一个data对应的每一个cell，就只需要计算一次高度。示例代码：
+``` c</p>
+
+<pre><code>@interface ContentInfo : NSObject
+
+@property(nonatomic, assign) DetailInfo *detail;
+@property(nonatomic, strong) CGFloat cellHeight;
+
+- (CGFloat)calcHeight;
+
+@end
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    ContentInfo *info = _dataSource[index];
+    if (info.cellHeight &lt;= 0.1) {
+        info.cellHeight = [info calcHeight];
+    }
+    return info.cellHeight;
+}
+</code></pre>
+
+<p>```</p>
+
+<p>当然，这样的方式，还是把运算量放到了TableView的代理方法内，其实也可以在创建ContentInfo本身的时候，就调用它的calcHeight方法，在代理方法里就可以可以直接返回info.cellHeight了。但也要结合实际情况进行取舍，因为有时候，有了数据源，但不一定需要展示TableView，提前计算高度反而会浪费时间。</p>
+
+<h3>2.2 缓存Cell的资源</h3>
+
+<p>比如每一个Cell都需要用到的UIImage，UIFont，NSDateFormatter或者任何在绘制时需要的对象，推荐使用类层级的初始化方法中执行分配，并将其存储为静态变量。</p>
+
+<h2>3. 创建</h2>
+
+<h3>3.1 去掉AutoLayout</h3>
+
+<p>如果发现通过StoryBoard+xib+AutoLayout创建Cell时性能满足不了需求，可以考虑去掉AutoLayout。</p>
+
+<h3>3.2 代码创建Cell</h3>
+
+<p>如果不用AutoLayout还是有问题，可以考虑通过代码创建Cell的Views。</p>
+
+<h3>3.3 自绘</h3>
+
+<p>如果使用代码创建还是解决不了问题，那就只能靠自绘了，重载Cell的drawRect方法即可。</p>
+
+<h2>4. 渲染</h2>
+
+<h3>4.1 减少子View的个数和层级</h3>
+
+<p>子View的层级越深，渲染到屏幕上所需要的计算量就越大。</p>
+
+<h3>4.2 减少子View的透明图层</h3>
+
+<p>对于不透明的View，设置opaque为YES，这样在绘制该View时，就不需要考虑被View覆盖的其他内容。</p>
+
+<h3>4.3 避免CAlayer特效。</h3>
+
+<p>给Cell中View加阴影会引起性能问题，如下面代码会导致滚动时有明显的卡顿：
+``` c</p>
+
+<pre><code>view.layer.shadowColor = color.CGColor;
+view.layer.shadowOffset = offset;
+view.layer.shadowOpacity = 1;
+view.layer.shadowRadius = radius;
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MarkText - iOS 上支持语法高亮、HTML预览、文件导出的Markdown文本编辑器]]></title>
@@ -345,191 +470,6 @@ __strong __typeof(self) strongSelf = weakSelf;
 </code></pre>
 
 <p>```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS AutoLayout与AutoSizing：自动布局，想说爱你真的好难]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/10/17/ios-autolayout-vs-autosizing/"/>
-    <updated>2014-10-17T14:31:20+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/10/17/ios-autolayout-vs-autosizing</id>
-    <content type="html"><![CDATA[<p>在iPhone Retina发布之前，还没有AutoLayout，因为屏幕只有一种尺寸。<br/>
-当iPhone Retina发布之后，我没有用上AutoLayout，因为屏幕尺寸是用点来表示，布局写起来没什么不同。<br/>
-当iPhone 5发布之后，屏幕尺寸终于加长了，但是由于有AutoSizing，所以我还是可以不用AutoLayout。<br/>
-现在，iPhone 6和6 Plus发布了，屏幕又大了，我不得不开始考虑是否要使用AutoLayout。</p>
-
-<!--more-->
-
-
-<h2>1. Autolayout 与 Autosizing的区别</h2>
-
-<p>虽然自iOS6之后，苹果推荐我们使用Autolayout布局，并且在Xib和Storyboard中默认帮我们打开了这个选项，但是在开发过程中，我们偏向于使用<code>Autosizing</code>，并且手动取消掉<code>Autolayout</code>，原因在于，Autolayout太繁琐复杂，而Autosizing简单并且能满足大部分的需求。</p>
-
-<h3>Autosizing适用的情况</h3>
-
-<p>当父视图被拉伸的时候，子视图能够适配父视图的新大小。其原理是，子视图有一个masks，用于指定与父视图上下左右边缘的距离，以及自身宽高的关系。</p>
-
-<p>比如，指定子视图的右边缘紧跟着父视图的右边缘，那么父视图变大之后，子视图还是贴在父视图的右边。</p>
-
-<p>这在大部分简单布局情况下非常有效。</p>
-
-<h3>Autosizing的不足</h3>
-
-<p>使用Autosizing，有一个前提，就是子视图的Frame是固定的，至少宽高是固定的，或者跟随着父视图的Frame变化。但是，如果希望多个子视图与父视图的边距固定，大小自动调整，Autosizing就爱莫能助了。</p>
-
-<p>原因在于：<strong>Autosizing无法智能计算多个子View各自的Frame</strong>。</p>
-
-<p>比如，我们希望在竖屏下布局是这样：</p>
-
-<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2013/09/StrutsProblem-portrait-design-423x500.png" alt="autosizing portrait" /></p>
-
-<p>并且在横屏下布局是这样：</p>
-
-<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2013/09/StrutsProblem-landscape-looks-good-480x289.png" alt="autosizing landscape" /></p>
-
-<p>除了手写代码调整Frame，单独用Autosizing是无法做到的。这时候就需要借助强大的Autolayout了。</p>
-
-<h3>Autolayout的优点</h3>
-
-<p>Autolayout使用约束来决定每个View的坐标、大小，约束可以针对SuperView，也可以针对其他任意一个SubView。</p>
-
-<p>使用自动布局，你可以表达出视图与视图之间的关系，而不是明确地指定每个视图的Frame。通过约束，视图会自动计算它们应该呆在哪个位置，只要约束足够多，它们也能自动计算自己的大小。</p>
-
-<p>只要指定了约束，无论屏幕大小怎么变化，它们都能自适应，这就是Autolayout的优点：妈妈再也不用担心你手写布局代码啦！也不用担心你为了适配各种屏幕大小而加班了。</p>
-
-<h3>Autolayout的缺点</h3>
-
-<p>Autolayout唯一的缺点就在于：过于复杂，较难上手。</p>
-
-<h3>使用Autolayout，还是Autosizing？</h3>
-
-<p>取决于项目需求。如果Autosizing完全能满足开发需求，那么就没必要使用复杂的Autolayout。但是，如果你已经被适配各种屏幕大小折腾得不成人形了，那么就要早日投入到Autolayout的怀抱了。</p>
-
-<h2>Autolayout的使用</h2>
-
-<p>首先要改变自己对布局的思考方式。你应该忘掉Frame，需要考虑的是subView A与subView B的上下左右的关系，以及与superView的关系。</p>
-
-<h3>借助XCode</h3>
-
-<p>在Xcode5之后，苹果已经尽力让开发者能更方便地使用Autolayout了。<br/>
-通过<code>Xcode</code>&ndash;><code>Editor</code>&ndash;><code>Pin/Align</code>菜单为视图添加约束即可。</p>
-
-<p>在XCode中除了通过菜单，还可以通过可视化的方式添加约束：</p>
-
-<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2013/09/Pin-green-view.png" alt="autolayout add constraint" /></p>
-
-<p>如果你添加的约束不足以表达某个View的位置大小，XCode还会以黄色的辅助线发出警告，十分好用。</p>
-
-<h3>手写约束Constraint</h3>
-
-<p>XCode虽然强大，但是有时候我们也许希望借助代码来写Constraint。</p>
-
-<p>加入你希望一个子view跟随父view的大小，但是与边距有10个点的距离：</p>
-
-<p>``` m</p>
-
-<p>UIView *superview = self;</p>
-
-<p>UIView *view1 = [[UIView alloc] init];
-view1.translatesAutoresizingMaskIntoConstraints = NO;
-view1.backgroundColor = [UIColor greenColor];
-[superview addSubview:view1];</p>
-
-<p>UIEdgeInsets padding = UIEdgeInsetsMake(10, 10, 10, 10);</p>
-
-<p>[superview addConstraints:@[</p>
-
-<pre><code>//view1 constraints
-[NSLayoutConstraint constraintWithItem:view1
-                             attribute:NSLayoutAttributeTop
-                             relatedBy:NSLayoutRelationEqual
-                                toItem:superview
-                             attribute:NSLayoutAttributeTop
-                            multiplier:1.0
-                              constant:padding.top],
-
-[NSLayoutConstraint constraintWithItem:view1
-                             attribute:NSLayoutAttributeLeft
-                             relatedBy:NSLayoutRelationEqual
-                                toItem:superview
-                             attribute:NSLayoutAttributeLeft
-                            multiplier:1.0
-                              constant:padding.left],
-
-[NSLayoutConstraint constraintWithItem:view1
-                             attribute:NSLayoutAttributeBottom
-                             relatedBy:NSLayoutRelationEqual
-                                toItem:superview
-                             attribute:NSLayoutAttributeBottom
-                            multiplier:1.0
-                              constant:-padding.bottom],
-
-[NSLayoutConstraint constraintWithItem:view1
-                             attribute:NSLayoutAttributeRight
-                             relatedBy:NSLayoutRelationEqual
-                                toItem:superview
-                             attribute:NSLayoutAttributeRight
-                            multiplier:1
-                              constant:-padding.right],
-</code></pre>
-
-<p> ]];</p>
-
-<p>```</p>
-
-<p>每个约束都是这样的长长一串代码，设想一下需要添加6个约束的话……</p>
-
-<p>幸好有了这个开源库：<a href="https://github.com/Masonry/Masonry">Masonry</a>。</p>
-
-<p>使用这个库，代码添加约束就可以简介如下：</p>
-
-<p>``` m</p>
-
-<p>[view1 mas_makeConstraints:^(MASConstraintMaker *make) {</p>
-
-<pre><code>make.edges.equalTo(superview).with.insets(padding);
-</code></pre>
-
-<p>}];</p>
-
-<p>```</p>
-
-<h3>更新约束</h3>
-
-<p>比如，我们自己实现了一个图文混排的TextView，添加到Xib时我们还不知道其高度，需要在代码中计算，那么就需要在代码里更新约束，如：</p>
-
-<p>``` m</p>
-
-<p>@property (strong, nonatomic) IBOutlet NSLayoutConstraint *richTextHeightConstraint;</p>
-
-<p>&hellip;</p>
-
-<ul>
-<li><p>(void)relayout
-{
-  self.richTextHeightConstraint.constant = self.richTextView.frame.size.height;</p>
-
-<p>  [self needsUpdateConstraints];
-}</p></li>
-</ul>
-
-
-<p>```</p>
-
-<h2>关键还是实践</h2>
-
-<p>多说无益，贵在实践。只要有意识地去使用了一次，自然就会了。</p>
-
-<h3>参考链接</h3>
-
-<ul>
-<li><a href="http://www.raywenderlich.com/50317/beginning-auto-layout-tutorial-in-ios-7-part-1">Beginning Auto Layout Tutorial in iOS 7: Part 1</a></li>
-<li><a href="http://www.raywenderlich.com/50319/beginning-auto-layout-tutorial-in-ios-7-part-2">Beginning Auto Layout Tutorial in iOS 7: Part 2</a></li>
-<li><a href="http://www.cocoachina.com/industry/20131203/7462.html">开始iOS 7中自动布局教程 一</a></li>
-<li><a href="http://www.cnblogs.com/zer0Black/p/3977288.html">开始iOS 7中自动布局教程 二</a></li>
-<li><a href="http://segmentfault.com/blog/ilikewhite/1190000000646452">从此爱上iOS Autolayout</a></li>
-</ul>
-
 ]]></content>
   </entry>
   
