@@ -1,17 +1,18 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
 
+// Header Colors: 329628; 
 
 /* ----- Content ----- */
 
 #content .blog-index article h1, article header h1 {
 	font-size: 1.8em;
 	font-weight: normal;
-	color: #329628 !important;
+	color: #55a955 !important;
 }
 
 article h2, article h3{
-	color: #329628 !important;
+	color: #55a955 !important;
 }
 
 article p {
@@ -24,7 +25,7 @@ article p {
 aside.sidebar section h1 {
 	font-size: 1.6em;
 	font-weight: normal;
-	color: #329628 !important;
+	color: #55a955 !important;
 }
 
 aside.sidebar {
