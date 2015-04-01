@@ -13,8 +13,8 @@ description: MarkText是iPhone上的Markdown文本编辑器。支持实时语法
 
 MarkText是iPhone上的Markdown文本编辑器。支持实时语法高亮、带CSS的HTML预览、文件导出为HTML/PNG/PDF, 分享到Evernote，Dropbox或 Email。
 
-当前版本：1.0.0  
-更新时间：2014.12.16
+当前版本：1.0.1  
+更新时间：2014.01.14
 
 ## iPhone 屏幕截图
 
@@ -25,7 +25,7 @@ MarkText是iPhone上的Markdown文本编辑器。支持实时语法高亮、带C
 
 ## 下载
   
-[![从AppStore下载](/images/app/appstore.png)](https://itunes.apple.com/cn/app/marktext-markdown-text-editor/id948768793?mt=8)
+[![从AppStore下载](/images/app/appstore_available.png)](https://itunes.apple.com/cn/app/marktext-markdown-text-editor/id948768793?mt=8)
 
 ## 应用介绍
 
@@ -34,22 +34,27 @@ MarkText是iPhone上的一款Markdown文本编辑器.
 
 ### 编辑 & 分享
 
-通过MarkText，你可以导入或创建markdown格式的文本文件，编辑的时候支持实时语法高亮显示。
-支持将markdown的纯文本转换为HTML、PNG或PDF文件。当编辑完成之后，你可以MD、HTML、PNG或PDF的格式将文稿分享出去。可以通过iTunes导出到电脑，或者发送到Evernote、Dropbox或Email。
+通过MarkText，你可以导入或创建markdown格式的文本文件，支持实时语法高亮显示。编辑完后，支持将markdown的纯文本转换为HTML、PNG或PDF文件，通过iTunes导出到电脑，或者分享到Evernote、Dropbox或Email。
 
 ### 光标增强
 
-通过输入辅助工具条，你可以很方便地点击按钮插入Tabs、标题、列表、代码块，或者超链接。左右滑动工具条可以迅速移动光标；双指选择可以快速选择文本。
+辅助工具条可以让你很方便地点击按钮插入Tabs、标题、列表、代码块，或者超链接。左右滑动工具条可以迅速移动光标；双指选择可以快速选择文本。
 
 ### HTML预览
 
-与语法高亮一样，你也可以使用CSS语法高亮地预览HTML内容。HTML预览支持以下语法特性：常规Markdown、MultiMarkdown、脚注、图片、表格和代码块。
+HTML预览支持CSS样式，语法高亮支持的特性：常规Markdown、MultiMarkdown、脚注、图片、表格和代码块。
+
+## 版本1.0.1 新特性
+
++ Bug 修复；
++ 字数统计;
++ 全文搜索。
 
 ## 版本1.0.0 特性
 
 + 创建、编辑markdown格式的文本；
 + 实时语法高亮；
-+ 带有样式的HTML预览；
++ 带CSS样式的HTML预览；
 + 修改主题配色；
 + 从iTunes导入文稿；
 + 导出文稿为HTML、PNG和PDF格式的文件；
