@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2015-04-01T20:16:01+08:00</updated>
+  <updated>2015-04-07T18:02:12+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[密码计算器，保护您iPhone里的隐私文件]]></title>
+    <link href="http://blog.lessfun.com/blog/2015/04/07/passcalc-protect-your-privacy-in-iphone/"/>
+    <updated>2015-04-07T16:48:09+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2015/04/07/passcalc-protect-your-privacy-in-iphone</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/app/passcalc/passcalc_appicon.png" width="120" height="120" title="&lsquo;PassCalc App&rsquo; &lsquo;PassCalc App&rsquo;" ></p>
+
+<p>密码计算器是一款iPhone私密文件管理器，通过在计算器上输入密码来访问您的私人文件可以完美地保护您的照片、视频、日记、联系人等私人隐私文件。</p>
+
+<p>当前版本：1.0.0<br/>
+更新时间：2015.04.07</p>
+
+<h2>iPhone 屏幕截图</h2>
+
+<div style="margin-top:30px;font-size:16px;line-height:20px;background:rgb(78,81,85);border-radius:4px;padding:4px;">
+<div style="margin: 0 14px; max-height: 640px; min-height: 320px; overflow-x: auto; overflow-y: hidden; padding-bottom: 16px; white-space: nowrap;"><img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/passcalc/passcalc_screenshot_1.png" alt="1"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/passcalc/passcalc_screenshot_2.png" alt="2"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/passcalc/passcalc_screenshot_3.png" alt="3"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/passcalc/passcalc_screenshot_4.png" alt="4"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/passcalc/passcalc_screenshot_5.png" alt="5"></div>
+</div>
+
+
+<h2>下载</h2>
+
+<p><a href="https://itunes.apple.com/cn/app/id980936769?mt=8"><img src="/images/app/appstore_available.png" alt="从AppStore下载" /></a></p>
+
+<!-- more -->
+
+
+<h2>应用介绍</h2>
+
+<p>密码计算器是iPhone上的一款私密文件管理器。那么多年以来，你一定保存了一些私密的照片、视频、笔记或联系人在手机里，并且不想被你身边的人看到。密码计算器可以完美地实现你的需求，保护你的隐私。表面上这是一款计算器，但是可以输入密码来访问你的私人文件。</p>
+
+<h3>安全性</h3>
+
+<ul>
+<li>使用RSA，AES加密技术来存储照片、笔记、视频和联系人。</li>
+<li>即使手机被盗，被破解，别人也无法打开加密的文件，妈妈再也不用担心你的艳照门啦。</li>
+</ul>
+
+
+<h3>文件管理器</h3>
+
+<ul>
+<li>使用WiFi、USB与电脑进行文件上传、下载。</li>
+<li>从相机或相册导入照片、视频。</li>
+<li>通过邮件、微信来分享文字、图片。</li>
+<li>支持视频格式：mov，m4v，mp4，mpv，3gp。</li>
+<li>支持图片格式：jpg，png，gif，bmp。</li>
+<li>支持笔记扩展名：txt，text，md，markdown，markd，markdn，mdown，mkd，mkdn。</li>
+</ul>
+
+
+<h3>私密笔记</h3>
+
+<ul>
+<li>语法高亮。</li>
+<li>通过电子邮件、微信分享。</li>
+</ul>
+
+
+<h3>私密联系人</h3>
+
+<ul>
+<li>无限制添加联系人。</li>
+<li>给联系人添加备注。</li>
+<li>快速拨号，发送短信，发送电子邮件。</li>
+</ul>
+
+
+<h3>浏览器</h3>
+
+<ul>
+<li>全功能浏览器，无障碍地访问你想看的网站，并且不留下蛛丝马迹。</li>
+<li>保存你常用的书签，方便你下次再次访问。</li>
+<li>一键下载网页上的所有图像，保存到图像可以在相册中找到。</li>
+</ul>
+
+
+<h3>更多</h3>
+
+<ul>
+<li>功能完善的数学计算器。</li>
+<li>应用程序切换到后台时，自动显示计算器界面。</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[UITableView性能优化，提升列表滚动的流畅性]]></title>
@@ -368,108 +454,6 @@ __strong __typeof(self) strongSelf = weakSelf;
 <li><a href="http://stackoverflow.com/questions/21113963/is-the-weakself-strongself-dance-really-necessary-when-referencing-self-inside-a?rq=1">Is the weakSelf/strongSelf dance really necessary when referencing self inside a non-retained completion called from a UIViewController?</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Xcode 6.1 iPhone Simulator 8.1 Keyboard Issue：键盘无法显示，设置inputAccessoryView崩溃]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/10/24/xcode-6-dot-1-iphone-simulator-8-dot-1-keyboard-issue/"/>
-    <updated>2014-10-24T14:42:51+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/10/24/xcode-6-dot-1-iphone-simulator-8-dot-1-keyboard-issue</id>
-    <content type="html"><![CDATA[<p>随着iPhone 6 &amp; Plus的发布，苹果也陆续更新了XCode和开发模拟器，目前最新的Xcode版本是6.1，内置的Simulator的iOS版本是8.1。也许你兴致冲冲迫不及待地一下子升级到了最新版的开发环境，那么可能会遇到一些键盘上的问题：无法弹出键盘，或者弹出键盘后会莫名其妙地崩溃。</p>
-
-<p>当然，不能怪你，你的项目在iOS7.1上是运行地好好的。只能怪苹果没有推出一个完美无Bug的开发工具。</p>
-
-<!--more-->
-
-
-<h2>1. 在XCode 6，iOS 8.1模拟器无法弹出键盘</h2>
-
-<p>解决方法很简单，在Simulator的系统菜单中，取消勾选：</p>
-
-<p><code>Hardware</code> &ndash;> <code>Keyboard</code> &ndash;> <code>Connect Hardware Keyboard</code>。</p>
-
-<p>取消选中之后，键盘可以正常弹出，但是，无法使用硬件的键盘输入了，自己慢慢用鼠标点击模拟器里的键盘吧……</p>
-
-<h2>2. 弹出键盘后会莫名其妙地崩溃</h2>
-
-<p>也许你键盘能正常显示了，但是一显示就崩溃，在堆栈中有这样的字样：</p>
-
-<p>``` m</p>
-
-<pre><code>*** First throw call stack:
-(
-    0   CoreFoundation                      0x02101df6 __exceptionPreprocess + 182
-    1   libobjc.A.dylib                     0x01d8ba97 objc_exception_throw + 44
-    2   CoreFoundation                      0x02101d1d +[NSException raise:format:] + 141
-    3   UIKit                               0x008cff9c -[UIViewController _addChildViewController:performHierarchyCheck:notifyWillMove:] + 210
-    4   UIKit                               0x00f4b44d -[UIInputWindowController changeToInputViewSet:] + 576
-    5   UIKit                               0x00f4c1be __43-[UIInputWindowController setInputViewSet:]_block_invoke + 103
-    6   UIKit                               0x007f73bf +[UIView(Animation) performWithoutAnimation:] + 82
-    7   UIKit                               0x00f4bf9c -[UIInputWindowController setInputViewSet:] + 374
-    8   UIKit                               0x00ce9101 __64-[UIPeripheralHost(UIKitInternal) setInputViews:animationStyle:]_block_invoke1459 + 43
-    9   UIKit                               0x00f473af -[UIInputWindowController performOperations:withAnimationStyle:] + 56
-
-......
-}
-</code></pre>
-
-<p>```</p>
-
-<p>以上崩溃也只在XCode 6，iOS 8出现，在iOS 7一切正常。</p>
-
-<p>原因可能是你设置了<code>UITextField</code>或<code>UITextView</code>的<code>inputView</code>或<code>inputAccessoryView</code>为customView，比如这样：</p>
-
-<p>``` m</p>
-
-<pre><code>//在Xib或Storyboard中创建了一个自定义View
-@property (strong, nonatomic) IBOutlet UIView *switchKeyboardBar;
-
-...
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.textView.inputAccessoryView = self.switchKeyboardBar;
-}
-</code></pre>
-
-<p>```</p>
-
-<p>上述代码在iOS 8中是必定Crash的，因为<code>UITextView.inputAccessoryView</code>不能是其他View的子View。而上面的<code>switchKeyboardBar</code>先被添加到了当前<code>UIViewController</code>的<code>View</code>中，再被设置到<code>inputAccessoryView</code>，就会导致崩溃。</p>
-
-<h3>2.1 解决方法</h3>
-
-<p>不从Xib创建自定义View，而是在代码中手动创建，并且不添加到别的View中。</p>
-
-<p>如下：</p>
-
-<p>``` m</p>
-
-<pre><code>//注意这里没有 IBOutlet
-@property (strong, nonatomic) UIView *switchKeyboardBar;
-
-- (UIView *)switchKeyboardBar
-{
-    if (!_switchKeyboardBar) {
-        _switchKeyboardBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40)];
-
-        //add other subviews
-        ...
-    }
-    return _switchKeyboardBar;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.textView.inputAccessoryView = self.switchKeyboardBar;
-}
-</code></pre>
-
-<p>```</p>
 ]]></content>
   </entry>
   

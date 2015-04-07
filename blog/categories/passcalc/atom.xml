@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: App | 浮生猎趣]]></title>
-  <link href="http://blog.lessfun.com/blog/categories/app/atom.xml" rel="self"/>
+  <title><![CDATA[Category: PassCalc | 浮生猎趣]]></title>
+  <link href="http://blog.lessfun.com/blog/categories/passcalc/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
   <updated>2015-04-07T18:02:12+08:00</updated>
   <id>http://blog.lessfun.com/</id>
@@ -94,74 +94,6 @@
 <ul>
 <li>功能完善的数学计算器。</li>
 <li>应用程序切换到后台时，自动显示计算器界面。</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MarkText - iOS 上支持语法高亮、HTML预览、文件导出的Markdown文本编辑器]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/12/10/marktext-a-markdown-text-editor-for-ios/"/>
-    <updated>2014-12-10T21:29:06+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/12/10/marktext-a-markdown-text-editor-for-ios</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/app/marktext/marktext_appicon.png" width="120" height="120" title="&lsquo;MarkText App&rsquo; &lsquo;A Markdown Text Editor&rsquo;" ></p>
-
-<p>MarkText是iPhone上的Markdown文本编辑器。支持实时语法高亮、带CSS的HTML预览、文件导出为HTML/PNG/PDF, 分享到Evernote，Dropbox或 Email。</p>
-
-<p>当前版本：1.0.1<br/>
-更新时间：2014.01.14</p>
-
-<h2>iPhone 屏幕截图</h2>
-
-<div style="margin-top:30px;font-size:16px;line-height:20px;background:rgb(78,81,85);border-radius:4px;padding:4px;">
-<div style="margin: 0 14px; max-height: 640px; min-height: 320px; overflow-x: auto; overflow-y: hidden; padding-bottom: 16px; white-space: nowrap;"><img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_1.png" alt="1"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_2.png" alt="2"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_3.png" alt="3"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_4.png" alt="4"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_5.png" alt="5"></div>
-</div>
-
-
-<h2>下载</h2>
-
-<p><a href="https://itunes.apple.com/cn/app/marktext-markdown-text-editor/id948768793?mt=8"><img src="/images/app/appstore_available.png" alt="从AppStore下载" /></a></p>
-
-<h2>应用介绍</h2>
-
-<!--more-->
-
-
-<p>MarkText是iPhone上的一款Markdown文本编辑器.</p>
-
-<h3>编辑 &amp; 分享</h3>
-
-<p>通过MarkText，你可以导入或创建markdown格式的文本文件，支持实时语法高亮显示。编辑完后，支持将markdown的纯文本转换为HTML、PNG或PDF文件，通过iTunes导出到电脑，或者分享到Evernote、Dropbox或Email。</p>
-
-<h3>光标增强</h3>
-
-<p>辅助工具条可以让你很方便地点击按钮插入Tabs、标题、列表、代码块，或者超链接。左右滑动工具条可以迅速移动光标；双指选择可以快速选择文本。</p>
-
-<h3>HTML预览</h3>
-
-<p>HTML预览支持CSS样式，语法高亮支持的特性：常规Markdown、MultiMarkdown、脚注、图片、表格和代码块。</p>
-
-<h2>版本1.0.1 新特性</h2>
-
-<ul>
-<li>Bug 修复；</li>
-<li>字数统计;</li>
-<li>全文搜索。</li>
-</ul>
-
-
-<h2>版本1.0.0 特性</h2>
-
-<ul>
-<li>创建、编辑markdown格式的文本；</li>
-<li>实时语法高亮；</li>
-<li>带CSS样式的HTML预览；</li>
-<li>修改主题配色；</li>
-<li>从iTunes导入文稿；</li>
-<li>导出文稿为HTML、PNG和PDF格式的文件；</li>
-<li>分享内容到Evernote、Dropbox和Email；</li>
-<li>光标增强：滑动输入工具栏，快速移动光标；</li>
-<li>支持的文件后缀类型：md、mmd、markdown、markdn、mdown、mkdn、markd、txt、text。</li>
 </ul>
 
 ]]></content>
