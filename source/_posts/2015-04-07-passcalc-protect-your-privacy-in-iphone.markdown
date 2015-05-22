@@ -5,16 +5,16 @@ date: 2015-04-07 16:48:09 +0800
 comments: true
 categories: [iOS, App, PassCalc]
 tags: [app, ios]
-keywords: app, ios, 私人, 计算器, 加密
-description: 密码计算器是一款iPhone私密文件管理器，通过在计算器上输入密码来访问您的私人文件可以完美地保护您的照片、视频、日记、联系人等私人隐私文件。
+keywords: 藏文件利器, PassCalc, 私人计算器, 私人相册, 照片保险柜
+description: 密码计算器是iPhone上的一款私密文件管理器，通过在计算器上输入密码来访问您的私人文件，可以完美地保护您的照片、视频、日记、联系人等私人隐私文件。
 ---
 
 {% img left /images/app/passcalc/passcalc_appicon.png 120 120 'PassCalc App' 'PassCalc App' %}
 
-密码计算器是一款iPhone私密文件管理器，通过在计算器上输入密码来访问您的私人文件可以完美地保护您的照片、视频、日记、联系人等私人隐私文件。
+密码计算器是iPhone上的一款私密文件管理器，通过在计算器上输入密码来访问您的私人文件，可以完美地保护您的照片、视频、日记、联系人等私人隐私文件。
 
-当前版本：1.0.0  
-更新时间：2015.04.07
+当前版本：1.0.1  
+更新时间：2015.05.06
 
 ## iPhone 屏幕截图
 
@@ -39,7 +39,7 @@ description: 密码计算器是一款iPhone私密文件管理器，通过在计�
 ### 文件管理器
 - 使用WiFi、USB与电脑进行文件上传、下载。
 - 从相机或相册导入照片、视频。
-- 通过邮件、微信来分享文字、图片。
+- 通过邮件、微信来分享文字、图片，支持发送Gif动态表情。
 - 支持视频格式：mov，m4v，mp4，mpv，3gp。
 - 支持图片格式：jpg，png，gif，bmp。
 - 支持笔记扩展名：txt，text，md，markdown，markd，markdn，mdown，mkd，mkdn。
@@ -47,6 +47,11 @@ description: 密码计算器是一款iPhone私密文件管理器，通过在计�
 ### 私密笔记
 - 语法高亮。
 - 通过电子邮件、微信分享。
+
+### 私密文档
+
+- 支持的文档类型：doc, ppt, xls, docx, pptx, xlsx, key, numbers, pages, pdf, rtf；
+- 可导入、导出、分享文档。
 
 ### 私密联系人
 - 无限制添加联系人。
@@ -57,8 +62,18 @@ description: 密码计算器是一款iPhone私密文件管理器，通过在计�
 - 全功能浏览器，无障碍地访问你想看的网站，并且不留下蛛丝马迹。
 - 保存你常用的书签，方便你下次再次访问。
 - 一键下载网页上的所有图像，保存到图像可以在相册中找到。
+- 离线浏览网页，保存完整网页内容为PDF。
 
 ### 更多
 - 功能完善的数学计算器。
 - 应用程序切换到后台时，自动显示计算器界面。
+
+### 1.0.1更新信息
+
++ 新增文档类型，支持：doc, ppt, xls, docx, pptx, xlsx, key, numbers, pages, pdf, rtf；
++ 离线浏览网页，保存完整网页内容为PDF；
++ 调用第三方App打开文件；
++ 处理来自第三方的文件；
++ 支持 iOS 8 Today Extension；
++ Bug 修复。
 
