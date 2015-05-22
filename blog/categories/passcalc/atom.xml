@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PassCalc | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/passcalc/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2015-04-07T18:02:12+08:00</updated>
+  <updated>2015-05-22T10:42:46+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -20,10 +20,10 @@
     <id>http://blog.lessfun.com/blog/2015/04/07/passcalc-protect-your-privacy-in-iphone</id>
     <content type="html"><![CDATA[<p><img class="left" src="/images/app/passcalc/passcalc_appicon.png" width="120" height="120" title="&lsquo;PassCalc App&rsquo; &lsquo;PassCalc App&rsquo;" ></p>
 
-<p>密码计算器是一款iPhone私密文件管理器，通过在计算器上输入密码来访问您的私人文件可以完美地保护您的照片、视频、日记、联系人等私人隐私文件。</p>
+<p>密码计算器是iPhone上的一款私密文件管理器，通过在计算器上输入密码来访问您的私人文件，可以完美地保护您的照片、视频、日记、联系人等私人隐私文件。</p>
 
-<p>当前版本：1.0.0<br/>
-更新时间：2015.04.07</p>
+<p>当前版本：1.0.1<br/>
+更新时间：2015.05.06</p>
 
 <h2>iPhone 屏幕截图</h2>
 
@@ -56,7 +56,7 @@
 <ul>
 <li>使用WiFi、USB与电脑进行文件上传、下载。</li>
 <li>从相机或相册导入照片、视频。</li>
-<li>通过邮件、微信来分享文字、图片。</li>
+<li>通过邮件、微信来分享文字、图片，支持发送Gif动态表情。</li>
 <li>支持视频格式：mov，m4v，mp4，mpv，3gp。</li>
 <li>支持图片格式：jpg，png，gif，bmp。</li>
 <li>支持笔记扩展名：txt，text，md，markdown，markd，markdn，mdown，mkd，mkdn。</li>
@@ -68,6 +68,14 @@
 <ul>
 <li>语法高亮。</li>
 <li>通过电子邮件、微信分享。</li>
+</ul>
+
+
+<h3>私密文档</h3>
+
+<ul>
+<li>支持的文档类型：doc, ppt, xls, docx, pptx, xlsx, key, numbers, pages, pdf, rtf；</li>
+<li>可导入、导出、分享文档。</li>
 </ul>
 
 
@@ -86,6 +94,7 @@
 <li>全功能浏览器，无障碍地访问你想看的网站，并且不留下蛛丝马迹。</li>
 <li>保存你常用的书签，方便你下次再次访问。</li>
 <li>一键下载网页上的所有图像，保存到图像可以在相册中找到。</li>
+<li>离线浏览网页，保存完整网页内容为PDF。</li>
 </ul>
 
 
@@ -94,6 +103,18 @@
 <ul>
 <li>功能完善的数学计算器。</li>
 <li>应用程序切换到后台时，自动显示计算器界面。</li>
+</ul>
+
+
+<h3>1.0.1更新信息</h3>
+
+<ul>
+<li>新增文档类型，支持：doc, ppt, xls, docx, pptx, xlsx, key, numbers, pages, pdf, rtf；</li>
+<li>离线浏览网页，保存完整网页内容为PDF；</li>
+<li>调用第三方App打开文件；</li>
+<li>处理来自第三方的文件；</li>
+<li>支持 iOS 8 Today Extension；</li>
+<li>Bug 修复。</li>
 </ul>
 
 ]]></content>

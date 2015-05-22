@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2015-04-07T18:02:12+08:00</updated>
+  <updated>2015-05-22T10:42:46+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -20,10 +20,10 @@
     <id>http://blog.lessfun.com/blog/2015/04/07/passcalc-protect-your-privacy-in-iphone</id>
     <content type="html"><![CDATA[<p><img class="left" src="http://blog.lessfun.com/images/app/passcalc/passcalc_appicon.png" width="120" height="120" title="PassCalc App" alt="PassCalc App"></p>
 
-<p>密码计算器是一款iPhone私密文件管理器，通过在计算器上输入密码来访问您的私人文件可以完美地保护您的照片、视频、日记、联系人等私人隐私文件。</p>
+<p>密码计算器是iPhone上的一款私密文件管理器，通过在计算器上输入密码来访问您的私人文件，可以完美地保护您的照片、视频、日记、联系人等私人隐私文件。</p>
 
-<p>当前版本：1.0.0<br/>
-更新时间：2015.04.07</p>
+<p>当前版本：1.0.1<br/>
+更新时间：2015.05.06</p>
 
 <h2>iPhone 屏幕截图</h2>
 
@@ -56,7 +56,7 @@
 <ul>
 <li>使用WiFi、USB与电脑进行文件上传、下载。</li>
 <li>从相机或相册导入照片、视频。</li>
-<li>通过邮件、微信来分享文字、图片。</li>
+<li>通过邮件、微信来分享文字、图片，支持发送Gif动态表情。</li>
 <li>支持视频格式：mov，m4v，mp4，mpv，3gp。</li>
 <li>支持图片格式：jpg，png，gif，bmp。</li>
 <li>支持笔记扩展名：txt，text，md，markdown，markd，markdn，mdown，mkd，mkdn。</li>
@@ -68,6 +68,14 @@
 <ul>
 <li>语法高亮。</li>
 <li>通过电子邮件、微信分享。</li>
+</ul>
+
+
+<h3>私密文档</h3>
+
+<ul>
+<li>支持的文档类型：doc, ppt, xls, docx, pptx, xlsx, key, numbers, pages, pdf, rtf；</li>
+<li>可导入、导出、分享文档。</li>
 </ul>
 
 
@@ -86,6 +94,7 @@
 <li>全功能浏览器，无障碍地访问你想看的网站，并且不留下蛛丝马迹。</li>
 <li>保存你常用的书签，方便你下次再次访问。</li>
 <li>一键下载网页上的所有图像，保存到图像可以在相册中找到。</li>
+<li>离线浏览网页，保存完整网页内容为PDF。</li>
 </ul>
 
 
@@ -94,6 +103,18 @@
 <ul>
 <li>功能完善的数学计算器。</li>
 <li>应用程序切换到后台时，自动显示计算器界面。</li>
+</ul>
+
+
+<h3>1.0.1更新信息</h3>
+
+<ul>
+<li>新增文档类型，支持：doc, ppt, xls, docx, pptx, xlsx, key, numbers, pages, pdf, rtf；</li>
+<li>离线浏览网页，保存完整网页内容为PDF；</li>
+<li>调用第三方App打开文件；</li>
+<li>处理来自第三方的文件；</li>
+<li>支持 iOS 8 Today Extension；</li>
+<li>Bug 修复。</li>
 </ul>
 
 
@@ -269,15 +290,20 @@
     <id>http://blog.lessfun.com/blog/2014/12/10/marktext-a-markdown-text-editor-for-ios</id>
     <content type="html"><![CDATA[<p><img class="left" src="http://blog.lessfun.com/images/app/marktext/marktext_appicon.png" width="120" height="120" title="MarkText App" alt="A Markdown Text Editor"></p>
 
-<p>MarkText是iPhone上的Markdown文本编辑器。支持实时语法高亮、带CSS的HTML预览、文件导出为HTML/PNG/PDF, 分享到Evernote，Dropbox或 Email。</p>
+<p>MarkText是iPhone上的Markdown文本编辑器。支持iCloud同步，实时语法高亮、带CSS的HTML预览、文件导出为HTML/PNG/PDF, 分享到Evernote，Dropbox或Email。</p>
 
-<p>当前版本：1.0.1<br/>
-更新时间：2014.01.14</p>
+<p>当前版本：1.0.3<br/>
+更新时间：2015.05.06</p>
 
 <h2>iPhone 屏幕截图</h2>
 
 <div style="margin-top:30px;font-size:16px;line-height:20px;background:rgb(78,81,85);border-radius:4px;padding:4px;">
-<div style="margin: 0 14px; max-height: 640px; min-height: 320px; overflow-x: auto; overflow-y: hidden; padding-bottom: 16px; white-space: nowrap;"><img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_1.png" alt="1"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_2.png" alt="2"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_3.png" alt="3"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_4.png" alt="4"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_5.png" alt="5"></div>
+<div style="margin: 0 14px; max-height: 640px; min-height: 320px; overflow-x: auto; overflow-y: hidden; padding-bottom: 16px; white-space: nowrap;">
+  <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_1.png" alt="1">
+  <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_2.png" alt="2">
+  <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_3.png" alt="3">
+  <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_4.png" alt="4">
+</div>
 </div>
 
 
@@ -290,11 +316,11 @@
 <!--more-->
 
 
-<p>MarkText是iPhone上的一款Markdown文本编辑器.</p>
+<p>MarkText是iPhone与iPad上的一款Markdown文本编辑器，支持iCloud同步，实时语法高亮，能转换为HTML、PNG或PDF文件。通过Email发送格式化的markdown内容，或者调用第三方App打开转换后的文件。</p>
 
-<h3>编辑 &amp; 分享</h3>
+<h3>导入 &amp; 导出</h3>
 
-<p>通过MarkText，你可以导入或创建markdown格式的文本文件，支持实时语法高亮显示。编辑完后，支持将markdown的纯文本转换为HTML、PNG或PDF文件，通过iTunes导出到电脑，或者分享到Evernote、Dropbox或Email。</p>
+<p>通过iTunes导入markdown文本文件，或通过MarkText创建，编辑时支持实时语法高亮显示。编辑完成之后，可以通过iTunes导出到电脑，或者转换为HTML、PNG、PDF文件并发送到Evernote、Dropbox、Email等第三方App。</p>
 
 <h3>光标增强</h3>
 
@@ -304,27 +330,37 @@
 
 <p>HTML预览支持CSS样式，语法高亮支持的特性：常规Markdown、MultiMarkdown、脚注、图片、表格和代码块。</p>
 
-<h2>版本1.0.1 新特性</h2>
+<h3>iCloud同步：</h3>
+
+<p>通过iCloud，在所有设备自动同步存储所有文件。</p>
+
+<h2>版本1.0.3 新特性</h2>
 
 <ul>
-<li>Bug 修复；</li>
-<li>字数统计;</li>
-<li>全文搜索。</li>
+<li>支持通过邮件发送HTML内容；</li>
+<li>修复：HTML预览的加粗、斜体；</li>
+<li>修复：关闭iCloud同步后无法新建文档；</li>
+<li>修复：iOS 8下可能出现的光标抖动；</li>
+<li>修复：在空行无法点击快捷输入。</li>
 </ul>
 
 
-<h2>版本1.0.0 特性</h2>
+<h2>主要功能</h2>
 
 <ul>
 <li>创建、编辑markdown格式的文本；</li>
 <li>实时语法高亮；</li>
 <li>带CSS样式的HTML预览；</li>
 <li>修改主题配色；</li>
-<li>从iTunes导入文稿；</li>
-<li>导出文稿为HTML、PNG和PDF格式的文件；</li>
-<li>分享内容到Evernote、Dropbox和Email；</li>
+<li>通过iTunes导入、导出文件；</li>
+<li>转换为HTML、PNG或PDF格式；</li>
+<li>分享到Evernote、Dropbox或Email等App；</li>
 <li>光标增强：滑动输入工具栏，快速移动光标；</li>
-<li>支持的文件后缀类型：md、mmd、markdown、markdn、mdown、mkdn、markd、txt、text。</li>
+<li>支持的文件后缀：md、mmd、markdown、markdn、mdown、mkdn、markd、txt、text；</li>
+<li>全文搜索；</li>
+<li>字数统计;</li>
+<li>支持正则的查找替换;</li>
+<li>iCloud同步。</li>
 </ul>
 
 
