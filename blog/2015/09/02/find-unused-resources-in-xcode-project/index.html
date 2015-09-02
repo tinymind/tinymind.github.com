@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Invalid Binary, the Binary Is Missing Architectures[arm64] - iTunes Connect的Bug - 浮生猎趣</title>
+  <title>查找XCode工程中没被使用的图片资源 - 浮生猎趣</title>
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="让iOS开发者乱成一团的强制提交支持64位架构的App，原来只是苹果的iTunes Connect的Bug。">
-  <meta name="keywords" content="iOS, App, arm64, XCode">
+  <meta name="description" content="LSUnusedResources 是一款查找 XCode 工程中未被使用的图片资源的 Mac 小工具，简单快速。有助于减少 App 的安装包大小，优化项目工程。">
+  <meta name="keywords" content="Unused, XCode, Project, Resources, 未使用, 资源, 图片">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.lessfun.com/blog/2014/09/11/invalid-binary-the-binary-is-missing-architectures-arm64">
+  <link rel="canonical" href="http://blog.lessfun.com/blog/2015/09/02/find-unused-resources-in-xcode-project">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
@@ -87,7 +87,7 @@
   
   <header>
     
-      <h1 class="entry-title">Invalid Binary, the Binary Is Missing Architectures[arm64] - iTunes Connect的Bug</h1>
+      <h1 class="entry-title">查找XCode工程中没被使用的图片资源</h1>
     
     
       <p class="meta">
@@ -103,7 +103,7 @@
   
 
 
-<time datetime="2014-09-11T14:51:58+08:00" pubdate data-updated="true">2014-09-11, Thu</time>
+<time datetime="2015-09-02T13:27:29+08:00" pubdate data-updated="true">2015-09-02, Wed</time>
         
 		
           | <a href="#comments">Comments</a>
@@ -113,37 +113,24 @@
   </header>
 
 
-<div class="entry-content"><p>从昨天开始，网上iOS开发者哀鸿一片，因为提交App到AppStore的时候，都遇到了这样一个错误：</p>
+<div class="entry-content"><p><img src="https://github.com/tinymind/LSUnusedResources/raw/master/LSUnusedResourcesExample.gif" alt="LSMessageHUD Example1" /></p>
 
-<blockquote><p>「Today I cannot submit the binary to App Store, with the error &ldquo;Invalid binary, the binary is missing architectures[arm64]&rdquo;.」</p></blockquote>
+<h2>需求的引入</h2>
 
-<p>国内开发者也遇到了同样的问题：<br/>
-<a href="http://bbs.lbsyun.baidu.com/redirect.php?tid=12550&amp;goto=lastpost">现在提交的新应用貌似必须支持arm64了</a></p>
+<p>一个项目开发得越久，添加的功能模块也就越多，相应地，也会慢慢引入大量图片等资源。但是，在移除一些不再使用的模块的时候，开发者往往会把该模块所对应的图片资源一起删除，因为源码和资源是分离的。长久以来，项目中就会存在大量没被使用的资源文件。</p>
 
-<p><a href="http://www.cocoachina.com/ask/questions/show/119687">上传项目到APPstore，遇到的问题</a></p>
+<p>在某个时机，也就是需求完成得差不多，Bug 增加得不够多，Crash 上涨得不够快的时候，码农们终于有了一点闲暇时间，打算清理一下资源文件，减少 App 安装包的大小。这是一件体力活，方法无非是，一个一个地复制资源文件名，然后在 XCode 中全局查找该字符串，如果结果为 0，那么这个资源很可能就没有被使用。为什么说很可能？因为在代码中，有可能通过字符串拼接的方式使用了这个资源，而这种情况是没办法通过字符串匹配查找出来的。</p>
 
-<p>公司内部这两天可能刚好不需要提交App，但是这是迟早的事，而项目中大部分引用的库都不支持arm64，未免开始紧张地修改工程编译选项，推动依赖库支持64位架构，沟通、协调、改错，乱成一团蚂蚁。</p>
-
-<p>结果……苹果告诉我们，不好意思，让你们受惊了，这是我们的一个Bug！</p>
+<p>道理我们都懂，但是，操作起来也实在是太繁琐了，码农们不可能会乐意这样干的。于是，我们需要这么一款工具：能够迅速找出工程中所有没被使用的资源文件。</p>
 
 <!--more-->
 
 
-<p>坑爹呢这是！<br/>
-<img src="/images/2014/09/keng_die_ne.jpg" alt="ios_tabbar_running" /></p>
+<h2>已有的方案</h2>
 
-<p>苹果开发者论坛里的员工TimT如是说：</p>
+<p>果不其然，在我打算写这么一个工具的时候，在网上已经有了两种方案。</p>
 
-<blockquote><p>「Yes, there was a fix recently applied to the server. Everyone should be able to submit 32-bit apps again.」</p></blockquote>
-
-<p><img src="/images/2014/09/invalid_arm64.png" alt="ios_tabbar_running" /> <br/>
-<a href="https://devforums.apple.com/message/1039265#1039265">32. Re: Invalid binary, the binary is missing architectures[arm64]</a></p>
-
-<p>居然Sorry也没一句！任你乱如蚂蚁，我自泰然自若。</p>
-
-<p>好了，没啥事了，还不能洗洗睡，继续提交32位App去吧~</p>
-
-<p>PS: 查看.a库或.framework文件支持那些架构的方法如下：</p>
+<h3>方案1：<a href="http://stackoverflow.com/a/6113449/3737409">万能的脚本</a></h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -154,25 +141,62 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>; .a
-</span><span class='line'><span class="nv">$cd</span> libs
-</span><span class='line'><span class="nv">$lipo</span> -info *.a
-</span><span class='line'>Architectures in the fat file: libssl.a are: i386 armv7 armv7s
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'><span class="nv">PROJ</span><span class="o">=</span><span class="sb">`</span>find . -name <span class="s1">&#39;*.xib&#39;</span> -o -name <span class="s1">&#39;*.[mh]&#39;</span><span class="sb">`</span>
 </span><span class='line'>
-</span><span class='line'>; .framework
-</span><span class='line'><span class="nv">$cd</span> xxFramework.framework
-</span><span class='line'><span class="nv">$lipo</span> -info xxFramework
-</span><span class='line'>Architectures in the fat file: xxFramework are: armv7 armv7s i386
+</span><span class='line'><span class="k">for </span>png in <span class="sb">`</span>find . -name <span class="s1">&#39;*.png&#39;</span><span class="sb">`</span>
+</span><span class='line'><span class="k">do</span>
+</span><span class='line'><span class="k">    </span><span class="nv">name</span><span class="o">=</span><span class="sb">`</span>basename <span class="nv">$png</span><span class="sb">`</span>
+</span><span class='line'>    <span class="k">if</span> ! grep -qhs <span class="s2">&quot;$name&quot;</span> <span class="s2">&quot;$PROJ&quot;</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;$png is not referenced&quot;</span>
+</span><span class='line'>    <span class="k">fi</span>
+</span><span class='line'><span class="k">done</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p><strong>缺点</strong>：不够智能，不够通用，速度太慢，结果不正确。</p>
+
+<h3>方案2：<a href="http://jeffhodnett.github.io/Unused/">脚本界面化</a></h3>
+
+<p><a href="http://jeffhodnett.github.io/Unused/">Unused</a> 对脚本的调用做了封装，通过界面可以配置一定的信息，然后比较清晰的输入结果。</p>
+
+<p><strong>缺点</strong>：实际上，Unused 的内部还是调用了方案1的脚本，所以方案1的缺点也就是方案2的缺点。</p>
+
+<h2>LSUnusedResources 做的改进</h2>
+
+<p>LSUnusedResources 很大程度上受 Unused 的影响，比如界面、交互，以及部分代码。但是，本工具在核心代码上做了优化，使其在搜索的速度、结果的正确上都有了很大的提高。</p>
+
+<p>核心步骤，简述如下：</p>
+
+<ul>
+<li>查找：选定的目录下的所有资源文件。这一步与上述方案1区别不大，都是调用 <code>find</code> 命令查找指定后缀名的文件。</li>
+<li>匹配：与上述方案不同，我不是对每个资源文件名都做一次全文搜索匹配，因为加入项目的资源太多，这里会导致性能快速下降。而我只是针对源码、Xib、Storyboard 和 plist 等文件，先全文搜索其中可能是引用了资源的字符串，然后用资源名和字符串做匹配。</li>
+</ul>
+
+
+<h2>使用方法</h2>
+
+<ol>
+<li>点击 <code>Browse..</code> 选择一个文件夹；</li>
+<li>点击 <code>Search</code> 开始搜索；</li>
+<li>等待片刻即可看到结果。</li>
+</ol>
+
+
+<h2>下载安装</h2>
+
+<ul>
+<li>下载: <a href="https://github.com/tinymind/LSUnusedResources/raw/master/Release/LSUnusedResources.app.zip">LSUnusedResources.app.zip</a></li>
+<li>或者使用 XCode 编译运行<a href="https://github.com/tinymind/LSUnusedResources/">项目代码</a>。</li>
+</ul>
 
 
 <blockquote class='post_original_block'>
             原文作者：
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
-            <a href='http://blog.lessfun.com/blog/2014/09/11/invalid-binary-the-binary-is-missing-architectures-arm64/'>http://blog.lessfun.com/blog/2014/09/11/invalid-binary-the-binary-is-missing-architectures-arm64/</a><br/>
+            <a href='http://blog.lessfun.com/blog/2015/09/02/find-unused-resources-in-xcode-project/'>http://blog.lessfun.com/blog/2015/09/02/find-unused-resources-in-xcode-project/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>
@@ -199,12 +223,12 @@
   
 
 
-<time datetime="2014-09-11T14:51:58+08:00" pubdate data-updated="true">2014-09-11, Thu</time>
+<time datetime="2015-09-02T13:27:29+08:00" pubdate data-updated="true">2015-09-02, Wed</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ios/'>iOS</a>
+    <a class='category' href='/blog/categories/app/'>App</a>, <a class='category' href='/blog/categories/mac/'>Mac</a>
   
 </span>
 
@@ -220,10 +244,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/08/28/to-achieve-financial-freedom/" title="Previous Post: 从储蓄罐到实现财务自由">&laquo; 从储蓄罐到实现财务自由</a>
+        <a class="basic-alignment left" href="/blog/2015/04/07/passcalc-protect-your-privacy-in-iphone/" title="Previous Post: 密码计算器，保护您iPhone里的隐私文件">&laquo; 密码计算器，保护您iPhone里的隐私文件</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/09/14/show-article-title-in-duoshuo-comment/" title="Next Post: 让Octopress博客侧边栏的多说评论显示文章标题">让Octopress博客侧边栏的多说评论显示文章标题 &raquo;</a>
       
     </p>
   </footer>
@@ -233,7 +255,7 @@
   <section>
     <h1>发表评论</h1>
     <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
-	<div class="ds-thread" data-title="Invalid binary, the binary is missing architectures[arm64] - iTunes Connect的Bug"></div>
+	<div class="ds-thread" data-title="查找XCode工程中没被使用的图片资源"></div>
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"lsfun"};
 	(function() {

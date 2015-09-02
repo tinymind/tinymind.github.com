@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2015-07-19T18:12:30+08:00</updated>
+  <updated>2015-09-02T14:05:22+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,102 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[查找XCode工程中没被使用的图片资源]]></title>
+    <link href="http://blog.lessfun.com/blog/2015/09/02/find-unused-resources-in-xcode-project/"/>
+    <updated>2015-09-02T13:27:29+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2015/09/02/find-unused-resources-in-xcode-project</id>
+    <content type="html"><![CDATA[<p><img src="https://github.com/tinymind/LSUnusedResources/raw/master/LSUnusedResourcesExample.gif" alt="LSMessageHUD Example1" /></p>
+
+<h2>需求的引入</h2>
+
+<p>一个项目开发得越久，添加的功能模块也就越多，相应地，也会慢慢引入大量图片等资源。但是，在移除一些不再使用的模块的时候，开发者往往会把该模块所对应的图片资源一起删除，因为源码和资源是分离的。长久以来，项目中就会存在大量没被使用的资源文件。</p>
+
+<p>在某个时机，也就是需求完成得差不多，Bug 增加得不够多，Crash 上涨得不够快的时候，码农们终于有了一点闲暇时间，打算清理一下资源文件，减少 App 安装包的大小。这是一件体力活，方法无非是，一个一个地复制资源文件名，然后在 XCode 中全局查找该字符串，如果结果为 0，那么这个资源很可能就没有被使用。为什么说很可能？因为在代码中，有可能通过字符串拼接的方式使用了这个资源，而这种情况是没办法通过字符串匹配查找出来的。</p>
+
+<p>道理我们都懂，但是，操作起来也实在是太繁琐了，码农们不可能会乐意这样干的。于是，我们需要这么一款工具：能够迅速找出工程中所有没被使用的资源文件。</p>
+
+<!--more-->
+
+
+<h2>已有的方案</h2>
+
+<p>果不其然，在我打算写这么一个工具的时候，在网上已经有了两种方案。</p>
+
+<h3>方案1：<a href="http://stackoverflow.com/a/6113449/3737409">万能的脚本</a></h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'><span class="nv">PROJ</span><span class="o">=</span><span class="sb">`</span>find . -name <span class="s1">&#39;*.xib&#39;</span> -o -name <span class="s1">&#39;*.[mh]&#39;</span><span class="sb">`</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">for </span>png in <span class="sb">`</span>find . -name <span class="s1">&#39;*.png&#39;</span><span class="sb">`</span>
+</span><span class='line'><span class="k">do</span>
+</span><span class='line'><span class="k">    </span><span class="nv">name</span><span class="o">=</span><span class="sb">`</span>basename <span class="nv">$png</span><span class="sb">`</span>
+</span><span class='line'>    <span class="k">if</span> ! grep -qhs <span class="s2">&quot;$name&quot;</span> <span class="s2">&quot;$PROJ&quot;</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;$png is not referenced&quot;</span>
+</span><span class='line'>    <span class="k">fi</span>
+</span><span class='line'><span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>缺点</strong>：不够智能，不够通用，速度太慢，结果不正确。</p>
+
+<h3>方案2：<a href="http://jeffhodnett.github.io/Unused/">脚本界面化</a></h3>
+
+<p><a href="http://jeffhodnett.github.io/Unused/">Unused</a> 对脚本的调用做了封装，通过界面可以配置一定的信息，然后比较清晰的输入结果。</p>
+
+<p><strong>缺点</strong>：实际上，Unused 的内部还是调用了方案1的脚本，所以方案1的缺点也就是方案2的缺点。</p>
+
+<h2>LSUnusedResources 做的改进</h2>
+
+<p>LSUnusedResources 很大程度上受 Unused 的影响，比如界面、交互，以及部分代码。但是，本工具在核心代码上做了优化，使其在搜索的速度、结果的正确上都有了很大的提高。</p>
+
+<p>核心步骤，简述如下：</p>
+
+<ul>
+<li>查找：选定的目录下的所有资源文件。这一步与上述方案1区别不大，都是调用 <code>find</code> 命令查找指定后缀名的文件。</li>
+<li>匹配：与上述方案不同，我不是对每个资源文件名都做一次全文搜索匹配，因为加入项目的资源太多，这里会导致性能快速下降。而我只是针对源码、Xib、Storyboard 和 plist 等文件，先全文搜索其中可能是引用了资源的字符串，然后用资源名和字符串做匹配。</li>
+</ul>
+
+
+<h2>使用方法</h2>
+
+<ol>
+<li>点击 <code>Browse..</code> 选择一个文件夹；</li>
+<li>点击 <code>Search</code> 开始搜索；</li>
+<li>等待片刻即可看到结果。</li>
+</ol>
+
+
+<h2>下载安装</h2>
+
+<ul>
+<li>下载: <a href="https://github.com/tinymind/LSUnusedResources/raw/master/Release/LSUnusedResources.app.zip">LSUnusedResources.app.zip</a></li>
+<li>或者使用 XCode 编译运行<a href="https://github.com/tinymind/LSUnusedResources/">项目代码</a>。</li>
+</ul>
+
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2015/09/02/find-unused-resources-in-xcode-project/'>http://blog.lessfun.com/blog/2015/09/02/find-unused-resources-in-xcode-project/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[密码计算器，保护您iPhone里的隐私文件]]></title>
@@ -2137,129 +2233,6 @@
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
             <a href='http://blog.lessfun.com/blog/2014/04/01/using-qiniu-c-sdk-in-cpp/'>http://blog.lessfun.com/blog/2014/04/01/using-qiniu-c-sdk-in-cpp/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名 | 
-            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
-            </blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[在程序运行时获取被调用的DLL的本地文件路径]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime/"/>
-    <updated>2014-03-18T17:42:46+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime</id>
-    <content type="html"><![CDATA[<p>很多时候，DLL都是被别的进程所调用，所以在运行时，下面方法获取到的实际上是EXE所在的文件路径：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">QCoreApplication</span><span class="o">::</span><span class="n">applicationFilePath</span><span class="p">();</span><span class="c1">//Qt</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>但是我们实际上想要获得的是DLL本身的路径，因为运行的EXE与被调用的DLL不一定在同一个目录，比如，当把abc.dll注入到notepad.exe进程，很明显abc.dll是不在notepad所在的目录的。在dll代码中调用上述语句，返回的实际上是notepad的EXE路径。</p>
-
-<p>那么，我们要获得abc.dll真实路径，有两个方法。</p>
-
-<!--more-->
-
-
-<h4>方法一：</h4>
-
-<p>在DLL的入口函数附近，声明以下变量，并定义函数：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">EXTERN_C</span> <span class="n">IMAGE_DOS_HEADER</span> <span class="n">__ImageBase</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">VOID</span> <span class="n">CALLBACK</span> <span class="n">abcAPCProc</span><span class="p">(</span><span class="n">ULONG_PTR</span> <span class="n">dwParam</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>      <span class="n">WCHAR</span> <span class="n">path</span><span class="p">[</span><span class="n">MAX_PATH</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-</span><span class='line'>      <span class="o">::</span><span class="n">GetModuleFileName</span><span class="p">((</span><span class="n">HINSTANCE</span><span class="p">)</span><span class="o">&amp;</span><span class="n">__ImageBase</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">MAX_PATH</span><span class="p">);</span>
-</span><span class='line'>      <span class="c1">//path就是当前dll的文件路径</span>
-</span><span class='line'>  <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后，需要在导出函数里调用一下上面的函数：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="n">DWORD</span> <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="kr">__stdcall</span> <span class="n">showABC</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>      <span class="n">HANDLE</span> <span class="n">hThread</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">DWORD</span> <span class="n">dwRes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">hThread</span> <span class="o">=</span> <span class="o">::</span><span class="n">OpenThread</span><span class="p">(</span><span class="n">THREAD_SET_CONTEXT</span><span class="p">,</span>
-</span><span class='line'>          <span class="n">FALSE</span><span class="p">,</span> <span class="n">getMainThreadId</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
-</span><span class='line'>      <span class="n">DW_ASSERT</span><span class="p">(</span><span class="nb">NULL</span> <span class="o">!=</span> <span class="n">hThread</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">dwRes</span> <span class="o">=</span> <span class="o">::</span><span class="n">QueueUserAPC</span><span class="p">(</span><span class="n">abcAPCProc</span><span class="p">,</span>
-</span><span class='line'>          <span class="n">hThread</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</span><span class='line'>      <span class="o">::</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">hThread</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">hThread</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>      <span class="k">return</span> <span class="n">dwRes</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>方法二：</h4>
-
-<p>定义以下函数：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">HMODULE</span> <span class="n">GetCurrentModule</span><span class="p">()</span>
-</span><span class='line'>  <span class="p">{</span> <span class="c1">// NB: XP+ solution!</span>
-</span><span class='line'>      <span class="n">HMODULE</span> <span class="n">hModule</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">GetModuleHandleEx</span><span class="p">(</span>
-</span><span class='line'>          <span class="n">GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS</span><span class="p">,</span>
-</span><span class='line'>          <span class="p">(</span><span class="n">LPCTSTR</span><span class="p">)</span><span class="n">GetCurrentModule</span><span class="p">,</span>
-</span><span class='line'>          <span class="o">&amp;</span><span class="n">hModule</span><span class="p">);</span>
-</span><span class='line'>  
-</span><span class='line'>      <span class="k">return</span> <span class="n">hModule</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>调用上面函数，获取当前局部，然后就可以使用<code>GetModuleFileName</code>方法获取DLL路径：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">WCHAR</span> <span class="n">path</span><span class="p">[</span><span class="n">MAX_PATH</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-</span><span class='line'>  <span class="n">HMODULE</span> <span class="n">hm</span> <span class="o">=</span> <span class="n">GetCurrentModule</span><span class="p">();</span>
-</span><span class='line'>  <span class="o">::</span><span class="n">GetModuleFileName</span><span class="p">(</span><span class="n">hm</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">MAX_PATH</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote class='post_original_block'>
-            原文作者：
-            <a href='http://blog.lessfun.com'>lslin</a><br/>
-            原文链接：
-            <a href='http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime/'>http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>
