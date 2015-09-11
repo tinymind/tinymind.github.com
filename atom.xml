@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2015-09-02T14:05:22+08:00</updated>
+  <updated>2015-09-11T17:43:59+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,416 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[UIViewController Push & Pop 的那些坑]]></title>
+    <link href="http://blog.lessfun.com/blog/2015/09/09/uiviewcontroller-push-pop-trap/"/>
+    <updated>2015-09-09T18:37:32+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2015/09/09/uiviewcontroller-push-pop-trap</id>
+    <content type="html"><![CDATA[<p>iOS开发中，UIViewController是最常用的一个类，在Push和Pop的过程中也会经常出现一些UI卡死、App闪退的问题，本文总结了开发中遇到的一些坑。</p>
+
+<p>大部分视图控制器切换导致的问题，根本原因都是使用了动画，因为执行动画需要时间，在动画未完成的时候又进行另一个切换动画，容易产生异常，假如在 Push 和 Pop 的过程不使用动画，世界会清静很多。所以本文只讨论使用了动画的视图切换。也就是使用一下方式的 Push 和 Pop：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">pushViewController:</span><span class="n">controller</span> <span class="nl">animated:</span><span class="n">YES</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">popViewControllerAnimated:</span><span class="n">NO</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<!--more-->
+
+
+<h2>1. 连续 Push</h2>
+
+<p>连续两次 Push 不同的 ViewController 是没问题的，比如这样：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">onPush:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">pushViewController:</span><span class="n">vc1</span> <span class="nl">animated:</span><span class="n">YES</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">pushViewController:</span><span class="n">vc2</span> <span class="nl">animated:</span><span class="n">YES</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是，如果不小心连续 Push 了同一个 ViewController，并且 animated 为 YES，则会 Crash：<code>Pushing the same view controller instance more than once is not supported</code>。</p>
+
+<p>这种情况很有可能发生，特别是界面上触发切换的入口不止一处，并且各个入口的点击没有互斥的话，用两根手指同时点击屏幕就会同时触发两个入口的切换了。多点触碰导致的同时 Push，基本上是防不胜防，当界面元素很复杂的时候，特别容易出现这个问题，而指望从用户交互的角度上避免这个问题是不可能的，测试美眉以暴力测试、胡乱点击而著称，防得了用户防不住测试。</p>
+
+<p>所以我们需要从根本上解决这个问题：当一个 Push 动画还没完成的时候，不允许再 Push 别的 ViewController。这样处理是没有问题的，因为连续带动画地 Push 多个 ViewController 肯定不是开发和产品的意愿，就算有这种需求，也可以通过禁用动画的方式来解决。</p>
+
+<h3>1.1 解决方案</h3>
+
+<p>继承 UINavigationController 并重载 pushViewController 方法。</p>
+
+<ol>
+<li>如果是动画 Push，并且属性 <code>isSwitching == YES</code>，则忽略这次 Push。</li>
+<li>否则，设置 <code>isSwitching = YES</code> 再继续切换。</li>
+<li>等到动画切换完毕，需要再把 <code>isSwitching</code> 改为 NO。</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">MYNavigationController</span> <span class="p">()</span> <span class="o">&lt;</span><span class="n">UINavigationControllerDelegate</span><span class="p">,</span> <span class="n">UIGestureRecognizerDelegate</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">isSwitching</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">MYNavigationController</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 重载 push 方法</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">pushViewController:</span><span class="p">(</span><span class="n">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">viewController</span> <span class="nf">animated:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">animated</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">isSwitching</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span><span class="p">;</span> <span class="c1">// 1. 如果是动画，并且正在切换，直接忽略</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>       <span class="n">self</span><span class="p">.</span><span class="n">isSwitching</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span> <span class="c1">// 2. 否则修改状态</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="nl">pushViewController:</span><span class="n">viewController</span> <span class="nl">animated:</span><span class="n">animated</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#pragma mark - UINavigationControllerDelegate</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">navigationController:</span><span class="p">(</span><span class="n">UINavigationController</span> <span class="o">*</span><span class="p">)</span><span class="nv">navigationController</span> <span class="nf">didShowViewController:</span><span class="p">(</span><span class="n">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">viewController</span> <span class="nf">animated:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">isSwitching</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="c1">// 3. 还原状态</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>2. 连续 Pop</h2>
+
+<p>连续 Pop ，可能会导致两种情况。</p>
+
+<h3>2.1 self 被释放</h3>
+
+<p>例如，下面的代码，执行到第二句的时候，self 已经被释放了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">popViewControllerAnimated:</span><span class="n">YES</span><span class="p">];</span> <span class="c1">// self 被 release</span>
+</span><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">popViewControllerAnimated:</span><span class="n">YES</span><span class="p">];</span> <span class="c1">// 继续访问 self 导致异常</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>2.2 界面异常、崩溃</h3>
+
+<p>假如你避开了上面那种调用，换成了这样：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[[</span><span class="n">AppDelegate</span> <span class="n">sharedObject</span><span class="p">].</span><span class="n">navigationController</span> <span class="nl">popViewControllerAnimated:</span><span class="n">YES</span><span class="p">];</span>
+</span><span class='line'><span class="p">[[</span><span class="n">AppDelegate</span> <span class="n">sharedObject</span><span class="p">].</span><span class="n">navigationController</span> <span class="nl">popViewControllerAnimated:</span><span class="n">YES</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>由于访问的是全局的 AppDelegate，自然避免了调用者被释放的问题，但是，连续两次动画 Pop，在iOS 7.X 系统会导致界面混乱、卡死、莫名其妙的崩溃（iOS 8 貌似不存在类似的问题）。比如，下面这个崩溃的堆栈：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">{</span><span class="s">&quot;bundleID&quot;</span><span class="o">:</span><span class="s">&quot;com.enterprise.kiwi&quot;</span><span class="p">,</span><span class="s">&quot;app_name&quot;</span><span class="o">:</span><span class="s">&quot;kiwi&quot;</span><span class="p">,</span><span class="s">&quot;bug_type&quot;</span><span class="o">:</span><span class="s">&quot;109&quot;</span><span class="p">,</span><span class="s">&quot;name&quot;</span><span class="o">:</span><span class="s">&quot;kiwi&quot;</span><span class="p">,</span><span class="s">&quot;os_version&quot;</span><span class="o">:</span><span class="s">&quot;iPhone OS 7.1.1 (11D201)&quot;</span><span class="p">,</span><span class="s">&quot;version&quot;</span><span class="o">:</span><span class="s">&quot;1190 (3.1.0)&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="n">Incident</span> <span class="nl">Identifier:</span> <span class="n">FE85E864</span><span class="o">-</span><span class="mi">393</span><span class="n">C</span><span class="o">-</span><span class="mi">417</span><span class="n">D</span><span class="o">-</span><span class="mi">9</span><span class="n">EA0</span><span class="o">-</span><span class="n">B4324BEEDA2F</span>
+</span><span class='line'><span class="n">CrashReporter</span> <span class="nl">Key:</span>   <span class="n">a54805586b9487c324ff5f42f4ac93dabbe9f23e</span>
+</span><span class='line'><span class="n">Hardware</span> <span class="nl">Model:</span>      <span class="n">iPhone6</span><span class="p">,</span><span class="mi">1</span>
+</span><span class='line'><span class="nl">Process:</span>             <span class="n">kiwi</span> <span class="p">[</span><span class="mi">1074</span><span class="p">]</span>
+</span><span class='line'><span class="nl">Path:</span>                <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">mobile</span><span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">D81CE836</span><span class="o">-</span><span class="mf">3F</span><span class="mi">88</span><span class="o">-</span><span class="mi">481</span><span class="n">C</span><span class="o">-</span><span class="n">AA5A</span><span class="o">-</span><span class="mi">21</span><span class="n">DA530234E0</span><span class="o">/</span><span class="n">kiwi</span><span class="p">.</span><span class="n">app</span><span class="o">/</span><span class="n">kiwi</span>
+</span><span class='line'><span class="nl">Identifier:</span>          <span class="n">com</span><span class="p">.</span><span class="n">yy</span><span class="p">.</span><span class="n">enterprise</span><span class="p">.</span><span class="n">kiwi</span>
+</span><span class='line'><span class="nl">Version:</span>             <span class="mi">1190</span> <span class="p">(</span><span class="mf">3.1.0</span><span class="p">)</span>
+</span><span class='line'><span class="n">Code</span> <span class="nl">Type:</span>           <span class="n">ARM</span><span class="o">-</span><span class="mi">64</span> <span class="p">(</span><span class="n">Native</span><span class="p">)</span>
+</span><span class='line'><span class="n">Parent</span> <span class="nl">Process:</span>      <span class="n">launchd</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Date</span><span class="o">/</span><span class="nl">Time:</span>           <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">08</span> <span class="mi">15</span><span class="o">:</span><span class="mi">44</span><span class="o">:</span><span class="mf">57.327</span> <span class="o">+</span><span class="mi">0800</span>
+</span><span class='line'><span class="n">OS</span> <span class="nl">Version:</span>          <span class="n">iOS</span> <span class="mf">7.1.1</span> <span class="p">(</span><span class="mi">11</span><span class="n">D201</span><span class="p">)</span>
+</span><span class='line'><span class="n">Report</span> <span class="nl">Version:</span>      <span class="mi">104</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Exception</span> <span class="nl">Type:</span>  <span class="n">EXC_CRASH</span> <span class="p">(</span><span class="n">SIGSEGV</span><span class="p">)</span>
+</span><span class='line'><span class="n">Exception</span> <span class="nl">Codes:</span> <span class="mh">0x0000000000000000</span><span class="p">,</span> <span class="mh">0x0000000000000000</span>
+</span><span class='line'><span class="n">Triggered</span> <span class="n">by</span> <span class="nl">Thread:</span>  <span class="mi">1</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Thread</span> <span class="mi">0</span><span class="o">:</span>
+</span><span class='line'><span class="mi">0</span>   <span class="n">libobjc</span><span class="p">.</span><span class="n">A</span><span class="p">.</span><span class="n">dylib</span>                <span class="mh">0x00000001993781dc</span> <span class="n">objc_msgSend</span> <span class="o">+</span> <span class="mi">28</span>
+</span><span class='line'><span class="mi">1</span>   <span class="n">UIKit</span>                          <span class="mh">0x000000018feacf14</span> <span class="o">-</span><span class="p">[</span><span class="n">UIResponder</span><span class="p">(</span><span class="n">Internal</span><span class="p">)</span> <span class="n">_canBecomeFirstResponder</span><span class="p">]</span> <span class="o">+</span> <span class="mi">20</span>
+</span><span class='line'><span class="mi">2</span>   <span class="n">UIKit</span>                          <span class="mh">0x000000018feacba0</span> <span class="o">-</span><span class="p">[</span><span class="n">UIResponder</span> <span class="n">becomeFirstResponder</span><span class="p">]</span> <span class="o">+</span> <span class="mi">240</span>
+</span><span class='line'><span class="mi">3</span>   <span class="n">UIKit</span>                          <span class="mh">0x000000018feacfa0</span> <span class="o">-</span><span class="p">[</span><span class="n">UIView</span><span class="p">(</span><span class="n">Hierarchy</span><span class="p">)</span> <span class="n">becomeFirstResponder</span><span class="p">]</span> <span class="o">+</span> <span class="mi">120</span>
+</span><span class='line'><span class="mi">4</span>   <span class="n">UIKit</span>                          <span class="mh">0x000000018ff320f8</span> <span class="o">-</span><span class="p">[</span><span class="n">UITextField</span> <span class="n">becomeFirstResponder</span><span class="p">]</span> <span class="o">+</span> <span class="mi">64</span>
+</span><span class='line'><span class="mi">5</span>   <span class="n">UIKit</span>                          <span class="mh">0x000000018ffe4800</span> <span class="o">-</span><span class="p">[</span><span class="n">UITextInteractionAssistant</span><span class="p">(</span><span class="n">UITextInteractionAssistant_Internal</span><span class="p">)</span> <span class="n">setFirstResponderIfNecessary</span><span class="p">]</span> <span class="o">+</span> <span class="mi">208</span>
+</span><span class='line'><span class="mi">6</span>   <span class="n">UIKit</span>                          <span class="mh">0x000000018ffe3f84</span> <span class="o">-</span><span class="p">[</span><span class="n">UITextInteractionAssistant</span><span class="p">(</span><span class="n">UITextInteractionAssistant_Internal</span><span class="p">)</span> <span class="nl">oneFingerTap:</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1792</span>
+</span><span class='line'><span class="mi">7</span>   <span class="n">UIKit</span>                          <span class="mh">0x000000018ffcac60</span> <span class="n">_UIGestureRecognizerSendActions</span> <span class="o">+</span> <span class="mi">212</span>
+</span><span class='line'><span class="mi">8</span>   <span class="n">UIKit</span>                          <span class="mh">0x000000018fe5929c</span> <span class="o">-</span><span class="p">[</span><span class="n">UIGestureRecognizer</span> <span class="nl">_updateGestureWithEvent:buttonEvent:</span><span class="p">]</span> <span class="o">+</span> <span class="mi">376</span>
+</span><span class='line'><span class="mi">9</span>   <span class="n">UIKit</span>                          <span class="mh">0x000000019025803c</span> <span class="n">___UIGestureRecognizerUpdate_block_invoke</span> <span class="o">+</span> <span class="mi">56</span>
+</span><span class='line'><span class="mi">10</span>  <span class="n">UIKit</span>                          <span class="mh">0x000000018fe1a258</span> <span class="n">_UIGestureRecognizerRemoveObjectsFromArrayAndApplyBlocks</span> <span class="o">+</span> <span class="mi">284</span>
+</span><span class='line'><span class="mi">11</span>  <span class="n">UIKit</span>                          <span class="mh">0x000000018fe18b34</span> <span class="n">_UIGestureRecognizerUpdate</span> <span class="o">+</span> <span class="mi">208</span>
+</span><span class='line'><span class="mi">12</span>  <span class="n">UIKit</span>                          <span class="mh">0x000000018fe57b1c</span> <span class="o">-</span><span class="p">[</span><span class="n">UIWindow</span> <span class="nl">_sendGesturesForEvent:</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1008</span>
+</span><span class='line'><span class="mi">13</span>  <span class="n">UIKit</span>                          <span class="mh">0x000000018fe5722c</span> <span class="o">-</span><span class="p">[</span><span class="n">UIWindow</span> <span class="nl">sendEvent:</span><span class="p">]</span> <span class="o">+</span> <span class="mi">824</span>
+</span><span class='line'><span class="mi">14</span>  <span class="n">UIKit</span>                          <span class="mh">0x000000018fe28b64</span> <span class="o">-</span><span class="p">[</span><span class="n">UIApplication</span> <span class="nl">sendEvent:</span><span class="p">]</span> <span class="o">+</span> <span class="mi">252</span>
+</span><span class='line'><span class="mi">15</span>  <span class="n">UIKit</span>                          <span class="mh">0x000000018fe26c54</span> <span class="n">_UIApplicationHandleEventQueue</span> <span class="o">+</span> <span class="mi">8496</span>
+</span><span class='line'><span class="mi">16</span>  <span class="n">CoreFoundation</span>                 <span class="mh">0x000000018ce1f640</span> <span class="n">__CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__</span> <span class="o">+</span> <span class="mi">20</span>
+</span><span class='line'><span class="mi">17</span>  <span class="n">CoreFoundation</span>                 <span class="mh">0x000000018ce1e99c</span> <span class="n">__CFRunLoopDoSources0</span> <span class="o">+</span> <span class="mi">252</span>
+</span><span class='line'><span class="mi">18</span>  <span class="n">CoreFoundation</span>                 <span class="mh">0x000000018ce1cc34</span> <span class="n">__CFRunLoopRun</span> <span class="o">+</span> <span class="mi">628</span>
+</span><span class='line'><span class="mi">19</span>  <span class="n">CoreFoundation</span>                 <span class="mh">0x000000018cd5dc1c</span> <span class="n">CFRunLoopRunSpecific</span> <span class="o">+</span> <span class="mi">448</span>
+</span><span class='line'><span class="mi">20</span>  <span class="n">GraphicsServices</span>               <span class="mh">0x0000000192a45c08</span> <span class="n">GSEventRunModal</span> <span class="o">+</span> <span class="mi">164</span>
+</span><span class='line'><span class="mi">21</span>  <span class="n">UIKit</span>                          <span class="mh">0x000000018fe8efd8</span> <span class="n">UIApplicationMain</span> <span class="o">+</span> <span class="mi">1152</span>
+</span><span class='line'><span class="mi">22</span>  <span class="n">kiwi</span>                           <span class="mh">0x000000010026a2b8</span> <span class="n">main</span> <span class="p">(</span><span class="n">main</span><span class="p">.</span><span class="nl">mm:</span><span class="mi">26</span><span class="p">)</span>
+</span><span class='line'><span class="mi">23</span>  <span class="n">libdyld</span><span class="p">.</span><span class="n">dylib</span>                    <span class="mh">0x000000019995ba9c</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Thread</span> <span class="mi">1</span> <span class="nl">Crashed:</span>
+</span><span class='line'><span class="mi">0</span>   <span class="n">libsystem_kernel</span><span class="p">.</span><span class="n">dylib</span>           <span class="mh">0x0000000199a3daa8</span> <span class="n">kevent64</span> <span class="o">+</span> <span class="mi">8</span>
+</span><span class='line'><span class="mi">1</span>   <span class="n">libdispatch</span><span class="p">.</span><span class="n">dylib</span>                <span class="mh">0x0000000199941998</span> <span class="n">_dispatch_mgr_thread</span> <span class="o">+</span> <span class="mi">48</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从崩溃记录完全看不出原因，十分坑爹。</p>
+
+<h3>2.3 解决方案</h3>
+
+<ul>
+<li>方案一：第一次 Pop 不使用动画。</li>
+<li>方案二：统一管理 Pop 的调用，如果当前正在 Pop，则下一次 Pop 先入栈；等到 Pop 执行完再执行下一次 Pop。</li>
+</ul>
+
+
+<h2>3. Push 的过程中立即 Pop</h2>
+
+<p>Push 的过程中调用 Pop，会导致界面卡死，表现为：不响应任何点击、手势操作，但是不会崩溃。这也是在 iOS7 中出现的问题，iOS 8 之后不存在。</p>
+
+<h3>3.1 解决方案</h3>
+
+<p>同 1.1，重载 Pop 方法：</p>
+
+<ol>
+<li>Pop 的时候先判断是否在切换中；</li>
+<li>如果正在切换，则 Pop 的命令先保存到队列；</li>
+<li>切换动画执行完毕，判断是否需要处理 Pop 的队列。</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#pragma mark - UINavigationController</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">popToViewController:</span><span class="p">(</span><span class="n">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">viewController</span> <span class="nf">animated:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">self</span><span class="p">.</span><span class="n">isSwitching</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="n">super</span> <span class="nl">popToViewController:</span><span class="n">viewController</span> <span class="nl">animated:</span><span class="n">animated</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">self</span> <span class="nl">enqueuePopViewController:</span><span class="n">viewController</span> <span class="nl">animate:</span><span class="n">animated</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nf">popViewControllerAnimated:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">self</span><span class="p">.</span><span class="n">isSwitching</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="n">super</span> <span class="nl">popViewControllerAnimated:</span><span class="n">animated</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">self</span> <span class="nl">enqueuePopViewController:</span><span class="nb">nil</span> <span class="nl">animate:</span><span class="n">animated</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#pragma mark - UINavigationControllerDelegate</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">navigationController:</span><span class="p">(</span><span class="n">UINavigationController</span> <span class="o">*</span><span class="p">)</span><span class="nv">navigationController</span> <span class="nf">didShowViewController:</span><span class="p">(</span><span class="n">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">viewController</span> <span class="nf">animated:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">isSwitching</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 显示完毕之后判断是否需要Pop</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">popVCAnimateQueue</span><span class="p">.</span><span class="n">count</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">PopVCInfo</span> <span class="o">*</span><span class="n">info</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">popVCAnimateQueue</span> <span class="n">firstObject</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">popVCAnimateQueue</span> <span class="nl">removeObjectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">controller</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">popToViewController:</span><span class="n">info</span><span class="p">.</span><span class="n">controller</span> <span class="nl">animated:</span><span class="n">info</span><span class="p">.</span><span class="n">animate</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">popViewControllerAnimated:</span><span class="n">info</span><span class="p">.</span><span class="n">animate</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>4. Push 的过程中手势滑动返回</h2>
+
+<p>手势滑动返回本质上调用的还是 Pop，所以，同上。</p>
+
+<p>不过，还可以更根本地禁止用户进行这样的操作，也就是在切换过程中禁止滑动返回手势。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#pragma mark - UINavigationController</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Hijack the push method to disable the gesture</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">pushViewController:</span><span class="p">(</span><span class="n">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">viewController</span> <span class="nf">animated:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">interactivePopGestureRecognizer</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="nl">pushViewController:</span><span class="n">viewController</span> <span class="nl">animated:</span><span class="n">animated</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#pragma mark - UINavigationControllerDelegate</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">navigationController:</span><span class="p">(</span><span class="n">UINavigationController</span> <span class="o">*</span><span class="p">)</span><span class="nv">navigationController</span> <span class="nf">didShowViewController:</span><span class="p">(</span><span class="n">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">viewController</span> <span class="nf">animated:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">isSwitching</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">interactivePopGestureRecognizer</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 显示完毕之后判断是否需要Pop</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">popVCAnimateQueue</span><span class="p">.</span><span class="n">count</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">PopVCInfo</span> <span class="o">*</span><span class="n">info</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">popVCAnimateQueue</span> <span class="n">firstObject</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">popVCAnimateQueue</span> <span class="nl">removeObjectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">controller</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">popToViewController:</span><span class="n">info</span><span class="p">.</span><span class="n">controller</span> <span class="nl">animated:</span><span class="n">info</span><span class="p">.</span><span class="n">animate</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">popViewControllerAnimated:</span><span class="n">info</span><span class="p">.</span><span class="n">animate</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2015/09/09/uiviewcontroller-push-pop-trap/'>http://blog.lessfun.com/blog/2015/09/09/uiviewcontroller-push-pop-trap/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[查找XCode工程中没被使用的图片资源]]></title>
@@ -2113,126 +2523,6 @@
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
             <a href='http://blog.lessfun.com/blog/2014/05/20/clone-exists-octopress-blog-to-new-mac/'>http://blog.lessfun.com/blog/2014/05/20/clone-exists-octopress-blog-to-new-mac/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名 | 
-            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
-            </blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[在C++中使用七牛C-SDK，给QINIU_ACCESS_KEY和QINIU_SECRET_KEY赋值失败的解决方法]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/04/01/using-qiniu-c-sdk-in-cpp/"/>
-    <updated>2014-04-01T10:14:00+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/04/01/using-qiniu-c-sdk-in-cpp</id>
-    <content type="html"><![CDATA[<p>七牛云存储为广大开发者提供了数据云存储的免费使用空间，对于个人开发来说完全足够了。并且提供了各种语言的SDK，方便开发。</p>
-
-<p>在C++工程中使用C-SDK的时候，遇到了一个问题，下面语句在运行时，提示：<code>0x00401005 处未处理的异常: 0xC0000005: 写入位置 0x0040ab42 时发生访问冲突</code></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">extern</span> <span class="s">&quot;C&quot;</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'><span class="cp">#include &quot;qiniu/conf.h&quot;</span>
-</span><span class='line'><span class="cp">#include &quot;qiniu/rs.h&quot;</span>
-</span><span class='line'><span class="cp">#include &quot;qiniu/io.h&quot;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">void</span> <span class="n">Class</span><span class="o">::</span><span class="n">_initQiniu</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">QINIU_ACCESS_KEY</span> <span class="o">=</span> <span class="s">&quot;my-akey&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">QINIU_SECRET_KEY</span> <span class="o">=</span> <span class="s">&quot;my-sKey&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>以上语句是官方文档给出的例子代码，但是我用了各种方法，都无法赋值成功，绝望……</p>
-
-<p>在网上找有没有人遇到类似的问题的时候，看到了这篇问答：<a href="http://segmentfault.com/q/1010000000450707">七牛C-SDK中，QINIU_ACCESS_KEY和QINIU_SECRET_KEY应该怎么赋值？</a>，虽然没有给出解决方案，但是至少可以知道，七牛官方提供的C-SDK由于没有在<code>qiniu.def</code>的导出变量后面加上<code>DATA</code>关键字，导致无法在别的C++工程中直接修改变量值。<br/>
-在回答中还看到，原来七牛还有一个<a href="https://github.com/qiniu/cpp-sdk/">Cpp-SDK</a>，尝试下载，发现有28M，没有了继续使用的欲望。</p>
-
-<p>那就继续折腾C-SDK吧。既然官方提供的C-SDK无法直接修改<code>QINIU_ACCESS_KEY</code> 和 <code>QINIU_SECRET_KEY</code>，在不重现编译DLL和Lib的情况下（Windows下编译不方便，还得配置各种cURL和OpenSSL的头文件路径），解决方法如下：<br/>
-<strong>不直接给那两个变量赋值，而是自己参考源码写生成uptoken的方法。</strong></p>
-
-<!--more-->
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &quot;cJSON.h&quot;</span>
-</span><span class='line'><span class="cp">#include &quot;http.h&quot;</span>
-</span><span class='line'><span class="c1">//......</span>
-</span><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">uptoken</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">bucket</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">expires</span> <span class="o">=</span> <span class="mi">3600</span><span class="p">;</span> <span class="c1">// 1小时;</span>
-</span><span class='line'>  <span class="n">time_t</span> <span class="n">deadline</span><span class="p">;</span>
-</span><span class='line'>  <span class="kt">char</span><span class="o">*</span> <span class="n">authstr</span><span class="p">;</span>
-</span><span class='line'>  <span class="kt">char</span><span class="o">*</span> <span class="n">token</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">cJSON</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="n">cJSON_CreateObject</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">cJSON_AddStringToObject</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">&quot;scope&quot;</span><span class="p">,</span> <span class="n">bucket</span><span class="p">);</span>
-</span><span class='line'>  <span class="n">time</span><span class="p">(</span><span class="o">&amp;</span><span class="n">deadline</span><span class="p">);</span>
-</span><span class='line'>  <span class="n">deadline</span> <span class="o">+=</span> <span class="n">expires</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">cJSON_AddNumberToObject</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">&quot;deadline&quot;</span><span class="p">,</span> <span class="n">deadline</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">authstr</span> <span class="o">=</span> <span class="n">cJSON_PrintUnformatted</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
-</span><span class='line'>  <span class="n">cJSON_Delete</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">Qiniu_Auth</span> <span class="n">mac</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">mac</span><span class="p">.</span><span class="n">accessKey</span> <span class="o">=</span> <span class="n">KYourQiniuAccessKey</span><span class="p">;</span><span class="c1">//将两个Key赋值到mac</span>
-</span><span class='line'>  <span class="n">mac</span><span class="p">.</span><span class="n">secretKey</span> <span class="o">=</span> <span class="n">KYourQiniuSecretKey</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">token</span> <span class="o">=</span> <span class="n">Qiniu_Mac_SignToken</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mac</span><span class="p">,</span> <span class="n">authstr</span><span class="p">);</span><span class="c1">//当mac不为空，七牛就不会访问QINIU_ACCESS_KEY和QINIU_SECRET_KEY</span>
-</span><span class='line'>  <span class="n">Qiniu_Free</span><span class="p">(</span><span class="n">authstr</span><span class="p">);</span><span class="c1">//这里会出现堆冲突=_=#</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">return</span> <span class="n">token</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote class='post_original_block'>
-            原文作者：
-            <a href='http://blog.lessfun.com'>lslin</a><br/>
-            原文链接：
-            <a href='http://blog.lessfun.com/blog/2014/04/01/using-qiniu-c-sdk-in-cpp/'>http://blog.lessfun.com/blog/2014/04/01/using-qiniu-c-sdk-in-cpp/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>

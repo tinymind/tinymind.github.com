@@ -90,6 +90,63 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/10/15/ios-adjust-view-frame-quickly-with-macro/">iOS通过宏定义快速调整View的Frame</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-15T18:45:03+08:00" pubdate data-updated="true">2014-10-15, Wed</time>
+        
+		
+          | <a href="/blog/2014/10/15/ios-adjust-view-frame-quickly-with-macro/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>在iOS开发中，经常需要在运行时动态修改View Frame，比如，theView的X坐标右移2个点，Y坐标下移2个点，常用的方法如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'>    <span class="n">CGRect</span> <span class="n">newFrame</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">theView</span><span class="p">.</span><span class="n">frame</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">newFrame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">newFrame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">theView</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">newFrame</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>逻辑很简单，就是代码繁琐了点，设想一下，假如有5个以上的子View需要调整位置与大小……</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/15/ios-adjust-view-frame-quickly-with-macro/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/09/24/ios8-issue-keyboard-orientation-and-idletimerdisabled-not-working/">App适配iOS8遇到的兼容问题：键盘方向与StatusBar方向不一致，阻止锁屏失效，OpenGL崩溃</a></h1>
     
     
@@ -514,87 +571,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/01/using-qiniu-c-sdk-in-cpp/">在C++中使用七牛C-SDK，给QINIU_ACCESS_KEY和QINIU_SECRET_KEY赋值失败的解决方法</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-01T10:14:00+08:00" pubdate data-updated="true">2014-04-01, Tue</time>
-        
-		
-          | <a href="/blog/2014/04/01/using-qiniu-c-sdk-in-cpp/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>七牛云存储为广大开发者提供了数据云存储的免费使用空间，对于个人开发来说完全足够了。并且提供了各种语言的SDK，方便开发。</p>
-
-<p>在C++工程中使用C-SDK的时候，遇到了一个问题，下面语句在运行时，提示：<code>0x00401005 处未处理的异常: 0xC0000005: 写入位置 0x0040ab42 时发生访问冲突</code></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">extern</span> <span class="s">&quot;C&quot;</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'><span class="cp">#include &quot;qiniu/conf.h&quot;</span>
-</span><span class='line'><span class="cp">#include &quot;qiniu/rs.h&quot;</span>
-</span><span class='line'><span class="cp">#include &quot;qiniu/io.h&quot;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">void</span> <span class="n">Class</span><span class="o">::</span><span class="n">_initQiniu</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">QINIU_ACCESS_KEY</span> <span class="o">=</span> <span class="s">&quot;my-akey&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">QINIU_SECRET_KEY</span> <span class="o">=</span> <span class="s">&quot;my-sKey&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>以上语句是官方文档给出的例子代码，但是我用了各种方法，都无法赋值成功，绝望……</p>
-
-<p>在网上找有没有人遇到类似的问题的时候，看到了这篇问答：<a href="http://segmentfault.com/q/1010000000450707">七牛C-SDK中，QINIU_ACCESS_KEY和QINIU_SECRET_KEY应该怎么赋值？</a>，虽然没有给出解决方案，但是至少可以知道，七牛官方提供的C-SDK由于没有在<code>qiniu.def</code>的导出变量后面加上<code>DATA</code>关键字，导致无法在别的C++工程中直接修改变量值。<br/>
-在回答中还看到，原来七牛还有一个<a href="https://github.com/qiniu/cpp-sdk/">Cpp-SDK</a>，尝试下载，发现有28M，没有了继续使用的欲望。</p>
-
-<p>那就继续折腾C-SDK吧。既然官方提供的C-SDK无法直接修改<code>QINIU_ACCESS_KEY</code> 和 <code>QINIU_SECRET_KEY</code>，在不重现编译DLL和Lib的情况下（Windows下编译不方便，还得配置各种cURL和OpenSSL的头文件路径），解决方法如下：<br/>
-<strong>不直接给那两个变量赋值，而是自己参考源码写生成uptoken的方法。</strong></p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/04/01/using-qiniu-c-sdk-in-cpp/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -610,12 +586,16 @@
     <section>
 <h1>About Me</h1>
 <p>一个程序员只会写代码是不够的，他还应该拥有一个分享的博客。<br>——王小波<br></p>
-<p>C++、iOS开发工程师，现就职于广州欢聚时代。<br></p>
+<p>iOS 开发工程师，现就职于 YY Inc.<br></p>
 <p><a href="http://like.lessfun.com">大众点赞：沉迷的大多数</a></p>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/09/09/uiviewcontroller-push-pop-trap/">UIViewController Push & Pop 的那些坑</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/09/02/find-unused-resources-in-xcode-project/">查找XCode工程中没被使用的图片资源</a>
@@ -631,10 +611,6 @@
     
       <li class="post">
         <a href="/blog/2014/12/10/marktext-a-markdown-text-editor-for-ios/">MarkText - iOS 上支持语法高亮、HTML预览、文件导出的Markdown文本编辑器</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/03/ios-developer-program-tutorial-2014/">2014年在Apple Store申请iOS个人开发者账号详细流程</a>
       </li>
     
   </ul>
@@ -687,7 +663,7 @@
 <li class='category'><a href='/blog/categories/passcalc/'>PassCalc (1)</a></li>
 <li class='category'><a href='/blog/categories/svn/'>SVN (1)</a></li>
 <li class='category'><a href='/blog/categories/xcode/'>XCode (1)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (15)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (16)</a></li>
 
   </ul>
 </section>

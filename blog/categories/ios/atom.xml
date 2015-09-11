@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2015-09-02T14:05:22+08:00</updated>
+  <updated>2015-09-11T17:43:59+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,291 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[UIViewController Push & Pop 的那些坑]]></title>
+    <link href="http://blog.lessfun.com/blog/2015/09/09/uiviewcontroller-push-pop-trap/"/>
+    <updated>2015-09-09T18:37:32+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2015/09/09/uiviewcontroller-push-pop-trap</id>
+    <content type="html"><![CDATA[<p>iOS开发中，UIViewController是最常用的一个类，在Push和Pop的过程中也会经常出现一些UI卡死、App闪退的问题，本文总结了开发中遇到的一些坑。</p>
+
+<p>大部分视图控制器切换导致的问题，根本原因都是使用了动画，因为执行动画需要时间，在动画未完成的时候又进行另一个切换动画，容易产生异常，假如在 Push 和 Pop 的过程不使用动画，世界会清静很多。所以本文只讨论使用了动画的视图切换。也就是使用一下方式的 Push 和 Pop：</p>
+
+<p>``` objc</p>
+
+<pre><code>[self.navigationController pushViewController:controller animated:YES];
+[self.navigationController popViewControllerAnimated:NO];
+</code></pre>
+
+<p>```</p>
+
+<!--more-->
+
+
+<h2>1. 连续 Push</h2>
+
+<p>连续两次 Push 不同的 ViewController 是没问题的，比如这样：</p>
+
+<p>``` objc
+&ndash; (void)onPush: {</p>
+
+<pre><code>[self.navigationController pushViewController:vc1 animated:YES];
+[self.navigationController pushViewController:vc2 animated:YES];
+</code></pre>
+
+<p>}
+```</p>
+
+<p>但是，如果不小心连续 Push 了同一个 ViewController，并且 animated 为 YES，则会 Crash：<code>Pushing the same view controller instance more than once is not supported</code>。</p>
+
+<p>这种情况很有可能发生，特别是界面上触发切换的入口不止一处，并且各个入口的点击没有互斥的话，用两根手指同时点击屏幕就会同时触发两个入口的切换了。多点触碰导致的同时 Push，基本上是防不胜防，当界面元素很复杂的时候，特别容易出现这个问题，而指望从用户交互的角度上避免这个问题是不可能的，测试美眉以暴力测试、胡乱点击而著称，防得了用户防不住测试。</p>
+
+<p>所以我们需要从根本上解决这个问题：当一个 Push 动画还没完成的时候，不允许再 Push 别的 ViewController。这样处理是没有问题的，因为连续带动画地 Push 多个 ViewController 肯定不是开发和产品的意愿，就算有这种需求，也可以通过禁用动画的方式来解决。</p>
+
+<h3>1.1 解决方案</h3>
+
+<p>继承 UINavigationController 并重载 pushViewController 方法。</p>
+
+<ol>
+<li>如果是动画 Push，并且属性 <code>isSwitching == YES</code>，则忽略这次 Push。</li>
+<li>否则，设置 <code>isSwitching = YES</code> 再继续切换。</li>
+<li>等到动画切换完毕，需要再把 <code>isSwitching</code> 改为 NO。</li>
+</ol>
+
+
+<p>``` objc</p>
+
+<p>@interface MYNavigationController () &lt;UINavigationControllerDelegate, UIGestureRecognizerDelegate></p>
+
+<p>@property (assign, nonatomic) BOOL isSwitching;</p>
+
+<p>@end</p>
+
+<p>@implementation MYNavigationController</p>
+
+<p>// 重载 push 方法
+&ndash; (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {</p>
+
+<pre><code>if (animated) {
+    if (self.isSwitching) {
+        return; // 1. 如果是动画，并且正在切换，直接忽略
+    }
+   self.isSwitching = YES; // 2. 否则修改状态
+}
+
+[super pushViewController:viewController animated:animated];
+</code></pre>
+
+<p>}</p>
+
+<h1>pragma mark &ndash; UINavigationControllerDelegate</h1>
+
+<ul>
+<li>(void)navigationController:(UINavigationController <em>)navigationController didShowViewController:(UIViewController </em>)viewController animated:(BOOL)animated {
+  self.isSwitching = NO; // 3. 还原状态
+}</li>
+</ul>
+
+
+<p>```</p>
+
+<h2>2. 连续 Pop</h2>
+
+<p>连续 Pop ，可能会导致两种情况。</p>
+
+<h3>2.1 self 被释放</h3>
+
+<p>例如，下面的代码，执行到第二句的时候，self 已经被释放了。</p>
+
+<p>``` objc</p>
+
+<pre><code>[self.navigationController popViewControllerAnimated:YES]; // self 被 release
+[self.navigationController popViewControllerAnimated:YES]; // 继续访问 self 导致异常
+</code></pre>
+
+<p>```</p>
+
+<h3>2.2 界面异常、崩溃</h3>
+
+<p>假如你避开了上面那种调用，换成了这样：</p>
+
+<p>``` objc</p>
+
+<pre><code>[[AppDelegate sharedObject].navigationController popViewControllerAnimated:YES]; 
+[[AppDelegate sharedObject].navigationController popViewControllerAnimated:YES]; 
+</code></pre>
+
+<p>```</p>
+
+<p>由于访问的是全局的 AppDelegate，自然避免了调用者被释放的问题，但是，连续两次动画 Pop，在iOS 7.X 系统会导致界面混乱、卡死、莫名其妙的崩溃（iOS 8 貌似不存在类似的问题）。比如，下面这个崩溃的堆栈：</p>
+
+<p>```
+{&ldquo;bundleID&rdquo;:&ldquo;com.enterprise.kiwi&rdquo;,&ldquo;app_name&rdquo;:&ldquo;kiwi&rdquo;,&ldquo;bug_type&rdquo;:&ldquo;109&rdquo;,&ldquo;name&rdquo;:&ldquo;kiwi&rdquo;,&ldquo;os_version&rdquo;:&ldquo;iPhone OS 7.1.1 (11D201)&rdquo;,&ldquo;version&rdquo;:&ldquo;1190 (3.1.0)&rdquo;}
+Incident Identifier: FE85E864-393C-417D-9EA0-B4324BEEDA2F
+CrashReporter Key:   a54805586b9487c324ff5f42f4ac93dabbe9f23e
+Hardware Model:      iPhone6,1
+Process:             kiwi [1074]
+Path:                /var/mobile/Applications/D81CE836-3F88-481C-AA5A-21DA530234E0/kiwi.app/kiwi
+Identifier:          com.yy.enterprise.kiwi
+Version:             1190 (3.1.0)
+Code Type:           ARM-64 (Native)
+Parent Process:      launchd [1]</p>
+
+<p>Date/Time:           2015-09-08 15:44:57.327 +0800
+OS Version:          iOS 7.1.1 (11D201)
+Report Version:      104</p>
+
+<p>Exception Type:  EXC_CRASH (SIGSEGV)
+Exception Codes: 0x0000000000000000, 0x0000000000000000
+Triggered by Thread:  1</p>
+
+<p>Thread 0:
+0   libobjc.A.dylib                 0x00000001993781dc objc_msgSend + 28
+1   UIKit                           0x000000018feacf14 &ndash;[UIResponder(Internal) <em>canBecomeFirstResponder] + 20
+2   UIKit                           0x000000018feacba0 &ndash;[UIResponder becomeFirstResponder] + 240
+3   UIKit                           0x000000018feacfa0 &ndash;[UIView(Hierarchy) becomeFirstResponder] + 120
+4   UIKit                           0x000000018ff320f8 &ndash;[UITextField becomeFirstResponder] + 64
+5   UIKit                           0x000000018ffe4800 &ndash;[UITextInteractionAssistant(UITextInteractionAssistant_Internal) setFirstResponderIfNecessary] + 208
+6   UIKit                           0x000000018ffe3f84 &ndash;[UITextInteractionAssistant(UITextInteractionAssistant_Internal) oneFingerTap:] + 1792
+7   UIKit                           0x000000018ffcac60 </em>UIGestureRecognizerSendActions + 212
+8   UIKit                           0x000000018fe5929c &ndash;[UIGestureRecognizer <em>updateGestureWithEvent:buttonEvent:] + 376
+9   UIKit                           0x000000019025803c </em><strong>UIGestureRecognizerUpdate_block_invoke + 56
+10  UIKit                           0x000000018fe1a258 <em>UIGestureRecognizerRemoveObjectsFromArrayAndApplyBlocks + 284
+11  UIKit                           0x000000018fe18b34 </em>UIGestureRecognizerUpdate + 208
+12  UIKit                           0x000000018fe57b1c &ndash;[UIWindow <em>sendGesturesForEvent:] + 1008
+13  UIKit                           0x000000018fe5722c &ndash;[UIWindow sendEvent:] + 824
+14  UIKit                           0x000000018fe28b64 &ndash;[UIApplication sendEvent:] + 252
+15  UIKit                           0x000000018fe26c54 </em>UIApplicationHandleEventQueue + 8496
+16  CoreFoundation                  0x000000018ce1f640 </strong>CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION<strong> + 20
+17  CoreFoundation                  0x000000018ce1e99c </strong>CFRunLoopDoSources0 + 252
+18  CoreFoundation                  0x000000018ce1cc34 __CFRunLoopRun + 628
+19  CoreFoundation                  0x000000018cd5dc1c CFRunLoopRunSpecific + 448
+20  GraphicsServices                0x0000000192a45c08 GSEventRunModal + 164
+21  UIKit                           0x000000018fe8efd8 UIApplicationMain + 1152
+22  kiwi                            0x000000010026a2b8 main (main.mm:26)
+23  libdyld.dylib                   0x000000019995ba9c start + 0</p>
+
+<p>Thread 1 Crashed:
+0   libsystem_kernel.dylib          0x0000000199a3daa8 kevent64 + 8
+1   libdispatch.dylib               0x0000000199941998 _dispatch_mgr_thread + 48
+```</p>
+
+<p>从崩溃记录完全看不出原因，十分坑爹。</p>
+
+<h3>2.3 解决方案</h3>
+
+<ul>
+<li>方案一：第一次 Pop 不使用动画。</li>
+<li>方案二：统一管理 Pop 的调用，如果当前正在 Pop，则下一次 Pop 先入栈；等到 Pop 执行完再执行下一次 Pop。</li>
+</ul>
+
+
+<h2>3. Push 的过程中立即 Pop</h2>
+
+<p>Push 的过程中调用 Pop，会导致界面卡死，表现为：不响应任何点击、手势操作，但是不会崩溃。这也是在 iOS7 中出现的问题，iOS 8 之后不存在。</p>
+
+<h3>3.1 解决方案</h3>
+
+<p>同 1.1，重载 Pop 方法：</p>
+
+<ol>
+<li>Pop 的时候先判断是否在切换中；</li>
+<li>如果正在切换，则 Pop 的命令先保存到队列；</li>
+<li>切换动画执行完毕，判断是否需要处理 Pop 的队列。</li>
+</ol>
+
+
+<p>``` objc</p>
+
+<h1>pragma mark &ndash; UINavigationController</h1>
+
+<ul>
+<li><p>(NSArray <em>)popToViewController:(UIViewController </em>)viewController animated:(BOOL)animated {
+  if (!self.isSwitching) {
+      return [super popToViewController:viewController animated:animated];
+  } else {
+      [self enqueuePopViewController:viewController animate:animated];
+      return nil;
+  }
+}</p></li>
+<li><p>(UIViewController *)popViewControllerAnimated:(BOOL)animated {
+  if (!self.isSwitching) {
+      return [super popViewControllerAnimated:animated];
+  } else {
+      [self enqueuePopViewController:nil animate:animated];
+      return nil;
+  }
+}</p></li>
+</ul>
+
+
+<h1>pragma mark &ndash; UINavigationControllerDelegate</h1>
+
+<ul>
+<li><p>(void)navigationController:(UINavigationController <em>)navigationController didShowViewController:(UIViewController </em>)viewController animated:(BOOL)animated {
+  self.isSwitching = NO;</p>
+
+<p>  // 显示完毕之后判断是否需要Pop
+  if (self.popVCAnimateQueue.count) {
+      PopVCInfo *info = [self.popVCAnimateQueue firstObject];
+      [self.popVCAnimateQueue removeObjectAtIndex:0];
+      if (info.controller) {
+          [self.navigationController popToViewController:info.controller animated:info.animate];
+      } else {
+          [self.navigationController popViewControllerAnimated:info.animate];
+      }
+  }
+}</p></li>
+</ul>
+
+
+<p>```</p>
+
+<h2>4. Push 的过程中手势滑动返回</h2>
+
+<p>手势滑动返回本质上调用的还是 Pop，所以，同上。</p>
+
+<p>不过，还可以更根本地禁止用户进行这样的操作，也就是在切换过程中禁止滑动返回手势。</p>
+
+<p>``` objc</p>
+
+<h1>pragma mark &ndash; UINavigationController</h1>
+
+<p>// Hijack the push method to disable the gesture
+&ndash; (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {</p>
+
+<pre><code>self.interactivePopGestureRecognizer.enabled = NO;
+
+[super pushViewController:viewController animated:animated];
+</code></pre>
+
+<p>}</p>
+
+<h1>pragma mark &ndash; UINavigationControllerDelegate</h1>
+
+<ul>
+<li><p>(void)navigationController:(UINavigationController <em>)navigationController didShowViewController:(UIViewController </em>)viewController animated:(BOOL)animated {
+  self.isSwitching = NO;</p>
+
+<p>  self.interactivePopGestureRecognizer.enabled = YES;</p>
+
+<p>  // 显示完毕之后判断是否需要Pop
+  if (self.popVCAnimateQueue.count) {
+      PopVCInfo *info = [self.popVCAnimateQueue firstObject];
+      [self.popVCAnimateQueue removeObjectAtIndex:0];
+      if (info.controller) {
+          [self.navigationController popToViewController:info.controller animated:info.animate];
+      } else {
+          [self.navigationController popViewControllerAnimated:info.animate];
+      }
+  }
+}</p></li>
+</ul>
+
+
+<p>```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[密码计算器，保护您iPhone里的隐私文件]]></title>
@@ -411,85 +696,6 @@ view.layer.shadowRadius = radius;
 
 
 <p><img src="/images/2014/12/idp_order_tips.png" alt="order tips" /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[到底什么时候才需要在ObjC的Block中使用weakSelf/strongSelf]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/"/>
-    <updated>2014-11-22T15:59:18+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block</id>
-    <content type="html"><![CDATA[<p>Objective C 的 <code>Block</code> 是一个很实用的语法，特别是与GCD结合使用，可以很方便地实现并发、异步任务。但是，如果使用不当，Block 也会引起一些循环引用问题(<code>retain cycle</code>)—— Block 会 retain ‘self’，而 ‘self‘ 又 retain 了 Block。因为在 ObjC 中，直接调用一个实例变量，会被编译器处理成 &lsquo;self->theVar'，'self&rsquo; 是一个 strong 类型的变量，引用计数会加 1，于是，self retains queue， queue retains block，block retains self。</p>
-
-<!--more-->
-
-
-<h3>解决 retain circle</h3>
-
-<p>Apple 官方的建议是，传进 Block 之前，把 &lsquo;self&rsquo; 转换成 weak automatic 的变量，这样在 Block 中就不会出现对 self 的强引用。如果在 Block 执行完成之前，self 被释放了，weakSelf 也会变为 nil。</p>
-
-<p>示例代码：</p>
-
-<p>``` m</p>
-
-<p><strong>weak </strong>typeof__(self) weakSelf = self;</p>
-
-<pre><code>dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-[weakSelf doSomething];
-</code></pre>
-
-<p>});</p>
-
-<p>```</p>
-
-<p>clang 的文档表示，在 doSomething 内，weakSelf 不会被释放。但，下面的情况除外：</p>
-
-<p>``` m</p>
-
-<p><strong>weak </strong>typeof__(self) weakSelf = self;</p>
-
-<pre><code>dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-[weakSelf doSomething];
-[weakSelf doOtherThing];
-</code></pre>
-
-<p>});</p>
-
-<p>```</p>
-
-<p>在 doSomething 中，weakSelf 不会变成 nil，不过在 doSomething 执行完成，调用第二个方法 doOtherThing 的时候，weakSelf 有可能被释放，于是，strongSelf 就派上用场了：</p>
-
-<p>``` m</p>
-
-<p><strong>weak </strong>typeof__(self) weakSelf = self;</p>
-
-<pre><code>dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-__strong __typeof(self) strongSelf = weakSelf;
-[strongSelf doSomething];
-[strongSelf doOtherThing];
-</code></pre>
-
-<p>});</p>
-
-<p>```</p>
-
-<p><code>__strong</code> 确保在 Block 内，strongSelf 不会被释放。</p>
-
-<h3>总结</h3>
-
-<ul>
-<li>在 Block 内如果需要访问 self 的方法、变量，建议使用 weakSelf。</li>
-<li>如果在 Block 内需要多次 访问 self，则需要使用 strongSelf。</li>
-</ul>
-
-
-<h3>参考</h3>
-
-<ul>
-<li><a href="http://dhoerl.wordpress.com/2013/04/23/i-finally-figured-out-weakself-and-strongself/">I finally figured out weakSelf and strongSelf</a></li>
-<li><a href="http://stackoverflow.com/questions/21113963/is-the-weakself-strongself-dance-really-necessary-when-referencing-self-inside-a?rq=1">Is the weakSelf/strongSelf dance really necessary when referencing self inside a non-retained completion called from a UIViewController?</a></li>
-</ul>
-
 ]]></content>
   </entry>
   
