@@ -118,12 +118,12 @@
 
   <div class="entry-content"><p>iOS开发中，UIViewController是最常用的一个类，在Push和Pop的过程中也会经常出现一些UI卡死、App闪退的问题，本文总结了开发中遇到的一些坑。</p>
 
-<p>大部分视图控制器切换导致的问题，根本原因都是使用了动画，因为执行动画需要时间，在动画未完成的时候又进行另一个切换动画，容易产生异常，假如在 Push 和 Pop 的过程不使用动画，世界会清静很多。所以本文只讨论使用了动画的视图切换。也就是使用一下方式的 Push 和 Pop：</p>
+<p>大部分视图控制器切换导致的问题，根本原因都是使用了动画，因为执行动画需要时间，在动画未完成的时候又进行另一个切换动画，容易产生异常，假如在 Push 和 Pop 的过程不使用动画，世界会清静很多。所以本文只讨论使用了动画的视图切换。也就是使用以下方式的 Push 和 Pop：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">pushViewController:</span><span class="n">controller</span> <span class="nl">animated:</span><span class="n">YES</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">popViewControllerAnimated:</span><span class="n">NO</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">popViewControllerAnimated:</span><span class="n">YES</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -171,7 +171,7 @@
 
   <div class="entry-content"><p><img src="https://github.com/tinymind/LSUnusedResources/raw/master/LSUnusedResourcesExample.gif" alt="LSMessageHUD Example1" /></p>
 
-<h2>需求的引入</h2>
+<h2>1. 需求的引入</h2>
 
 <p>一个项目开发得越久，添加的功能模块也就越多，相应地，也会慢慢引入大量图片等资源。但是，在移除一些不再使用的模块的时候，开发者往往会把该模块所对应的图片资源一起删除，因为源码和资源是分离的。长久以来，项目中就会存在大量没被使用的资源文件。</p>
 

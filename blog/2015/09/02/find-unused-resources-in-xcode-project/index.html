@@ -115,7 +115,7 @@
 
 <div class="entry-content"><p><img src="https://github.com/tinymind/LSUnusedResources/raw/master/LSUnusedResourcesExample.gif" alt="LSMessageHUD Example1" /></p>
 
-<h2>需求的引入</h2>
+<h2>1. 需求的引入</h2>
 
 <p>一个项目开发得越久，添加的功能模块也就越多，相应地，也会慢慢引入大量图片等资源。但是，在移除一些不再使用的模块的时候，开发者往往会把该模块所对应的图片资源一起删除，因为源码和资源是分离的。长久以来，项目中就会存在大量没被使用的资源文件。</p>
 
@@ -126,11 +126,11 @@
 <!--more-->
 
 
-<h2>已有的方案</h2>
+<h2>2. 已有的方案</h2>
 
 <p>果不其然，在我打算写这么一个工具的时候，在网上已经有了两种方案。</p>
 
-<h3>方案1：<a href="http://stackoverflow.com/a/6113449/3737409">万能的脚本</a></h3>
+<h3>2.1 方案1：<a href="http://stackoverflow.com/a/6113449/3737409">万能的脚本</a></h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -157,13 +157,15 @@
 
 <p><strong>缺点</strong>：不够智能，不够通用，速度太慢，结果不正确。</p>
 
-<h3>方案2：<a href="http://jeffhodnett.github.io/Unused/">脚本界面化</a></h3>
+<h3>2.2 方案2：<a href="http://jeffhodnett.github.io/Unused/">脚本界面化</a></h3>
 
 <p><a href="http://jeffhodnett.github.io/Unused/">Unused</a> 对脚本的调用做了封装，通过界面可以配置一定的信息，然后比较清晰的输入结果。</p>
 
-<p><strong>缺点</strong>：实际上，Unused 的内部还是调用了方案1的脚本，所以方案1的缺点也就是方案2的缺点。</p>
+<p><strong>缺点</strong>：实际上，Unused 的内部还是调用了方案 1 的脚本，所以方案 1 的缺点也就是方案 2 的缺点。</p>
 
-<h2>LSUnusedResources 做的改进</h2>
+<h2>3. LSUnusedResources 做的改进</h2>
+
+<h3>3.1 提高匹配速度</h3>
 
 <p>LSUnusedResources 很大程度上受 Unused 的影响，比如界面、交互，以及部分代码。但是，本工具在核心代码上做了优化，使其在搜索的速度、结果的正确上都有了很大的提高。</p>
 
@@ -175,7 +177,36 @@
 </ul>
 
 
-<h2>使用方法</h2>
+<h3>3.2 优化匹配结果</h3>
+
+<p>Unused 会把大量实际上有使用的资源，当做未使用的资源输出。LSUnusedResources 则不会出现这样的问题，并且使得结果更加优化。</p>
+
+<p>举例说明：<br/>
+你在工程中添加了下面资源:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>icon_tag_0.png
+</span><span class='line'>icon_tag_1.png
+</span><span class='line'>icon_tag_2.png
+</span><span class='line'>icon_tag_3.png
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后用字符串拼接的方式在代码中引用:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSInteger</span> <span class="n">index</span> <span class="o">=</span> <span class="n">random</span><span class="p">()</span> <span class="o">%</span> <span class="mi">4</span><span class="p">;</span>
+</span><span class='line'><span class="n">UIImage</span> <span class="o">*</span><span class="n">img</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;icon_tag_%d&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">]];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>icon_tag_x.png</code> 是不应该被当做未使用的资源的，只是以一种比较隐晦的方式间接引用了，所以不应该出现在结果列表中。</p>
+
+<h2>4. 使用方法</h2>
 
 <ol>
 <li>点击 <code>Browse..</code> 选择一个文件夹；</li>
@@ -184,7 +215,7 @@
 </ol>
 
 
-<h2>下载安装</h2>
+<h2>5. 下载安装</h2>
 
 <ul>
 <li>下载: <a href="https://github.com/tinymind/LSUnusedResources/raw/master/Release/LSUnusedResources.app.zip">LSUnusedResources.app.zip</a></li>
