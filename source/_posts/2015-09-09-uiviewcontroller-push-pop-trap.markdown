@@ -11,11 +11,11 @@ description: iOS开发中，UIViewController是最常用的一个类，在Push�
 
 iOS开发中，UIViewController是最常用的一个类，在Push和Pop的过程中也会经常出现一些UI卡死、App闪退的问题，本文总结了开发中遇到的一些坑。
 
-大部分视图控制器切换导致的问题，根本原因都是使用了动画，因为执行动画需要时间，在动画未完成的时候又进行另一个切换动画，容易产生异常，假如在 Push 和 Pop 的过程不使用动画，世界会清静很多。所以本文只讨论使用了动画的视图切换。也就是使用一下方式的 Push 和 Pop：
+大部分视图控制器切换导致的问题，根本原因都是使用了动画，因为执行动画需要时间，在动画未完成的时候又进行另一个切换动画，容易产生异常，假如在 Push 和 Pop 的过程不使用动画，世界会清静很多。所以本文只讨论使用了动画的视图切换。也就是使用以下方式的 Push 和 Pop：
 
 ``` objc
     [self.navigationController pushViewController:controller animated:YES];
-    [self.navigationController popViewControllerAnimated:NO];
+    [self.navigationController popViewControllerAnimated:YES];
 ```
 <!--more-->
 
