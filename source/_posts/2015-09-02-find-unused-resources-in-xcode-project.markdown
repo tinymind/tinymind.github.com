@@ -10,7 +10,7 @@ description: LSUnusedResources 是一款查找 XCode 工程中未被使用的图
 ---
 
 
-![LSMessageHUD Example1](https://github.com/tinymind/LSUnusedResources/raw/master/LSUnusedResourcesExample.gif)  
+![LSUnusedResources](https://github.com/tinymind/LSUnusedResources/raw/master/LSUnusedResourcesExample.gif)  
 
 ## 1. 需求的引入
 
@@ -87,7 +87,8 @@ Unused 会把大量实际上有使用的资源，当做未使用的资源输出�
 
 1. 点击 `Browse..` 选择一个文件夹；
 2. 点击 `Search` 开始搜索；
-3. 等待片刻即可看到结果。
+3. 等待片刻即可看到结果；
+4. 选中某些行，然后点击 `Delete` 可以直接删除资源。
 
 ## 5. 下载安装
 
