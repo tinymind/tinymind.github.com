@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: App - 浮生猎趣</title>
+  <title>使用LSLog XCode插件来过滤Log及修改Log的文本颜色 - 浮生猎趣</title>
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="Category: App">
-  <meta name="keywords" content="internet, developer, c++, ios, lslin">
+  <meta name="description" content="LSLog XCode插件可以过滤XCode调试控制台输出的Log，支持正则表达式，可自定义前缀字符串以区分不同等级的Log，并修改对应的文字颜色。">
+  <meta name="keywords" content="XCode, Plugin, Log, Filter, Colorize, 过滤, 配色">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.lessfun.comblog/categories/app">
+  <link rel="canonical" href="http://blog.lessfun.com/blog/2015/12/18/lslog-xcode-plugin-to-filter-and-colorize-debugging-console">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
@@ -83,67 +83,154 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: App</h1>
+    
+      <h1 class="entry-title">使用LSLog XCode插件来过滤Log及修改Log的文本颜色</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-18T18:34:16+08:00" pubdate data-updated="true">2015-12-18, Fri</time>
+        
+		
+          | <a href="#comments">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p><img src="https://github.com/tinymind/LSLog-XCode/raw/master/LSLog-XCode.gif" alt="LSLog-XCode" /></p>
 
-  
-  <h2>2015</h2>
-
-<article>
-  
-<h1><a href="/blog/2015/09/02/find-unused-resources-in-xcode-project/">查找XCode工程中没被使用的图片资源</a></h1>
-<time datetime="2015-09-02T13:27:29+08:00" pubdate><span class='month'>Sep</span> <span class='day'>02</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/app/'>App</a>, <a class='category' href='/blog/categories/mac/'>Mac</a></span>
-</footer>
+<!--more-->
 
 
-</article>
+<h2>1. 功能</h2>
+
+<p>LSLog-XCode 是一款 XCode 插件，用于过滤 XCode 调试控制台输出的 Log，支持正则表达式，可自定义前缀字符串以区分不同等级的Log，并修改对应的文字颜色。</p>
+
+<p>LSLog-XCode 内置支持 <a href="https://github.com/robbiehanson/XcodeColors">XCodeColors</a> 插件。如果你没有安装 XCodeColors，LSLog-XCode 会采用类似 XCodeColors 的语法，高亮显示调试器打印的 Log。</p>
+
+<h3>1.1 默认配置</h3>
+
+<p>不同 Log 等级对应的前缀字符串及默认文字颜色：</p>
+
+<ul>
+<li>Error: <code>&lt;ERROR&gt;</code>, RGB(214, 57, 30)</li>
+<li>Warn: <code>&lt;WARNING&gt;</code>, RGB(204, 121, 32)</li>
+<li>Info: <code>&lt;INFO&gt;</code>, RGB(32, 32, 32)</li>
+<li>Verbose: <code>&lt;VERBOSE&gt;</code>, RGB(0, 0, 255)</li>
+</ul>
 
 
+<h2>2. 安装</h2>
 
-<article>
-  
-<h1><a href="/blog/2015/04/07/passcalc-protect-your-privacy-in-iphone/">密码计算器，保护您iPhone里的隐私文件</a></h1>
-<time datetime="2015-04-07T16:48:09+08:00" pubdate><span class='month'>Apr</span> <span class='day'>07</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/app/'>App</a>, <a class='category' href='/blog/categories/passcalc/'>PassCalc</a>, <a class='category' href='/blog/categories/ios/'>iOS</a></span>
-</footer>
+<ul>
+<li>通过 <a href="https://github.com/alcatraz/Alcatraz">Alcatraz</a> 安装。(即将上线&hellip;)</li>
+<li>下载工程文件 <a href="https://github.com/tinymind/LSLog-XCode">LSLog-XCode</a>，编译运行，然后<strong>重启XCode</strong>。</li>
+</ul>
 
 
-</article>
+<h2>3. 卸载</h2>
 
+<p>LSLog-XCode.xcplugin 被保存在 <code>~/Library/Application Support/Developer/Shared/Xcode/Plug-ins</code>，如果要卸载，只需删除这个文件：<code>~/Library/Application Support/Developer/Shared/Xcode/Plug-ins/LSLog-XCode.xcplugin</code>。</p>
 
+<h2>4. 感谢</h2>
 
-  
-  <h2>2014</h2>
-
-<article>
-  
-<h1><a href="/blog/2014/12/10/marktext-a-markdown-text-editor-for-ios/">MarkText - iOS 上支持语法高亮、HTML预览、文件导出的Markdown文本编辑器</a></h1>
-<time datetime="2014-12-10T21:29:06+08:00" pubdate><span class='month'>Dec</span> <span class='day'>10</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/app/'>App</a>, <a class='category' href='/blog/categories/marktext/'>MarkText</a>, <a class='category' href='/blog/categories/ios/'>iOS</a></span>
-</footer>
-
-
-</article>
+<ul>
+<li><a href="https://github.com/yuhua-chen/MCLog">MCLog</a></li>
+<li><a href="https://github.com/robbiehanson/XcodeColors">XCodeColors</a><blockquote class='post_original_block'>
+          原文作者：
+          <a href='http://blog.lessfun.com'>lslin</a><br/>
+          原文链接：
+          <a href='http://blog.lessfun.com/blog/2015/12/18/lslog-xcode-plugin-to-filter-and-colorize-debugging-console/'><a href="http://blog.lessfun.com/blog/2015/12/18/lslog-xcode-plugin-to-filter-and-colorize-debugging-console/">http://blog.lessfun.com/blog/2015/12/18/lslog-xcode-plugin-to-filter-and-colorize-debugging-console/</a></a><br/>
+          版权声明：自由转载-非商用-非衍生-保持署名 |
+          <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+          </blockquote></li>
+</ul>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">lslin</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-18T18:34:16+08:00" pubdate data-updated="true">2015-12-18, Fri</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/plugin/'>Plugin</a>, <a class='category' href='/blog/categories/xcode/'>XCode</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/09/09/uiviewcontroller-push-pop-trap/" title="Previous Post: UIViewController Push & Pop 的那些坑">&laquo; UIViewController Push & Pop 的那些坑</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+
+  <section>
+    <h1>发表评论</h1>
+    <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread" data-title="使用LSLog XCode插件来过滤Log及修改Log的文本颜色"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lsfun"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+</div>
+  </section>
 
 </div>
 

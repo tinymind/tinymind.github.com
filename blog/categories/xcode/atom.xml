@@ -4,7 +4,7 @@
   <title><![CDATA[Category: XCode | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/xcode/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2015-09-14T17:59:14+08:00</updated>
+  <updated>2015-12-19T23:57:45+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,56 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[使用LSLog XCode插件来过滤Log及修改Log的文本颜色]]></title>
+    <link href="http://blog.lessfun.com/blog/2015/12/18/lslog-xcode-plugin-to-filter-and-colorize-debugging-console/"/>
+    <updated>2015-12-18T18:34:16+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2015/12/18/lslog-xcode-plugin-to-filter-and-colorize-debugging-console</id>
+    <content type="html"><![CDATA[<p><img src="https://github.com/tinymind/LSLog-XCode/raw/master/LSLog-XCode.gif" alt="LSLog-XCode" /></p>
+
+<!--more-->
+
+
+<h2>1. 功能</h2>
+
+<p>LSLog-XCode 是一款 XCode 插件，用于过滤 XCode 调试控制台输出的 Log，支持正则表达式，可自定义前缀字符串以区分不同等级的Log，并修改对应的文字颜色。</p>
+
+<p>LSLog-XCode 内置支持 <a href="https://github.com/robbiehanson/XcodeColors">XCodeColors</a> 插件。如果你没有安装 XCodeColors，LSLog-XCode 会采用类似 XCodeColors 的语法，高亮显示调试器打印的 Log。</p>
+
+<h3>1.1 默认配置</h3>
+
+<p>不同 Log 等级对应的前缀字符串及默认文字颜色：</p>
+
+<ul>
+<li>Error: <code>&lt;ERROR&gt;</code>, RGB(214, 57, 30)</li>
+<li>Warn: <code>&lt;WARNING&gt;</code>, RGB(204, 121, 32)</li>
+<li>Info: <code>&lt;INFO&gt;</code>, RGB(32, 32, 32)</li>
+<li>Verbose: <code>&lt;VERBOSE&gt;</code>, RGB(0, 0, 255)</li>
+</ul>
+
+
+<h2>2. 安装</h2>
+
+<ul>
+<li>通过 <a href="https://github.com/alcatraz/Alcatraz">Alcatraz</a> 安装。(即将上线&hellip;)</li>
+<li>下载工程文件 <a href="https://github.com/tinymind/LSLog-XCode">LSLog-XCode</a>，编译运行，然后<strong>重启XCode</strong>。</li>
+</ul>
+
+
+<h2>3. 卸载</h2>
+
+<p>LSLog-XCode.xcplugin 被保存在 <code>~/Library/Application Support/Developer/Shared/Xcode/Plug-ins</code>，如果要卸载，只需删除这个文件：<code>~/Library/Application Support/Developer/Shared/Xcode/Plug-ins/LSLog-XCode.xcplugin</code>。</p>
+
+<h2>4. 感谢</h2>
+
+<ul>
+<li><a href="https://github.com/yuhua-chen/MCLog">MCLog</a></li>
+<li><a href="https://github.com/robbiehanson/XcodeColors">XCodeColors</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[XCode无法正确import预编译文件.pch里的头文件]]></title>

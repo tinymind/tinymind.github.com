@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Mac | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/mac/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2015-09-14T17:59:14+08:00</updated>
+  <updated>2015-12-19T23:57:45+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -18,7 +18,7 @@
     <link href="http://blog.lessfun.com/blog/2015/09/02/find-unused-resources-in-xcode-project/"/>
     <updated>2015-09-02T13:27:29+08:00</updated>
     <id>http://blog.lessfun.com/blog/2015/09/02/find-unused-resources-in-xcode-project</id>
-    <content type="html"><![CDATA[<p><img src="https://github.com/tinymind/LSUnusedResources/raw/master/LSUnusedResourcesExample.gif" alt="LSMessageHUD Example1" /></p>
+    <content type="html"><![CDATA[<p><img src="https://github.com/tinymind/LSUnusedResources/raw/master/LSUnusedResourcesExample.gif" alt="LSUnusedResources" /></p>
 
 <h2>1. 需求的引入</h2>
 
@@ -111,7 +111,8 @@ UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"icon_tag_%d", in
 <ol>
 <li>点击 <code>Browse..</code> 选择一个文件夹；</li>
 <li>点击 <code>Search</code> 开始搜索；</li>
-<li>等待片刻即可看到结果。</li>
+<li>等待片刻即可看到结果；</li>
+<li>选中某些行，然后点击 <code>Delete</code> 可以直接删除资源。</li>
 </ol>
 
 
