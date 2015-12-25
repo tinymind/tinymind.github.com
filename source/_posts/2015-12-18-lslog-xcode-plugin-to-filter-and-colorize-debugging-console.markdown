@@ -30,7 +30,7 @@ LSLog-XCode 内置支持 [XCodeColors](https://github.com/robbiehanson/XcodeColo
 
 ## 2. 安装
 
-* 通过 [Alcatraz](https://github.com/alcatraz/Alcatraz) 安装。(即将上线...)
+* 通过 [Alcatraz](https://github.com/alcatraz/Alcatraz) 安装。
 * 下载工程文件 [LSLog-XCode](https://github.com/tinymind/LSLog-XCode)，编译运行，然后**重启XCode**。
 
 ## 3. 卸载
