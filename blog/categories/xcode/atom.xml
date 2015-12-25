@@ -4,7 +4,7 @@
   <title><![CDATA[Category: XCode | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/xcode/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2015-12-19T23:57:45+08:00</updated>
+  <updated>2015-12-25T18:39:22+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -44,7 +44,7 @@
 <h2>2. 安装</h2>
 
 <ul>
-<li>通过 <a href="https://github.com/alcatraz/Alcatraz">Alcatraz</a> 安装。(即将上线&hellip;)</li>
+<li>通过 <a href="https://github.com/alcatraz/Alcatraz">Alcatraz</a> 安装。</li>
 <li>下载工程文件 <a href="https://github.com/tinymind/LSLog-XCode">LSLog-XCode</a>，编译运行，然后<strong>重启XCode</strong>。</li>
 </ul>
 

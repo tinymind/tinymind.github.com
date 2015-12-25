@@ -1,0 +1,571 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>非越狱 iOS 在后台截屏、录制屏幕的相关实现 - 浮生猎趣</title>
+  <meta name="author" content="lslin">
+
+  
+  <meta name="description" content="非越狱iOS系统在后台截屏、录制屏幕的几种方法，适用于iOS 7、iOS 8。iOS 9已经失效。">
+  <meta name="keywords" content="ios, screen, record, background, capture, non-jailbreak">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.lessfun.com/blog/2015/12/25/ios-record-screen-in-background">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://ajax.useso.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+<!--<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+
+<link href="http://fonts.useso.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.useso.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-46115267-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">浮生猎趣</a></h1>
+  
+    <h2>ls *.fun >> 罗列一切乐趣</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.lessfun.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="http://www.lessfun.com/app/">Apps</a></li>
+  <li><a href="http://www.lessfun.com/app/marktext/">MarkText</a></li>
+  <li><a href="http://www.lessfun.com/app/passcalc/">PassCalc</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <li><a href="http://like.lessfun.com">大众点赞</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">非越狱 iOS 在后台截屏、录制屏幕的相关实现</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-25T16:54:31+08:00" pubdate data-updated="true">2015-12-25, Fri</time>
+        
+		
+          | <a href="#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>需求</h2>
+
+<p>先简单介绍一下标题的含义。也许你看到<code>iOS</code>、<code>截屏</code>，觉得这有什么好长篇大论的，小菜一碟而已。可能你忽略了<code>后台</code>这个关键词。</p>
+
+<p>这里的关键就在于怎么在 App 切换到后台之后，仍然能够持续截取用户屏幕内容。解决了这点，剩下的就是把图片合成视频，有必要的话再加入声音。</p>
+
+<p>另外，需要说明的是，实现后台截屏只能使用私有 API，而苹果是不允许这类 App 上架的，就算你用了一些技巧（比如动态加载私有 API 以绕过 App Store 的审核）而上架，假以时日苹果也会发现并且下架处理。<a href="http://stackoverflow.com/questions/11090184/how-does-the-ios-app-display-recorder-record-the-screen-without-using-private-ap">Display Recorder</a> 就是这么做并且被下架的，所以现在它发到越狱市场了。</p>
+
+<h2>作用</h2>
+
+<p>在 iOS 上录制全局屏幕，保存成一个视频，这么一个小众需求到底有什么作用？虽然一般用户都不会用到，不过它还是有点用的：</p>
+
+<ul>
+<li>录制 App 使用的视频教程（而不是图片+文字、图片+文字、图片+文字）；</li>
+<li>如果 App 有个在某些用户机器上必现的 Bug，可以让他把操作记录下来，发给开发者（这样码农们就没办法再推脱：“在我这里是好的！肯定是你的打开方式不对！”）；</li>
+<li>如果你是游戏大神，玩得一手好手游，还可以把你在游戏中的神操作保存下来供日后回味（或者分享出去让小白们膜拜）。</li>
+</ul>
+
+
+<!--more-->
+
+
+<h2>实现</h2>
+
+<p>iOS 的系统封闭，API 变化无常，所以并没有一个可以全版本 iOS 系统通用的后台截屏方法。下面所列的方法都因系统版本而异，前提都是非越狱。</p>
+
+<h3>1. _UICreateScreenUIImage (&lt; iOS 6)</h3>
+
+<p><a href="http://iphonedevwiki.net/index.php/UIImage#UICreateScreenUIImage">_UICreateScreenUIImage</a> 是 UIImage 的一个私有方法，在<strong> iOS 6</strong>以前可以用于后台调用截屏，方法如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">OBJC_EXTERN</span> <span class="n">UIImage</span> <span class="o">*</span><span class="nf">_UICreateScreenUIImage</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">takeScreenshot</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">UIImage</span> <span class="o">*</span><span class="n">screenImage</span> <span class="o">=</span> <span class="n">_UICreateScreenUIImage</span><span class="p">();</span>
+</span><span class='line'>    <span class="c1">// ...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是，在 iOS 6 以后，这个方法不允许在 App 切到后台的时候调用了，会在调试控制台输出不能调用的错误提示。</p>
+
+<h3>2. CARenderServerRenderDisplay (&lt; iOS 7)</h3>
+
+<p><a href="https://github.com/coolstar/RecordMyScreen">RecordMyScreen</a> 用的就是这个方法，不过实测在 iOS 7以上，只能截到黑色的空白图片。网上说 RecordMyScreen 就是 Display Recorder 的开源版本。</p>
+
+<p>其中涉及到后台截屏的代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">IOSurfaceLock</span><span class="p">(</span><span class="n">_surface</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">nil</span><span class="p">);</span>
+</span><span class='line'><span class="c1">// Take currently displayed image from the LCD</span>
+</span><span class='line'><span class="n">CARenderServerRenderDisplay</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">CFSTR</span><span class="p">(</span><span class="s">&quot;LCD&quot;</span><span class="p">),</span> <span class="n">_surface</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="c1">// Unlock the surface</span>
+</span><span class='line'><span class="n">IOSurfaceUnlock</span><span class="p">(</span><span class="n">_surface</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Make a raw memory copy of the surface</span>
+</span><span class='line'><span class="kt">void</span> <span class="o">*</span><span class="n">baseAddr</span> <span class="o">=</span> <span class="n">IOSurfaceGetBaseAddress</span><span class="p">(</span><span class="n">_surface</span><span class="p">);</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">totalBytes</span> <span class="o">=</span> <span class="n">_bytesPerRow</span> <span class="o">*</span> <span class="n">_height</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSMutableData</span> <span class="o">*</span><span class="n">rawDataObj</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableData</span> <span class="nl">dataWithBytes:</span><span class="n">baseAddr</span> <span class="nl">length:</span><span class="n">totalBytes</span><span class="p">];</span>
+</span><span class='line'><span class="c1">// ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是，经过测试，在iOS 7和iOS 8上，这个方法没办法正确截屏，只能得到黑色的图片。而且，虽说 RecordMyScreen 是一个开源项目，但实际上它并不是一份完整可用的代码，开源到中途，作者发现有人在窃取他的项目源码，于是停止了开源。虽然如此，该项目中对于音视频的编码、合成部分的处理都是很值得参考的。</p>
+
+<h3>3. createScreenIOSurface(&lt; iOS 7?)</h3>
+
+<p><a href="https://github.com/kishikawakatsumi/ScreenRecorder">ScreenRecorder</a> 用了这个方法，但是实际上这个项目没办法在后台运行。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">UIWindow</span> <span class="nl">(ScreenRecorder)</span>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">CFTypeRef</span><span class="p">)</span><span class="nf">createScreenIOSurface</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">screenShot</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">CFTypeRef</span> <span class="n">surface</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIWindow</span> <span class="n">createScreenIOSurface</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">backingData</span> <span class="o">=</span> <span class="n">surface</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">pixelBufferAttributes</span> <span class="o">=</span> <span class="err">@</span><span class="p">{(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">kCVPixelBufferPixelFormatTypeKey</span> <span class="o">:</span> <span class="err">@</span><span class="p">(</span><span class="n">kCVPixelFormatType_32BGRA</span><span class="p">)};</span>
+</span><span class='line'>    <span class="n">status</span> <span class="o">=</span> <span class="n">CVPixelBufferCreateWithIOSurface</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">surface</span><span class="p">,</span> <span class="p">(</span><span class="n">__bridge</span> <span class="n">CFDictionaryRef</span><span class="p">)(</span><span class="n">pixelBufferAttributes</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">buffer</span><span class="p">);</span>
+</span><span class='line'>    <span class="c1">// ...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>4. 终极方法 IOSurface (&lt; iOS 9)</h3>
+
+<p>好吧，前面提到的几种方法在 iOS 7 以上版本都没啥卵用。现在说的这个方法是可以在 iOS 7 和 iOS 8 上使用的，只是 iOS 9 禁用了该方法。</p>
+
+<p>与 RecordMyScreen 类似，还是基于 IOSurface 私有库，只是调用的方法不太一样：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nf">screenshot</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">IOMobileFramebufferConnection</span> <span class="n">connect</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">kern_return_t</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'><span class="n">CoreSurfaceBufferRef</span> <span class="n">screenSurface</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">io_service_t</span> <span class="n">framebufferService</span> <span class="o">=</span> <span class="n">IOServiceGetMatchingService</span><span class="p">(</span><span class="n">kIOMasterPortDefault</span><span class="p">,</span> <span class="n">IOServiceMatching</span><span class="p">(</span><span class="s">&quot;AppleH1CLCD&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">framebufferService</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">framebufferService</span> <span class="o">=</span> <span class="n">IOServiceGetMatchingService</span><span class="p">(</span><span class="n">kIOMasterPortDefault</span><span class="p">,</span> <span class="n">IOServiceMatching</span><span class="p">(</span><span class="s">&quot;AppleM2CLCD&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">framebufferService</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">framebufferService</span> <span class="o">=</span> <span class="n">IOServiceGetMatchingService</span><span class="p">(</span><span class="n">kIOMasterPortDefault</span><span class="p">,</span> <span class="n">IOServiceMatching</span><span class="p">(</span><span class="s">&quot;AppleCLCD&quot;</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">IOMobileFramebufferOpen</span><span class="p">(</span><span class="n">framebufferService</span><span class="p">,</span> <span class="n">mach_task_self</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">connect</span><span class="p">);</span>
+</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">IOMobileFramebufferGetLayerDefaultSurface</span><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">screenSurface</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">uint32_t</span> <span class="n">aseed</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">IOSurfaceLock</span><span class="p">((</span><span class="n">IOSurfaceRef</span><span class="p">)</span><span class="n">screenSurface</span><span class="p">,</span> <span class="mh">0x00000001</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">aseed</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">size_t</span> <span class="n">width</span> <span class="o">=</span> <span class="n">IOSurfaceGetWidth</span><span class="p">((</span><span class="n">IOSurfaceRef</span><span class="p">)</span><span class="n">screenSurface</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">size_t</span> <span class="n">height</span> <span class="o">=</span> <span class="n">IOSurfaceGetHeight</span><span class="p">((</span><span class="n">IOSurfaceRef</span><span class="p">)</span><span class="n">screenSurface</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFMutableDictionaryRef</span> <span class="n">dict</span><span class="p">;</span>
+</span><span class='line'><span class="n">size_t</span> <span class="n">pitch</span> <span class="o">=</span> <span class="n">width</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">width</span><span class="o">*</span><span class="n">height</span><span class="o">*</span><span class="mi">4</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">bPE</span><span class="o">=</span><span class="mi">4</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">char</span> <span class="n">pixelFormat</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="sc">&#39;A&#39;</span><span class="p">,</span><span class="sc">&#39;R&#39;</span><span class="p">,</span><span class="sc">&#39;G&#39;</span><span class="p">,</span><span class="sc">&#39;B&#39;</span><span class="p">};</span>
+</span><span class='line'>    <span class="n">dict</span> <span class="o">=</span> <span class="n">CFDictionaryCreateMutable</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">kCFTypeDictionaryKeyCallBacks</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">kCFTypeDictionaryValueCallBacks</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFDictionarySetValue</span><span class="p">(</span><span class="n">dict</span><span class="p">,</span> <span class="n">kIOSurfaceIsGlobal</span><span class="p">,</span> <span class="n">kCFBooleanTrue</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFDictionarySetValue</span><span class="p">(</span><span class="n">dict</span><span class="p">,</span> <span class="n">kIOSurfaceBytesPerRow</span><span class="p">,</span> <span class="n">CFNumberCreate</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="n">kCFNumberSInt32Type</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pitch</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">CFDictionarySetValue</span><span class="p">(</span><span class="n">dict</span><span class="p">,</span> <span class="n">kIOSurfaceBytesPerElement</span><span class="p">,</span> <span class="n">CFNumberCreate</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="n">kCFNumberSInt32Type</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">bPE</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">CFDictionarySetValue</span><span class="p">(</span><span class="n">dict</span><span class="p">,</span> <span class="n">kIOSurfaceWidth</span><span class="p">,</span> <span class="n">CFNumberCreate</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="n">kCFNumberSInt32Type</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">width</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">CFDictionarySetValue</span><span class="p">(</span><span class="n">dict</span><span class="p">,</span> <span class="n">kIOSurfaceHeight</span><span class="p">,</span> <span class="n">CFNumberCreate</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="n">kCFNumberSInt32Type</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">height</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">CFDictionarySetValue</span><span class="p">(</span><span class="n">dict</span><span class="p">,</span> <span class="n">kIOSurfacePixelFormat</span><span class="p">,</span> <span class="n">CFNumberCreate</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="n">kCFNumberSInt32Type</span><span class="p">,</span> <span class="n">pixelFormat</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">CFDictionarySetValue</span><span class="p">(</span><span class="n">dict</span><span class="p">,</span> <span class="n">kIOSurfaceAllocSize</span><span class="p">,</span> <span class="n">CFNumberCreate</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="n">kCFNumberSInt32Type</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">IOSurfaceRef</span> <span class="n">destSurf</span> <span class="o">=</span> <span class="n">IOSurfaceCreate</span><span class="p">(</span><span class="n">dict</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">IOSurfaceAcceleratorRef</span> <span class="n">outAcc</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">IOSurfaceAcceleratorCreate</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outAcc</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">IOSurfaceAcceleratorTransferSurface</span><span class="p">(</span><span class="n">outAcc</span><span class="p">,</span> <span class="p">(</span><span class="n">IOSurfaceRef</span><span class="p">)</span><span class="n">screenSurface</span><span class="p">,</span> <span class="n">destSurf</span><span class="p">,</span> <span class="n">dict</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">IOSurfaceUnlock</span><span class="p">((</span><span class="n">IOSurfaceRef</span><span class="p">)</span><span class="n">screenSurface</span><span class="p">,</span> <span class="n">kIOSurfaceLockReadOnly</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">aseed</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">outAcc</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CGDataProviderRef</span> <span class="n">provider</span> <span class="o">=</span>  <span class="n">CGDataProviderCreateWithData</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span>  <span class="n">IOSurfaceGetBaseAddress</span><span class="p">(</span><span class="n">destSurf</span><span class="p">),</span> <span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="n">height</span> <span class="o">*</span> <span class="mi">4</span><span class="p">),</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CGImageRef</span> <span class="n">cgImage</span> <span class="o">=</span> <span class="n">CGImageCreate</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span>
+</span><span class='line'><span class="mi">8</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">IOSurfaceGetBytesPerRow</span><span class="p">(</span><span class="n">destSurf</span><span class="p">),</span>
+</span><span class='line'> <span class="n">CGColorSpaceCreateDeviceRGB</span><span class="p">(),</span> <span class="n">kCGImageAlphaNoneSkipFirst</span> <span class="o">|</span><span class="n">kCGBitmapByteOrder32Little</span><span class="p">,</span> <span class="n">provider</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">YES</span><span class="p">,</span> <span class="n">kCGRenderingIntentDefault</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">UIImage</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageWithCGImage:</span><span class="n">cgImage</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">image</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>见：</p>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/21870667/iomobileframebuffergetlayerdefaultsurface-does-not-work-on-ios7-retina">IOMobileFramebufferGetLayerDefaultSurface does not work on ios7 retina</a></li>
+<li><a href="http://stackoverflow.com/questions/32239969/iomobileframebuffergetlayerdefaultsurface-not-working-on-ios-9">IOMobileFramebufferGetLayerDefaultSurface not working on iOS 9</a></li>
+</ul>
+
+
+<h2>合成</h2>
+
+<p>在 App 后台得到截图之后怎么处理成视频呢？其实在 RecordMyScreen 中有完整的代码可以参考，只是它里面截屏的方法需要替换为本文提到的<code>第四种</code>实现，不赘述。</p>
+
+<h2>注意</h2>
+
+<ol>
+<li>需要修改 App 的 plist 文件，使其能在后台运行。</li>
+<li>需要打开设备的 Access Touch 功能，否则对于 OpenGL 实现的游戏 App，会黑屏。</li>
+<li>iPad Retina 屏幕像素过大，处理起来很吃力，需要减小生成的图片大小。</li>
+</ol>
+
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2015/12/25/ios-record-screen-in-background/'>http://blog.lessfun.com/blog/2015/12/25/ios-record-screen-in-background/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">lslin</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-25T16:54:31+08:00" pubdate data-updated="true">2015-12-25, Fri</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/18/lslog-xcode-plugin-to-filter-and-colorize-debugging-console/" title="Previous Post: 使用LSLog XCode插件来过滤Log及修改Log的文本颜色">&laquo; 使用LSLog XCode插件来过滤Log及修改Log的文本颜色</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+
+  <section>
+    <h1>发表评论</h1>
+    <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread" data-title="非越狱 iOS 在后台截屏、录制屏幕的相关实现"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lsfun"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>About Me</h1>
+<p>一个程序员只会写代码是不够的，他还应该拥有一个分享的博客。<br>——王小波<br></p>
+<p>iOS 开发工程师，现就职于 YY Inc.<br></p>
+<p><a href="http://like.lessfun.com">大众点赞：沉迷的大多数</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/12/25/ios-record-screen-in-background/">非越狱 iOS 在后台截屏、录制屏幕的相关实现</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/18/lslog-xcode-plugin-to-filter-and-colorize-debugging-console/">使用LSLog XCode插件来过滤Log及修改Log的文本颜色</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/09/uiviewcontroller-push-pop-trap/">UIViewController Push & Pop 的那些坑</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/02/find-unused-resources-in-xcode-project/">查找XCode工程中没被使用的图片资源</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/07/passcalc-protect-your-privacy-in-iphone/">密码计算器，保护您iPhone里的隐私文件</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tinymind">@tinymind</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tinymind',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/app/'>App (3)</a></li>
+<li class='category'><a href='/blog/categories/bitcoin/'>Bitcoin (2)</a></li>
+<li class='category'><a href='/blog/categories/book/'>Book (1)</a></li>
+<li class='category'><a href='/blog/categories/c-/'>C++ (2)</a></li>
+<li class='category'><a href='/blog/categories/financial/'>Financial (1)</a></li>
+<li class='category'><a href='/blog/categories/github/'>Github (1)</a></li>
+<li class='category'><a href='/blog/categories/godaddy/'>Godaddy (1)</a></li>
+<li class='category'><a href='/blog/categories/http/'>Http (1)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (3)</a></li>
+<li class='category'><a href='/blog/categories/marktext/'>MarkText (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (4)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
+<li class='category'><a href='/blog/categories/passcalc/'>PassCalc (1)</a></li>
+<li class='category'><a href='/blog/categories/plugin/'>Plugin (1)</a></li>
+<li class='category'><a href='/blog/categories/svn/'>SVN (1)</a></li>
+<li class='category'><a href='/blog/categories/xcode/'>XCode (2)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (17)</a></li>
+
+  </ul>
+</section>
+
+
+
+<section>
+<h1>Recent Comments</h1>
+<ul class="ds-recent-comments" data-num-items="10" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="20">
+</ul>
+<!--多说js加载开始，一个页面只需要加载一次 -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lsfun"};
+(function() {
+var ds = document.createElement('script');
+ds.type = 'text/javascript';
+ds.async = true;ds.src = 'http://static.duoshuo.com/embed.js';
+ds.charset = 'UTF-8';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
+<!--多说js加载结束，一个页面只需要加载一次 -->
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - lslin -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

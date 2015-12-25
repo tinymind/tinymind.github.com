@@ -90,6 +90,67 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2015/12/25/ios-record-screen-in-background/">非越狱 iOS 在后台截屏、录制屏幕的相关实现</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-25T16:54:31+08:00" pubdate data-updated="true">2015-12-25, Fri</time>
+        
+		
+          | <a href="/blog/2015/12/25/ios-record-screen-in-background/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>需求</h2>
+
+<p>先简单介绍一下标题的含义。也许你看到<code>iOS</code>、<code>截屏</code>，觉得这有什么好长篇大论的，小菜一碟而已。可能你忽略了<code>后台</code>这个关键词。</p>
+
+<p>这里的关键就在于怎么在 App 切换到后台之后，仍然能够持续截取用户屏幕内容。解决了这点，剩下的就是把图片合成视频，有必要的话再加入声音。</p>
+
+<p>另外，需要说明的是，实现后台截屏只能使用私有 API，而苹果是不允许这类 App 上架的，就算你用了一些技巧（比如动态加载私有 API 以绕过 App Store 的审核）而上架，假以时日苹果也会发现并且下架处理。<a href="http://stackoverflow.com/questions/11090184/how-does-the-ios-app-display-recorder-record-the-screen-without-using-private-ap">Display Recorder</a> 就是这么做并且被下架的，所以现在它发到越狱市场了。</p>
+
+<h2>作用</h2>
+
+<p>在 iOS 上录制全局屏幕，保存成一个视频，这么一个小众需求到底有什么作用？虽然一般用户都不会用到，不过它还是有点用的：</p>
+
+<ul>
+<li>录制 App 使用的视频教程（而不是图片+文字、图片+文字、图片+文字）；</li>
+<li>如果 App 有个在某些用户机器上必现的 Bug，可以让他把操作记录下来，发给开发者（这样码农们就没办法再推脱：“在我这里是好的！肯定是你的打开方式不对！”）；</li>
+<li>如果你是游戏大神，玩得一手好手游，还可以把你在游戏中的神操作保存下来供日后回味（或者分享出去让小白们膜拜）。</li>
+</ul>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/12/25/ios-record-screen-in-background/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2015/12/18/lslog-xcode-plugin-to-filter-and-colorize-debugging-console/">使用LSLog XCode插件来过滤Log及修改Log的文本颜色</a></h1>
     
     
@@ -539,53 +600,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/10/17/ios-autolayout-vs-autosizing/">iOS AutoLayout与AutoSizing：自动布局，想说爱你真的好难</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-17T14:31:20+08:00" pubdate data-updated="true">2014-10-17, Fri</time>
-        
-		
-          | <a href="/blog/2014/10/17/ios-autolayout-vs-autosizing/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>在iPhone Retina发布之前，还没有AutoLayout，因为屏幕只有一种尺寸。<br/>
-当iPhone Retina发布之后，我没有用上AutoLayout，因为屏幕尺寸是用点来表示，布局写起来没什么不同。<br/>
-当iPhone 5发布之后，屏幕尺寸终于加长了，但是由于有AutoSizing，所以我还是可以不用AutoLayout。<br/>
-现在，iPhone 6和6 Plus发布了，屏幕又大了，我不得不开始考虑是否要使用AutoLayout。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/10/17/ios-autolayout-vs-autosizing/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -607,6 +621,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/12/25/ios-record-screen-in-background/">非越狱 iOS 在后台截屏、录制屏幕的相关实现</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/18/lslog-xcode-plugin-to-filter-and-colorize-debugging-console/">使用LSLog XCode插件来过滤Log及修改Log的文本颜色</a>
       </li>
     
@@ -620,10 +638,6 @@
     
       <li class="post">
         <a href="/blog/2015/04/07/passcalc-protect-your-privacy-in-iphone/">密码计算器，保护您iPhone里的隐私文件</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/04/01/uitableview-performence-improve/">UITableView性能优化，提升列表滚动的流畅性</a>
       </li>
     
   </ul>
@@ -677,7 +691,7 @@
 <li class='category'><a href='/blog/categories/plugin/'>Plugin (1)</a></li>
 <li class='category'><a href='/blog/categories/svn/'>SVN (1)</a></li>
 <li class='category'><a href='/blog/categories/xcode/'>XCode (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (16)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (17)</a></li>
 
   </ul>
 </section>
