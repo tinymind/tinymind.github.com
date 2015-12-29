@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2015-12-25T18:39:22+08:00</updated>
+  <updated>2015-12-29T14:50:27+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,172 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[使用Swift语言在iOS客户端生成七牛的上传Token]]></title>
+    <link href="http://blog.lessfun.com/blog/2015/12/29/swift-create-qiniu-upload-token/"/>
+    <updated>2015-12-29T14:14:01+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2015/12/29/swift-create-qiniu-upload-token</id>
+    <content type="html"><![CDATA[<p>七牛SDK官方不推荐由客户端生成Token，所以在SDK的源码以及Demo中都没有提供生成上传Token的接口与示例。但是有时候的确需要在客户端生成Token，因为个人用户哪里有那么多服务器啊……本文提供了Swift语言版本在iOS客户端生成七牛上传Token的示例代码。</p>
+
+<!--more-->
+
+
+<h2>Token 的生成算法</h2>
+
+<p>详见 <a href="http://developer.qiniu.com/docs/v6/api/reference/security/upload-token.html">官方说明</a>。概述如下：</p>
+
+<ol>
+<li>构造<a href="http://developer.qiniu.com/docs/v6/api/reference/security/put-policy.html">上传策略</a>，转为 JSON 字符串，进行 <a href="http://developer.qiniu.com/docs/v6/api/overview/appendix.html#urlsafe-base64">URL安全的Base64编码</a>，得到 <code>encodedPutPolicy</code>。</li>
+<li>使用 <code>SecretKey</code> 对上一步生成的 <code>encodedPutPolicy</code> 计算 <a href="http://en.wikipedia.org/wiki/Hash-based_message_authentication_code">HMAC-SHA1</a> 签名，进行URL安全的Base64编码，得到 <code>encodedSign</code>。</li>
+<li>将 <code>AccessKey</code>、<code>encodedSign</code> 和 <code>encodedPutPolicy</code> 用<code>:</code>连接起来，得到Token</li>
+</ol>
+
+
+<h2>Swift 示例代码</h2>
+
+<h3>修改 Podfile 文件添加七牛依赖库</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">source</span> <span class="s1">&#39;https://github.com/CocoaPods/Specs.git&#39;</span>
+</span><span class='line'>platform :ios, <span class="s1">&#39;8.0&#39;</span>
+</span><span class='line'>use_frameworks!
+</span><span class='line'>
+</span><span class='line'>inhibit_all_warnings!
+</span><span class='line'>
+</span><span class='line'>pod <span class="s1">&#39;JSONKit-NoWarning&#39;</span>, <span class="s1">&#39;1.2&#39;</span>
+</span><span class='line'>pod <span class="s1">&#39;AFNetworking&#39;</span>, <span class="s1">&#39;2.5.0&#39;</span>
+</span><span class='line'>pod <span class="s1">&#39;Qiniu&#39;</span>, <span class="s1">&#39;~&gt; 7.0&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>在 .swift 文件上方，引入库，定义钥匙串</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">import</span> <span class="n">Qiniu</span>
+</span><span class='line'><span class="n">import</span> <span class="n">JSONKit_NoWarning</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">let</span> <span class="n">kQiniuBucket</span> <span class="o">=</span> <span class="s">&quot;qiniubucket&quot;</span>
+</span><span class='line'><span class="n">let</span> <span class="n">kQiniuAccessKey</span> <span class="o">=</span> <span class="s">&quot;xxxxxxxxxxxxxxxxxxxxxx--xxxxxxxxxxxxxxxx&quot;</span>
+</span><span class='line'><span class="n">let</span> <span class="n">kQiniuSecretKey</span> <span class="o">=</span> <span class="s">&quot;xxxxxxxxxxxxxxxxxxxxxx--xxxxxxxxxxxxxxxx&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>定义辅助方法</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">func</span> <span class="n">hmacsha1WithString</span><span class="p">(</span><span class="nl">str:</span> <span class="n">String</span><span class="p">,</span> <span class="nl">secretKey:</span> <span class="n">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NSData</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">let</span> <span class="n">cKey</span>  <span class="o">=</span> <span class="n">secretKey</span><span class="p">.</span><span class="n">cStringUsingEncoding</span><span class="p">(</span><span class="n">NSASCIIStringEncoding</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">let</span> <span class="n">cData</span> <span class="o">=</span> <span class="n">str</span><span class="p">.</span><span class="n">cStringUsingEncoding</span><span class="p">(</span><span class="n">NSASCIIStringEncoding</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">var</span> <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">CUnsignedChar</span><span class="p">](</span><span class="nl">count:</span> <span class="n">Int</span><span class="p">(</span><span class="n">CC_SHA1_DIGEST_LENGTH</span><span class="p">),</span> <span class="nl">repeatedValue:</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">CCHmac</span><span class="p">(</span><span class="n">CCHmacAlgorithm</span><span class="p">(</span><span class="n">kCCHmacAlgSHA1</span><span class="p">),</span> <span class="n">cKey</span><span class="o">!</span><span class="p">,</span> <span class="n">Int</span><span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">cKey</span><span class="o">!</span><span class="p">)),</span> <span class="n">cData</span><span class="o">!</span><span class="p">,</span> <span class="n">Int</span><span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">cData</span><span class="o">!</span><span class="p">)),</span> <span class="o">&amp;</span><span class="n">result</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">let</span> <span class="nl">hmacData:</span> <span class="n">NSData</span> <span class="o">=</span> <span class="n">NSData</span><span class="p">(</span><span class="nl">bytes:</span> <span class="n">result</span><span class="p">,</span> <span class="nl">length:</span> <span class="p">(</span><span class="n">Int</span><span class="p">(</span><span class="n">CC_SHA1_DIGEST_LENGTH</span><span class="p">)))</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">hmacData</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中，<code>CCHmac</code> 使用的是 Objective C 的 <code>#import &lt;CommonCrypto/CommonCrypto.h&gt;</code>，在 Swift 中用需要自己添加桥接头文件。</p>
+
+<h3>定义生成 Token 方法</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">func</span> <span class="n">createQiniuToken</span><span class="p">(</span><span class="nl">fileName:</span> <span class="n">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">String</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">let</span> <span class="n">oneHourLater</span> <span class="o">=</span> <span class="n">NSDate</span><span class="p">().</span><span class="n">timeIntervalSince1970</span> <span class="o">+</span> <span class="mi">3600</span>
+</span><span class='line'>    <span class="c1">// 上传策略中，只有scope和deadline是必填的</span>
+</span><span class='line'>    <span class="n">let</span> <span class="n">scope</span> <span class="o">=</span> <span class="n">fileName</span><span class="p">.</span><span class="n">isEmpty</span> <span class="o">?</span> <span class="n">kQiniuBucket</span> <span class="o">:</span> <span class="n">kQiniuBucket</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="n">fileName</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">let</span> <span class="nl">putPolicy:</span> <span class="n">NSDictionary</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;scope&quot;</span><span class="o">:</span> <span class="n">scope</span><span class="p">,</span> <span class="s">&quot;deadline&quot;</span><span class="o">:</span> <span class="n">NSNumber</span><span class="p">(</span><span class="nl">unsignedLongLong:</span> <span class="n">UInt64</span><span class="p">(</span><span class="n">oneHourLater</span><span class="p">))]</span>
+</span><span class='line'>    <span class="n">let</span> <span class="n">encodedPutPolicy</span> <span class="o">=</span> <span class="n">QNUrlSafeBase64</span><span class="p">.</span><span class="n">encodeString</span><span class="p">(</span><span class="n">putPolicy</span><span class="p">.</span><span class="n">JSONString</span><span class="p">())</span>
+</span><span class='line'>    <span class="n">let</span> <span class="n">sign</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">hmacsha1WithString</span><span class="p">(</span><span class="n">encodedPutPolicy</span><span class="p">,</span> <span class="nl">secretKey:</span> <span class="n">kQiniuSecretKey</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">let</span> <span class="n">encodedSign</span> <span class="o">=</span> <span class="n">QNUrlSafeBase64</span><span class="p">.</span><span class="n">encodeData</span><span class="p">(</span><span class="n">sign</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">kQiniuAccessKey</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="n">encodedSign</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="n">encodedPutPolicy</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>上传示例</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">func</span> <span class="nf">uploadWithName</span><span class="p">(</span><span class="nl">fileName:</span> <span class="n">String</span><span class="p">,</span> <span class="nl">content:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">let</span> <span class="nl">dict:</span> <span class="n">NSDictionary</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;content&quot;</span><span class="o">:</span> <span class="n">content</span><span class="p">]</span>
+</span><span class='line'>    <span class="c1">// 如果覆盖已有的文件，则指定文件名。否则如果同名文件已存在，会上传失败</span>
+</span><span class='line'>    <span class="n">let</span> <span class="n">token</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">qiniuToken</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">replaceIfExists</span> <span class="o">?</span> <span class="n">fileName</span> <span class="o">:</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">var</span> <span class="nl">uploader:</span> <span class="n">QNUploadManager</span> <span class="o">=</span> <span class="n">QNUploadManager</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">uploader</span><span class="p">.</span><span class="n">putData</span><span class="p">(</span><span class="n">dict</span><span class="p">.</span><span class="n">JSONData</span><span class="p">(),</span> <span class="nl">key:</span> <span class="n">fileName</span><span class="p">,</span> <span class="nl">token:</span> <span class="n">token</span><span class="p">,</span> <span class="nl">complete:</span> <span class="p">{</span> <span class="p">(</span><span class="nl">info:</span> <span class="n">QNResponseInfo</span><span class="o">!</span><span class="p">,</span> <span class="nl">key:</span> <span class="n">String</span><span class="o">!</span><span class="p">,</span> <span class="nl">resp:</span> <span class="p">[</span><span class="n">NSObject</span> <span class="o">:</span> <span class="n">AnyObject</span><span class="p">]</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Void</span> <span class="k">in</span>
+</span><span class='line'>            <span class="k">if</span> <span class="n">info</span><span class="p">.</span><span class="n">ok</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">NSLog</span><span class="p">(</span><span class="s">&quot;Success&quot;</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">NSLog</span><span class="p">(</span><span class="s">&quot;Error: &quot;</span> <span class="o">+</span> <span class="n">info</span><span class="p">.</span><span class="n">error</span><span class="p">.</span><span class="n">description</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">},</span> <span class="nl">option:</span> <span class="nb">nil</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2015/12/29/swift-create-qiniu-upload-token/'>http://blog.lessfun.com/blog/2015/12/29/swift-create-qiniu-upload-token/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[非越狱 iOS 在后台截屏、录制屏幕的相关实现]]></title>
@@ -2541,68 +2707,6 @@
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
             <a href='http://blog.lessfun.com/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/'>http://blog.lessfun.com/blog/2014/07/16/setting-phpmailer-to-send-email-in-godaddy/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名 | 
-            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
-            </blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[在Mac系统上简便地启用Http Server]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/06/30/setup-a-simple-http-server-on-mac/"/>
-    <updated>2014-06-30T15:27:28+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/06/30/setup-a-simple-http-server-on-mac</id>
-    <content type="html"><![CDATA[<p>在本地调试Html等简单网页的时候，经常需要启动一个Web服务器，但又不想或不方便安装Apache或者IIS之类的软件，那么可以使用简单的方法：在Python或Php命令行下启用Http Server。</p>
-
-<p>由于在Mac系统下，Python和Php都是默认安装好的，所以不需要额外的软件支持。具体方法如下：</p>
-
-<!--more-->
-
-
-<h4>方法一：不支持Php</h4>
-
-<p>这一方法的前提是，Mac系统默认安装了Python，所以可以利用Python启用Http服务器。
-步骤：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$cd</span> /path/project/site
-</span><span class='line'><span class="nv">$python</span> -m SimpleHTTPServer 8080
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>`</p>
-
-<p>然后，在浏览器打开<a href="http://localhost:8080/index.html%E5%8D%B3%E5%8F%AF%E3%80%82">http://localhost:8080/index.html%E5%8D%B3%E5%8F%AF%E3%80%82</a></p>
-
-<h4>方法二：支持Php</h4>
-
-<p>注意，以上方法，仅适用于提供html等文件服务，不支持运行php脚本。</p>
-
-<p>如果需要运行php，参考 StackOverFlow 和 官网。请先确保php版本是5.4之后。
-步骤：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$cd</span> /path/project/site
-</span><span class='line'><span class="nv">$php</span> -S localhost:8080
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>停止Server</h4>
-
-<p>在终端按<code>Ctrl-C</code>即可停止。</p>
-
-<h4>其他系统</h4>
-
-<p>由于Python和PHP都是跨平台的，在其他系统上，只需要安装好这两个运行环境，就可以使用同样的方法。</p>
-
-<blockquote class='post_original_block'>
-            原文作者：
-            <a href='http://blog.lessfun.com'>lslin</a><br/>
-            原文链接：
-            <a href='http://blog.lessfun.com/blog/2014/06/30/setup-a-simple-http-server-on-mac/'>http://blog.lessfun.com/blog/2014/06/30/setup-a-simple-http-server-on-mac/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2015-12-25T18:39:22+08:00</updated>
+  <updated>2015-12-29T14:50:27+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,118 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[使用Swift语言在iOS客户端生成七牛的上传Token]]></title>
+    <link href="http://blog.lessfun.com/blog/2015/12/29/swift-create-qiniu-upload-token/"/>
+    <updated>2015-12-29T14:14:01+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2015/12/29/swift-create-qiniu-upload-token</id>
+    <content type="html"><![CDATA[<p>七牛SDK官方不推荐由客户端生成Token，所以在SDK的源码以及Demo中都没有提供生成上传Token的接口与示例。但是有时候的确需要在客户端生成Token，因为个人用户哪里有那么多服务器啊……本文提供了Swift语言版本在iOS客户端生成七牛上传Token的示例代码。</p>
+
+<!--more-->
+
+
+<h2>Token 的生成算法</h2>
+
+<p>详见 <a href="http://developer.qiniu.com/docs/v6/api/reference/security/upload-token.html">官方说明</a>。概述如下：</p>
+
+<ol>
+<li>构造<a href="http://developer.qiniu.com/docs/v6/api/reference/security/put-policy.html">上传策略</a>，转为 JSON 字符串，进行 <a href="http://developer.qiniu.com/docs/v6/api/overview/appendix.html#urlsafe-base64">URL安全的Base64编码</a>，得到 <code>encodedPutPolicy</code>。</li>
+<li>使用 <code>SecretKey</code> 对上一步生成的 <code>encodedPutPolicy</code> 计算 <a href="http://en.wikipedia.org/wiki/Hash-based_message_authentication_code">HMAC-SHA1</a> 签名，进行URL安全的Base64编码，得到 <code>encodedSign</code>。</li>
+<li>将 <code>AccessKey</code>、<code>encodedSign</code> 和 <code>encodedPutPolicy</code> 用<code>:</code>连接起来，得到Token</li>
+</ol>
+
+
+<h2>Swift 示例代码</h2>
+
+<h3>修改 Podfile 文件添加七牛依赖库</h3>
+
+<p>``` bash
+source &lsquo;<a href="https://github.com/CocoaPods/Specs.git">https://github.com/CocoaPods/Specs.git</a>&rsquo;
+platform :ios, &lsquo;8.0&rsquo;
+use_frameworks!</p>
+
+<p>inhibit_all_warnings!</p>
+
+<p>pod &lsquo;JSONKit-NoWarning&rsquo;, &lsquo;1.2&rsquo;
+pod &lsquo;AFNetworking&rsquo;, &lsquo;2.5.0&rsquo;
+pod &lsquo;Qiniu&rsquo;, &lsquo;~> 7.0&rsquo;
+```</p>
+
+<h3>在 .swift 文件上方，引入库，定义钥匙串</h3>
+
+<p>``` objc
+import Qiniu
+import JSONKit_NoWarning</p>
+
+<p>let kQiniuBucket = &ldquo;qiniubucket&rdquo;
+let kQiniuAccessKey = &ldquo;xxxxxxxxxxxxxxxxxxxxxx&mdash;xxxxxxxxxxxxxxxx&rdquo;
+let kQiniuSecretKey = &ldquo;xxxxxxxxxxxxxxxxxxxxxx&mdash;xxxxxxxxxxxxxxxx&rdquo;
+```</p>
+
+<h3>定义辅助方法</h3>
+
+<p>``` objc</p>
+
+<pre><code>func hmacsha1WithString(str: String, secretKey: String) -&gt; NSData {
+
+    let cKey  = secretKey.cStringUsingEncoding(NSASCIIStringEncoding)
+    let cData = str.cStringUsingEncoding(NSASCIIStringEncoding)
+
+    var result = [CUnsignedChar](count: Int(CC_SHA1_DIGEST_LENGTH), repeatedValue: 0)
+    CCHmac(CCHmacAlgorithm(kCCHmacAlgSHA1), cKey!, Int(strlen(cKey!)), cData!, Int(strlen(cData!)), &amp;result)
+    let hmacData: NSData = NSData(bytes: result, length: (Int(CC_SHA1_DIGEST_LENGTH)))
+    return hmacData
+}
+</code></pre>
+
+<p>```</p>
+
+<p>其中，<code>CCHmac</code> 使用的是 Objective C 的 <code>#import &lt;CommonCrypto/CommonCrypto.h&gt;</code>，在 Swift 中用需要自己添加桥接头文件。</p>
+
+<h3>定义生成 Token 方法</h3>
+
+<p>``` objc</p>
+
+<pre><code>func createQiniuToken(fileName: String) -&gt; String {
+
+    let oneHourLater = NSDate().timeIntervalSince1970 + 3600
+    // 上传策略中，只有scope和deadline是必填的
+    let scope = fileName.isEmpty ? kQiniuBucket : kQiniuBucket + ":" + fileName;
+    let putPolicy: NSDictionary = ["scope": scope, "deadline": NSNumber(unsignedLongLong: UInt64(oneHourLater))]
+    let encodedPutPolicy = QNUrlSafeBase64.encodeString(putPolicy.JSONString())
+    let sign = self.hmacsha1WithString(encodedPutPolicy, secretKey: kQiniuSecretKey)
+    let encodedSign = QNUrlSafeBase64.encodeData(sign)
+
+    return kQiniuAccessKey + ":" + encodedSign + ":" + encodedPutPolicy
+}
+</code></pre>
+
+<p>```</p>
+
+<h3>上传示例</h3>
+
+<p>``` objc</p>
+
+<pre><code>func uploadWithName(fileName: String, content: String) {
+    let dict: NSDictionary = ["content": content]
+    // 如果覆盖已有的文件，则指定文件名。否则如果同名文件已存在，会上传失败
+    let token = self.qiniuToken(self.replaceIfExists ? fileName : "")
+
+    var uploader: QNUploadManager = QNUploadManager()
+    uploader.putData(dict.JSONData(), key: fileName, token: token, complete: { (info: QNResponseInfo!, key: String!, resp: [NSObject : AnyObject]!) -&gt; Void in
+            if info.ok {
+                NSLog("Success")
+            } else {
+                NSLog("Error: " + info.error.description)
+            }
+        }, option: nil)
+}
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[非越狱 iOS 在后台截屏、录制屏幕的相关实现]]></title>
@@ -725,89 +837,6 @@ view.layer.shadowRadius = radius;
 </code></pre>
 
 <p>```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MarkText - iOS 上支持语法高亮、HTML预览、文件导出的Markdown文本编辑器]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/12/10/marktext-a-markdown-text-editor-for-ios/"/>
-    <updated>2014-12-10T21:29:06+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/12/10/marktext-a-markdown-text-editor-for-ios</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/app/marktext/marktext_appicon.png" width="120" height="120" title="&lsquo;MarkText App&rsquo; &lsquo;A Markdown Text Editor&rsquo;" ></p>
-
-<p>MarkText是iPhone上的Markdown文本编辑器。支持iCloud同步，实时语法高亮、带CSS的HTML预览、文件导出为HTML/PNG/PDF, 分享到Evernote，Dropbox或Email。</p>
-
-<p>当前版本：1.0.3<br/>
-更新时间：2015.05.06</p>
-
-<h2>iPhone 屏幕截图</h2>
-
-<div style="margin-top:30px;font-size:16px;line-height:20px;background:rgb(78,81,85);border-radius:4px;padding:4px;">
-<div style="margin: 0 14px; max-height: 640px; min-height: 320px; overflow-x: auto; overflow-y: hidden; padding-bottom: 16px; white-space: nowrap;">
-  <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_1.png" alt="1">
-  <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_2.png" alt="2">
-  <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_3.png" alt="3">
-  <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/marktext/marktext_screenshot_4.png" alt="4">
-</div>
-</div>
-
-
-<h2>下载</h2>
-
-<p><a href="https://itunes.apple.com/cn/app/marktext-markdown-text-editor/id948768793?mt=8"><img src="/images/app/appstore_available.png" alt="从AppStore下载" /></a></p>
-
-<h2>应用介绍</h2>
-
-<!--more-->
-
-
-<p>MarkText是iPhone与iPad上的一款Markdown文本编辑器，支持iCloud同步，实时语法高亮，能转换为HTML、PNG或PDF文件。通过Email发送格式化的markdown内容，或者调用第三方App打开转换后的文件。</p>
-
-<h3>导入 &amp; 导出</h3>
-
-<p>通过iTunes导入markdown文本文件，或通过MarkText创建，编辑时支持实时语法高亮显示。编辑完成之后，可以通过iTunes导出到电脑，或者转换为HTML、PNG、PDF文件并发送到Evernote、Dropbox、Email等第三方App。</p>
-
-<h3>光标增强</h3>
-
-<p>辅助工具条可以让你很方便地点击按钮插入Tabs、标题、列表、代码块，或者超链接。左右滑动工具条可以迅速移动光标；双指选择可以快速选择文本。</p>
-
-<h3>HTML预览</h3>
-
-<p>HTML预览支持CSS样式，语法高亮支持的特性：常规Markdown、MultiMarkdown、脚注、图片、表格和代码块。</p>
-
-<h3>iCloud同步：</h3>
-
-<p>通过iCloud，在所有设备自动同步存储所有文件。</p>
-
-<h2>版本1.0.3 新特性</h2>
-
-<ul>
-<li>支持通过邮件发送HTML内容；</li>
-<li>修复：HTML预览的加粗、斜体；</li>
-<li>修复：关闭iCloud同步后无法新建文档；</li>
-<li>修复：iOS 8下可能出现的光标抖动；</li>
-<li>修复：在空行无法点击快捷输入。</li>
-</ul>
-
-
-<h2>主要功能</h2>
-
-<ul>
-<li>创建、编辑markdown格式的文本；</li>
-<li>实时语法高亮；</li>
-<li>带CSS样式的HTML预览；</li>
-<li>修改主题配色；</li>
-<li>通过iTunes导入、导出文件；</li>
-<li>转换为HTML、PNG或PDF格式；</li>
-<li>分享到Evernote、Dropbox或Email等App；</li>
-<li>光标增强：滑动输入工具栏，快速移动光标；</li>
-<li>支持的文件后缀：md、mmd、markdown、markdn、mdown、mkdn、markd、txt、text；</li>
-<li>全文搜索；</li>
-<li>字数统计;</li>
-<li>支持正则的查找替换;</li>
-<li>iCloud同步。</li>
-</ul>
-
 ]]></content>
   </entry>
   
