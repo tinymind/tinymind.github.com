@@ -90,6 +90,61 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2016/08/05/reliable-timer-in-ios/">更可靠和高精度的 iOS 定时器</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-08-05T18:23:26+08:00" pubdate data-updated="true">2016-08-05, Fri</time>
+        
+		
+          | <a href="/blog/2016/08/05/reliable-timer-in-ios/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>定时器一般用于延迟一段时间执行特定的代码，必要的话按照指定的频率重复执行。iOS 中延时执行有多种方式，常用的有：</p>
+
+<ul>
+<li>NSTimer</li>
+<li>NSObject 的 <code>(void)performSelector:(SEL)aSelector withObject:(id)anArgument afterDelay:(NSTimeInterval)delay;</code></li>
+<li>CADisplayLink</li>
+<li>GCD 的 <code>dispatch_after</code></li>
+<li>GCD 的 <code>dispatch_source_t</code></li>
+</ul>
+
+
+<p>每种方法创建的定时器，其可靠性与最小精度都有不同。<code>可靠性</code>指是否严格按照设定的时间间隔按时执行，<code>最小精度</code>指支持的最小时间间隔是多少。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2016/08/05/reliable-timer-in-ios/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2015/12/29/swift-create-qiniu-upload-token/">使用Swift语言在iOS客户端生成七牛的上传Token</a></h1>
     
     
@@ -554,50 +609,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/">到底什么时候才需要在ObjC的Block中使用weakSelf/strongSelf</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-11-22T15:59:18+08:00" pubdate data-updated="true">2014-11-22, Sat</time>
-        
-		
-          | <a href="/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/#comments">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Objective C 的 <code>Block</code> 是一个很实用的语法，特别是与GCD结合使用，可以很方便地实现并发、异步任务。但是，如果使用不当，Block 也会引起一些循环引用问题(<code>retain cycle</code>)—— Block 会 retain ‘self’，而 ‘self‘ 又 retain 了 Block。因为在 ObjC 中，直接调用一个实例变量，会被编译器处理成 &lsquo;self->theVar&#8217;，&#8217;self&rsquo; 是一个 strong 类型的变量，引用计数会加 1，于是，self retains queue， queue retains block，block retains self。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/11/22/when-should-use-weakself-and-strongself-in-objc-block/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -619,6 +630,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/08/05/reliable-timer-in-ios/">更可靠和高精度的 iOS 定时器</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/29/swift-create-qiniu-upload-token/">使用Swift语言在iOS客户端生成七牛的上传Token</a>
       </li>
     
@@ -632,10 +647,6 @@
     
       <li class="post">
         <a href="/blog/2015/09/09/uiviewcontroller-push-pop-trap/">UIViewController Push & Pop 的那些坑</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/09/02/find-unused-resources-in-xcode-project/">查找XCode工程中没被使用的图片资源</a>
       </li>
     
   </ul>
@@ -690,7 +701,7 @@
 <li class='category'><a href='/blog/categories/svn/'>SVN (1)</a></li>
 <li class='category'><a href='/blog/categories/swift/'>Swift (1)</a></li>
 <li class='category'><a href='/blog/categories/xcode/'>XCode (2)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (18)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (19)</a></li>
 
   </ul>
 </section>
@@ -721,7 +732,7 @@ ds.charset = 'UTF-8';
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - lslin -
+  Copyright &copy; 2016 - lslin -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
