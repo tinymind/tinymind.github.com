@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2016-08-29T15:19:08+08:00</updated>
+  <updated>2016-09-21T16:39:30+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,235 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 10 ReplayKit Live 与 Broadcast UI/Upload Extension]]></title>
+    <link href="http://blog.lessfun.com/blog/2016/09/21/ios-10-replaykit-live-and-broadcast-extension/"/>
+    <updated>2016-09-21T11:47:55+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2016/09/21/ios-10-replaykit-live-and-broadcast-extension</id>
+    <content type="html"><![CDATA[<p>在 iOS 8 及以前，第三方 App 如果想要全局录屏，只能使用私有 API，详见<a href="http://blog.lessfun.com/blog/2015/12/25/ios-record-screen-in-background/">非越狱后台录屏</a>。</p>
+
+<p>升级到 iOS 9 后，官方新增了 ReplayKit，并且禁用了录屏的私有 API。ReplayKit 并不算是完美的录屏方案，如果想要把梦幻西游的游戏过程录制下来，需要梦幻西游这个应用本身添加 ReplayKit 的支持，然后再把录制的视频分享出去。对于不支持 ReplayKit 的游戏，怎么录制？答案是，没有办法。试想，又有多少个游戏会内置 ReplayKit 呢？</p>
+
+<p>iOS 10 在 iOS 9 的 ReplayKit 保存录屏视频的基础上，增加了视频流实时直播功能（streaming live），官方介绍见 <a href="http://devstreaming.apple.com/videos/wwdc/2016/601nsio90cd7ylwimk9/601/601_go_live_with_replaykit.pdf">Go Live with ReplayKit</a>。下面详细说说这个流程。</p>
+
+<!--more-->
+
+
+<h2>1. ReplayKit Live 概述</h2>
+
+<p>从录制到直播，整体流程如下：</p>
+
+<ol>
+<li>被录制端需引入 ReplayKit，发起广播请求。</li>
+<li>广播端需要实现 Broadcast UI 和 Broadcast Upload 两个 <a href="https://developer.apple.com/library/content/documentation/General/Conceptual/ExtensibilityPG/index.html#//apple_ref/doc/uid/TP40014214-CH20-SW1">App Extension</a>，以便出现在被录制端的 App 列表。</li>
+<li>被录制端选定广播端 App 后，开始直播。</li>
+</ol>
+
+
+<p>其中，<code>被录制端</code>可以是任意一个 App，如梦幻西游，<code>广播端</code>是支持 ReplayKit Live 的直播平台，如虎牙直播。</p>
+
+<p><img src="/images/2016/09/replaykit_workflow.png" alt="ReplayKit WorkFlow" /></p>
+
+<h2>2. 被录制端（游戏或应用）的实现</h2>
+
+<p>被录制端需要在原有功能的基础上，增加一个唤起广播的入口。代码：</p>
+
+<p>``` objc</p>
+
+<h1>import &lt;ReplayKit/ReplayKit.h></h1>
+
+<ul>
+<li>(IBAction)onLiveButtonPressed:(id)sender {
+  [RPBroadcastActivityViewController loadBroadcastActivityViewControllerWithHandler:^(RPBroadcastActivityViewController * <em>Nullable broadcastActivityViewController, NSError * </em>Nullable error) {
+      self.broadcastAVC = broadcastActivityViewController;
+      self.broadcastAVC.delegate = self;
+      [self presentViewController:self.broadcastAVC animated:YES completion:nil];
+  }];
+}</li>
+</ul>
+
+
+<h1>pragma mark &ndash; RPBroadcastActivityViewControllerDelegate</h1>
+
+<ul>
+<li><p>(void)broadcastActivityViewController:(RPBroadcastActivityViewController <em>)broadcastActivityViewController didFinishWithBroadcastController:(nullable RPBroadcastController </em>)broadcastController error:(nullable NSError *)error {</p>
+
+<p>  [self.broadcastAVC dismissViewControllerAnimated:YES completion:nil];</p>
+
+<p>  self.broadcastController = broadcastController;
+  [broadcastController startBroadcastWithHandler:^(NSError * _Nullable error) {
+      if (!error) {
+          self.liveButton.selected = YES;
+      } else {
+          NSLog(@&ldquo;startBroadcastWithHandler error: %@&rdquo;, error);
+      }
+  }];
+}</p></li>
+</ul>
+
+
+<p>```</p>
+
+<p>如下图的右上角就是开始广播的入口按钮。</p>
+
+<p><img src="/images/2016/09/replaykit_demo_init.png" alt="ReplayKit Demo Init" /></p>
+
+<p>如果手机内没有支持广播的 App，会弹框提示到 App Store 查找一个。</p>
+
+<p><img src="/images/2016/09/replaykit_demo_choose.png" alt="ReplayKit Demo Choose" /></p>
+
+<p>如果已经安装支持广播的 App，则会列出，点击后会打开广播端的 Broadcast UI。</p>
+
+<p><img src="/images/2016/09/replaykit_demo_list.png" alt="ReplayKit Demo List" /></p>
+
+<p>下面要说的就是怎么实现一个支持广播的 App。</p>
+
+<h2>3. 广播端（直播平台）的实现</h2>
+
+<p>很多直播 App 本身已经支持通过摄像头进行视频流上传、直播，新增对 ReplayKit Live 的支持，只需要创建两个扩展的 target，分别是 Broadcast UI Extension 和 Broadcast Upload Extension，在XCode 8 中内置了这两个模板。</p>
+
+<h3>3.1 Broadcast UI</h3>
+
+<p>Broadcast UI 负责广播前的一些初始化工作，比如，让用户填写直播平台的账号、密码、直播标题。从被录制端唤起广播请求并选定广播平台后，会显示 Broadcast UI 界面。</p>
+
+<p>核心代码：</p>
+
+<p>``` objc</p>
+
+<h1>import &lt;ReplayKit/ReplayKit.h></h1>
+
+<p>@interface BroadcastViewController : UIViewController</p>
+
+<p>@end</p>
+
+<p>&hellip;</p>
+
+<ul>
+<li><p>(IBAction)onCancelButtonPressed:(id)sender {
+  [self userDidCancelSetup];
+}</p></li>
+<li><p>(IBAction)onOKButtonPressed:(id)sender {
+  if (self.accountTextField.text.length == 0
+      || self.passwordTextField.text.length == 0
+      || self.channelIDTextField.text.length == 0) {
+      return;
+  }
+  [self userDidFinishSetup];
+}</p></li>
+</ul>
+
+
+<h1>pragma mark &ndash; Private</h1>
+
+<p>// Called when the user has finished interacting with the view controller and a broadcast stream can start
+&ndash; (void)userDidFinishSetup {</p>
+
+<pre><code>NSLog(@"userDidFinishSetup");
+
+// Broadcast url that will be returned to the application
+NSURL *broadcastURL = [NSURL URLWithString:@"http://broadcastURL_example/stream1"];
+
+// Service specific broadcast data example which will be supplied to the process extension during broadcast
+NSDictionary *setupInfo = @{@"account" : self.accountTextField.text,
+                            @"password" : self.passwordTextField.text,
+                            @"channelID" : @(self.channelIDTextField.text.integerValue)};
+
+// Set broadcast settings
+RPBroadcastConfiguration *broadcastConfig = [[RPBroadcastConfiguration alloc] init];
+broadcastConfig.clipDuration = 5.0; // deliver movie clips every 5 seconds
+
+// Tell ReplayKit that the extension is finished setting up and can begin broadcasting
+[self.extensionContext completeRequestWithBroadcastURL:broadcastURL broadcastConfiguration:broadcastConfig setupInfo:setupInfo];
+</code></pre>
+
+<p>}</p>
+
+<ul>
+<li>(void)userDidCancelSetup {
+  // Tell ReplayKit that the extension was cancelled by the user
+  [self.extensionContext cancelRequestWithError:[NSError errorWithDomain:@&ldquo;YourAppDomain&rdquo; code:-1     userInfo:nil]];
+}</li>
+</ul>
+
+
+<p>```</p>
+
+<p>效果：</p>
+
+<p><img src="/images/2016/09/replaykit_demo_broadcast_ui.png" alt="ReplayKit Demo List" /></p>
+
+<p>如果用户点击 <code>OK</code>，则会回调到第二部分中的<code>RPBroadcastActivityViewControllerDelegate</code>，开始直播会调用 Broadcast Upload 扩展。</p>
+
+<h3>3.2 Broadcast Upload</h3>
+
+<p>第二部分调用<code>startBroadcastWithHandler</code>，会跑到<code>Broadcast Upload</code>，本扩展的作用是接收并处理 Broadcast UI 传过来的用户信息，以及处理 RPBroadcastController 传过来的音视频流数据，如编码、上传。</p>
+
+<p>核心代码：</p>
+
+<p>``` objc</p>
+
+<h1>import &lt;ReplayKit/ReplayKit.h></h1>
+
+<p>@interface SampleHandler : RPBroadcastSampleHandler</p>
+
+<p>@end</p>
+
+<p>&hellip;</p>
+
+<p>//  To handle samples with a subclass of RPBroadcastSampleHandler set the following in the extension&rsquo;s Info.plist file:
+//  &ndash; RPBroadcastProcessMode should be set to RPBroadcastProcessModeSampleBuffer
+//  &ndash; NSExtensionPrincipalClass should be set to this class</p>
+
+<p>@implementation SampleHandler</p>
+
+<ul>
+<li><p>(void)broadcastStartedWithSetupInfo:(NSDictionary<NSString *,NSObject *> *)setupInfo {
+  // User has requested to start the broadcast. Setup info from the UI extension will be supplied.
+  NSLog(@&ldquo;broadcastStartedWithSetupInfo: %@&rdquo;, setupInfo);
+  [[ReplayKitUploader sharedObject] setupWithInfo:setupInfo];
+}</p></li>
+<li><p>(void)broadcastPaused {
+  // User has requested to pause the broadcast. Samples will stop being delivered.
+}</p></li>
+<li><p>(void)broadcastResumed {
+  // User has requested to resume the broadcast. Samples delivery will resume.
+}</p></li>
+<li><p>(void)broadcastFinished {
+  // User has requested to finish the broadcast.
+}</p></li>
+<li><p>(void)processSampleBuffer:(CMSampleBufferRef)sampleBuffer withType:(RPSampleBufferType)sampleBufferType {
+  [[ReplayKitUploader sharedObject] handleSampleBuffer:sampleBuffer withType:sampleBufferType];
+}</p></li>
+</ul>
+
+
+<p>@end</p>
+
+<p>```</p>
+
+<h3>3.3 注意事项</h3>
+
+<p><code>ReplayKitUploader</code> 是自定义的一个类，使用了单例模式，负责广播服务的登录、编码、上传功能。使用单例，而不是直接在 SampleHandler 里面处理，是因为 SampleHandler 并不是 Broadcast Upload Extension 里的唯一一个实例，实际上，Upload Extension 会不断地创建很多个 SampleHandler 来处理 CMSampleBufferRef，而我们为了保存一些内部状态，必须使用一个固定的类实例来实现。</p>
+
+<h2>4. App 与 Extension 的代码共用</h2>
+
+<p>iOS 10 新增了很多种 Extension，包括本文提到的两种 Broadcast Extension。主 App 与 Extension 属于不同的两个进程，代码逻辑也是分离的，而实际情况中，主 App 与 Extension 往往会包含相同的逻辑，需要共用代码。</p>
+
+<p>主 App 与 Extension 属于两个不同的 target，共用代码，有以下几种方式：</p>
+
+<ul>
+<li>一份代码创建两个副本，分别加到 App 和 Extension 两个 target 中。这种方法简单粗暴而有效，只是，如果需要改动逻辑，则需要改两份代码，想象一下，假如这种改动很频繁，世界上又有几个程序员能受得了？</li>
+<li>抽离公共代码，放到独立的 framework，然后两个 target 都依赖该 framework，这是标准而方便的做法。</li>
+<li>使用 CocoaPods，只需要在 Podfile 中分别写两个 target 所依赖的 pod 即可，最简洁。</li>
+</ul>
+
+
+<h2>5. 结论</h2>
+
+<p>在 iOS 环境中，想要共享设备屏幕，无论是录播还是直播，都注定了没有直接方便的方案。ReplayKit Live 是目前最标准的做法，只是，使用 ReplayKit 有两个前提，应用本身支持 ReplayKit，直播平台支持 Broadcast Extension。这两个前提，后者比较容易实现，而前者，就需要靠各个应用开发商的自觉了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[更可靠和高精度的 iOS 定时器]]></title>
@@ -1152,113 +1381,6 @@ Triggered by Thread:  1</p>
 
 
 <p>```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[密码计算器，保护您iPhone里的隐私文件]]></title>
-    <link href="http://blog.lessfun.com/blog/2015/04/07/passcalc-protect-your-privacy-in-iphone/"/>
-    <updated>2015-04-07T16:48:09+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2015/04/07/passcalc-protect-your-privacy-in-iphone</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/app/passcalc/passcalc_appicon.png" width="120" height="120" title="&lsquo;PassCalc App&rsquo; &lsquo;PassCalc App&rsquo;" ></p>
-
-<p>密码计算器是iPhone上的一款私密文件管理器，通过在计算器上输入密码来访问您的私人文件，可以完美地保护您的照片、视频、日记、联系人等私人隐私文件。</p>
-
-<p>当前版本：1.0.1<br/>
-更新时间：2015.05.06</p>
-
-<h2>iPhone 屏幕截图</h2>
-
-<div style="margin-top:30px;font-size:16px;line-height:20px;background:rgb(78,81,85);border-radius:4px;padding:4px;">
-<div style="margin: 0 14px; max-height: 640px; min-height: 320px; overflow-x: auto; overflow-y: hidden; padding-bottom: 16px; white-space: nowrap;"><img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/passcalc/passcalc_screenshot_1.png" alt="1"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/passcalc/passcalc_screenshot_2.png" alt="2"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/passcalc/passcalc_screenshot_3.png" alt="3"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/passcalc/passcalc_screenshot_4.png" alt="4"> <img style="border:2px solid white;margin:5px;box-shadow:0 0 5px rgba(220,220,220,0.5);width:320px;" src="http://blog.lessfun.com/images/app/passcalc/passcalc_screenshot_5.png" alt="5"></div>
-</div>
-
-
-<h2>下载</h2>
-
-<p><a href="https://itunes.apple.com/cn/app/id980936769?mt=8"><img src="/images/app/appstore_available.png" alt="从AppStore下载" /></a></p>
-
-<!-- more -->
-
-
-<h2>应用介绍</h2>
-
-<p>密码计算器是iPhone上的一款私密文件管理器。那么多年以来，你一定保存了一些私密的照片、视频、笔记或联系人在手机里，并且不想被你身边的人看到。密码计算器可以完美地实现你的需求，保护你的隐私。表面上这是一款计算器，但是可以输入密码来访问你的私人文件。</p>
-
-<h3>安全性</h3>
-
-<ul>
-<li>使用RSA，AES加密技术来存储照片、笔记、视频和联系人。</li>
-<li>即使手机被盗，被破解，别人也无法打开加密的文件，妈妈再也不用担心你的艳照门啦。</li>
-</ul>
-
-
-<h3>文件管理器</h3>
-
-<ul>
-<li>使用WiFi、USB与电脑进行文件上传、下载。</li>
-<li>从相机或相册导入照片、视频。</li>
-<li>通过邮件、微信来分享文字、图片，支持发送Gif动态表情。</li>
-<li>支持视频格式：mov，m4v，mp4，mpv，3gp。</li>
-<li>支持图片格式：jpg，png，gif，bmp。</li>
-<li>支持笔记扩展名：txt，text，md，markdown，markd，markdn，mdown，mkd，mkdn。</li>
-</ul>
-
-
-<h3>私密笔记</h3>
-
-<ul>
-<li>语法高亮。</li>
-<li>通过电子邮件、微信分享。</li>
-</ul>
-
-
-<h3>私密文档</h3>
-
-<ul>
-<li>支持的文档类型：doc, ppt, xls, docx, pptx, xlsx, key, numbers, pages, pdf, rtf；</li>
-<li>可导入、导出、分享文档。</li>
-</ul>
-
-
-<h3>私密联系人</h3>
-
-<ul>
-<li>无限制添加联系人。</li>
-<li>给联系人添加备注。</li>
-<li>快速拨号，发送短信，发送电子邮件。</li>
-</ul>
-
-
-<h3>浏览器</h3>
-
-<ul>
-<li>全功能浏览器，无障碍地访问你想看的网站，并且不留下蛛丝马迹。</li>
-<li>保存你常用的书签，方便你下次再次访问。</li>
-<li>一键下载网页上的所有图像，保存到图像可以在相册中找到。</li>
-<li>离线浏览网页，保存完整网页内容为PDF。</li>
-</ul>
-
-
-<h3>更多</h3>
-
-<ul>
-<li>功能完善的数学计算器。</li>
-<li>应用程序切换到后台时，自动显示计算器界面。</li>
-</ul>
-
-
-<h3>1.0.1更新信息</h3>
-
-<ul>
-<li>新增文档类型，支持：doc, ppt, xls, docx, pptx, xlsx, key, numbers, pages, pdf, rtf；</li>
-<li>离线浏览网页，保存完整网页内容为PDF；</li>
-<li>调用第三方App打开文件；</li>
-<li>处理来自第三方的文件；</li>
-<li>支持 iOS 8 Today Extension；</li>
-<li>Bug 修复。</li>
-</ul>
-
 ]]></content>
   </entry>
   

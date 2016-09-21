@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>iOS 10 ReplayKit Live 与 Broadcast UI/Upload Extension - 浮生猎趣</title>
+  <meta name="author" content="lslin">
+
+  
+  <meta name="description" content="iOS 10 的 ReplayKit 除了录制屏幕，还可以实时直播了，前提是手机里装了包含 Broadcast UI 和 Broadcast Upload 两个 Extension 的 App。">
+  <meta name="keywords" content="iOS, ReplayKit, Live, Broadcast, Extension">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.lessfun.com/blog/2016/09/21/ios-10-replaykit-live-and-broadcast-extension">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://ajax.useso.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+<!--<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+
+<link href="http://fonts.useso.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.useso.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-46115267-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">浮生猎趣</a></h1>
+  
+    <h2>ls *.fun >> 罗列一切乐趣</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.lessfun.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="http://www.lessfun.com/app/">Apps</a></li>
+  <li><a href="http://www.lessfun.com/app/marktext/">MarkText</a></li>
+  <li><a href="http://www.lessfun.com/app/passcalc/">PassCalc</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <li><a href="http://like.lessfun.com">大众点赞</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">iOS 10 ReplayKit Live 与 Broadcast UI/Upload Extension</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-09-21T11:47:55+08:00" pubdate data-updated="true">2016-09-21, Wed</time>
+        
+		
+          | <a href="#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>在 iOS 8 及以前，第三方 App 如果想要全局录屏，只能使用私有 API，详见<a href="http://blog.lessfun.com/blog/2015/12/25/ios-record-screen-in-background/">非越狱后台录屏</a>。</p>
+
+<p>升级到 iOS 9 后，官方新增了 ReplayKit，并且禁用了录屏的私有 API。ReplayKit 并不算是完美的录屏方案，如果想要把梦幻西游的游戏过程录制下来，需要梦幻西游这个应用本身添加 ReplayKit 的支持，然后再把录制的视频分享出去。对于不支持 ReplayKit 的游戏，怎么录制？答案是，没有办法。试想，又有多少个游戏会内置 ReplayKit 呢？</p>
+
+<p>iOS 10 在 iOS 9 的 ReplayKit 保存录屏视频的基础上，增加了视频流实时直播功能（streaming live），官方介绍见 <a href="http://devstreaming.apple.com/videos/wwdc/2016/601nsio90cd7ylwimk9/601/601_go_live_with_replaykit.pdf">Go Live with ReplayKit</a>。下面详细说说这个流程。</p>
+
+<!--more-->
+
+
+<h2>1. ReplayKit Live 概述</h2>
+
+<p>从录制到直播，整体流程如下：</p>
+
+<ol>
+<li>被录制端需引入 ReplayKit，发起广播请求。</li>
+<li>广播端需要实现 Broadcast UI 和 Broadcast Upload 两个 <a href="https://developer.apple.com/library/content/documentation/General/Conceptual/ExtensibilityPG/index.html#//apple_ref/doc/uid/TP40014214-CH20-SW1">App Extension</a>，以便出现在被录制端的 App 列表。</li>
+<li>被录制端选定广播端 App 后，开始直播。</li>
+</ol>
+
+
+<p>其中，<code>被录制端</code>可以是任意一个 App，如梦幻西游，<code>广播端</code>是支持 ReplayKit Live 的直播平台，如虎牙直播。</p>
+
+<p><img src="/images/2016/09/replaykit_workflow.png" alt="ReplayKit WorkFlow" /></p>
+
+<h2>2. 被录制端（游戏或应用）的实现</h2>
+
+<p>被录制端需要在原有功能的基础上，增加一个唤起广播的入口。代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;ReplayKit/ReplayKit.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nf">onLiveButtonPressed:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">RPBroadcastActivityViewController</span> <span class="nl">loadBroadcastActivityViewControllerWithHandler:</span><span class="o">^</span><span class="p">(</span><span class="n">RPBroadcastActivityViewController</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">broadcastActivityViewController</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">self</span><span class="p">.</span><span class="n">broadcastAVC</span> <span class="o">=</span> <span class="n">broadcastActivityViewController</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">self</span><span class="p">.</span><span class="n">broadcastAVC</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">self</span> <span class="nl">presentViewController:</span><span class="n">self</span><span class="p">.</span><span class="n">broadcastAVC</span> <span class="nl">animated:</span><span class="n">YES</span> <span class="nl">completion:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#pragma mark - RPBroadcastActivityViewControllerDelegate</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">broadcastActivityViewController:</span><span class="p">(</span><span class="n">RPBroadcastActivityViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">broadcastActivityViewController</span> <span class="nf">didFinishWithBroadcastController:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">RPBroadcastController</span> <span class="o">*</span><span class="p">)</span><span class="nv">broadcastController</span> <span class="nf">error:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">NSError</span> <span class="o">*</span><span class="p">)</span><span class="nv">error</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">broadcastAVC</span> <span class="nl">dismissViewControllerAnimated:</span><span class="n">YES</span> <span class="nl">completion:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">broadcastController</span> <span class="o">=</span> <span class="n">broadcastController</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">broadcastController</span> <span class="nl">startBroadcastWithHandler:</span><span class="o">^</span><span class="p">(</span><span class="n">NSError</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">self</span><span class="p">.</span><span class="n">liveButton</span><span class="p">.</span><span class="n">selected</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;startBroadcastWithHandler error: %@&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如下图的右上角就是开始广播的入口按钮。</p>
+
+<p><img src="/images/2016/09/replaykit_demo_init.png" alt="ReplayKit Demo Init" /></p>
+
+<p>如果手机内没有支持广播的 App，会弹框提示到 App Store 查找一个。</p>
+
+<p><img src="/images/2016/09/replaykit_demo_choose.png" alt="ReplayKit Demo Choose" /></p>
+
+<p>如果已经安装支持广播的 App，则会列出，点击后会打开广播端的 Broadcast UI。</p>
+
+<p><img src="/images/2016/09/replaykit_demo_list.png" alt="ReplayKit Demo List" /></p>
+
+<p>下面要说的就是怎么实现一个支持广播的 App。</p>
+
+<h2>3. 广播端（直播平台）的实现</h2>
+
+<p>很多直播 App 本身已经支持通过摄像头进行视频流上传、直播，新增对 ReplayKit Live 的支持，只需要创建两个扩展的 target，分别是 Broadcast UI Extension 和 Broadcast Upload Extension，在XCode 8 中内置了这两个模板。</p>
+
+<h3>3.1 Broadcast UI</h3>
+
+<p>Broadcast UI 负责广播前的一些初始化工作，比如，让用户填写直播平台的账号、密码、直播标题。从被录制端唤起广播请求并选定广播平台后，会显示 Broadcast UI 界面。</p>
+
+<p>核心代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;ReplayKit/ReplayKit.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">BroadcastViewController</span> : <span class="nc">UIViewController</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nl">onCancelButtonPressed:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">sender</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="n">userDidCancelSetup</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nl">onOKButtonPressed:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">sender</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">accountTextField</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">length</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>        <span class="o">||</span> <span class="n">self</span><span class="p">.</span><span class="n">passwordTextField</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">length</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>        <span class="o">||</span> <span class="n">self</span><span class="p">.</span><span class="n">channelIDTextField</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="n">userDidFinishSetup</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#pragma mark - Private</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Called when the user has finished interacting with the view controller and a broadcast stream can start</span>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">userDidFinishSetup</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;userDidFinishSetup&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Broadcast url that will be returned to the application</span>
+</span><span class='line'>    <span class="n">NSURL</span> <span class="o">*</span><span class="n">broadcastURL</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="s">@&quot;http://broadcastURL_example/stream1&quot;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Service specific broadcast data example which will be supplied to the process extension during broadcast</span>
+</span><span class='line'>    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">setupInfo</span> <span class="o">=</span> <span class="err">@</span><span class="p">{</span><span class="s">@&quot;account&quot;</span> <span class="o">:</span> <span class="n">self</span><span class="p">.</span><span class="n">accountTextField</span><span class="p">.</span><span class="n">text</span><span class="p">,</span>
+</span><span class='line'>                                <span class="s">@&quot;password&quot;</span> <span class="o">:</span> <span class="n">self</span><span class="p">.</span><span class="n">passwordTextField</span><span class="p">.</span><span class="n">text</span><span class="p">,</span>
+</span><span class='line'>                                <span class="s">@&quot;channelID&quot;</span> <span class="o">:</span> <span class="err">@</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">channelIDTextField</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">integerValue</span><span class="p">)};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Set broadcast settings</span>
+</span><span class='line'>    <span class="n">RPBroadcastConfiguration</span> <span class="o">*</span><span class="n">broadcastConfig</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RPBroadcastConfiguration</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">broadcastConfig</span><span class="p">.</span><span class="n">clipDuration</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">;</span> <span class="c1">// deliver movie clips every 5 seconds</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Tell ReplayKit that the extension is finished setting up and can begin broadcasting</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">extensionContext</span> <span class="nl">completeRequestWithBroadcastURL:</span><span class="n">broadcastURL</span> <span class="nl">broadcastConfiguration:</span><span class="n">broadcastConfig</span> <span class="nl">setupInfo:</span><span class="n">setupInfo</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">userDidCancelSetup</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Tell ReplayKit that the extension was cancelled by the user</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">extensionContext</span> <span class="nl">cancelRequestWithError:</span><span class="p">[</span><span class="n">NSError</span> <span class="nl">errorWithDomain:</span><span class="s">@&quot;YourAppDomain&quot;</span> <span class="nl">code:</span><span class="o">-</span><span class="mi">1</span>     <span class="nl">userInfo:</span><span class="nb">nil</span><span class="p">]];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>效果：</p>
+
+<p><img src="/images/2016/09/replaykit_demo_broadcast_ui.png" alt="ReplayKit Demo List" /></p>
+
+<p>如果用户点击 <code>OK</code>，则会回调到第二部分中的<code>RPBroadcastActivityViewControllerDelegate</code>，开始直播会调用 Broadcast Upload 扩展。</p>
+
+<h3>3.2 Broadcast Upload</h3>
+
+<p>第二部分调用<code>startBroadcastWithHandler</code>，会跑到<code>Broadcast Upload</code>，本扩展的作用是接收并处理 Broadcast UI 传过来的用户信息，以及处理 RPBroadcastController 传过来的音视频流数据，如编码、上传。</p>
+
+<p>核心代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;ReplayKit/ReplayKit.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">SampleHandler</span> : <span class="nc">RPBroadcastSampleHandler</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//  To handle samples with a subclass of RPBroadcastSampleHandler set the following in the extension&#39;s Info.plist file:</span>
+</span><span class='line'><span class="c1">//  - RPBroadcastProcessMode should be set to RPBroadcastProcessModeSampleBuffer</span>
+</span><span class='line'><span class="c1">//  - NSExtensionPrincipalClass should be set to this class</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">SampleHandler</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">broadcastStartedWithSetupInfo:</span><span class="p">(</span><span class="n">NSDictionary</span><span class="o">&lt;</span><span class="n">NSString</span> <span class="o">*</span><span class="p">,</span><span class="n">NSObject</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">setupInfo</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// User has requested to start the broadcast. Setup info from the UI extension will be supplied.</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;broadcastStartedWithSetupInfo: %@&quot;</span><span class="p">,</span> <span class="n">setupInfo</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">ReplayKitUploader</span> <span class="n">sharedObject</span><span class="p">]</span> <span class="nl">setupWithInfo:</span><span class="n">setupInfo</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">broadcastPaused</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// User has requested to pause the broadcast. Samples will stop being delivered.</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">broadcastResumed</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// User has requested to resume the broadcast. Samples delivery will resume.</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">broadcastFinished</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// User has requested to finish the broadcast.</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">processSampleBuffer:</span><span class="p">(</span><span class="n">CMSampleBufferRef</span><span class="p">)</span><span class="nv">sampleBuffer</span> <span class="nf">withType:</span><span class="p">(</span><span class="n">RPSampleBufferType</span><span class="p">)</span><span class="nv">sampleBufferType</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">ReplayKitUploader</span> <span class="n">sharedObject</span><span class="p">]</span> <span class="nl">handleSampleBuffer:</span><span class="n">sampleBuffer</span> <span class="nl">withType:</span><span class="n">sampleBufferType</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3.3 注意事项</h3>
+
+<p><code>ReplayKitUploader</code> 是自定义的一个类，使用了单例模式，负责广播服务的登录、编码、上传功能。使用单例，而不是直接在 SampleHandler 里面处理，是因为 SampleHandler 并不是 Broadcast Upload Extension 里的唯一一个实例，实际上，Upload Extension 会不断地创建很多个 SampleHandler 来处理 CMSampleBufferRef，而我们为了保存一些内部状态，必须使用一个固定的类实例来实现。</p>
+
+<h2>4. App 与 Extension 的代码共用</h2>
+
+<p>iOS 10 新增了很多种 Extension，包括本文提到的两种 Broadcast Extension。主 App 与 Extension 属于不同的两个进程，代码逻辑也是分离的，而实际情况中，主 App 与 Extension 往往会包含相同的逻辑，需要共用代码。</p>
+
+<p>主 App 与 Extension 属于两个不同的 target，共用代码，有以下几种方式：</p>
+
+<ul>
+<li>一份代码创建两个副本，分别加到 App 和 Extension 两个 target 中。这种方法简单粗暴而有效，只是，如果需要改动逻辑，则需要改两份代码，想象一下，假如这种改动很频繁，世界上又有几个程序员能受得了？</li>
+<li>抽离公共代码，放到独立的 framework，然后两个 target 都依赖该 framework，这是标准而方便的做法。</li>
+<li>使用 CocoaPods，只需要在 Podfile 中分别写两个 target 所依赖的 pod 即可，最简洁。</li>
+</ul>
+
+
+<h2>5. 结论</h2>
+
+<p>在 iOS 环境中，想要共享设备屏幕，无论是录播还是直播，都注定了没有直接方便的方案。ReplayKit Live 是目前最标准的做法，只是，使用 ReplayKit 有两个前提，应用本身支持 ReplayKit，直播平台支持 Broadcast Extension。这两个前提，后者比较容易实现，而前者，就需要靠各个应用开发商的自觉了。</p>
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2016/09/21/ios-10-replaykit-live-and-broadcast-extension/'>http://blog.lessfun.com/blog/2016/09/21/ios-10-replaykit-live-and-broadcast-extension/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">lslin</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-09-21T11:47:55+08:00" pubdate data-updated="true">2016-09-21, Wed</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/08/05/reliable-timer-in-ios/" title="Previous Post: 更可靠和高精度的 iOS 定时器">&laquo; 更可靠和高精度的 iOS 定时器</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+
+  <section>
+    <h1>发表评论</h1>
+    <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread" data-title="iOS 10 ReplayKit Live 与 Broadcast UI/Upload Extension"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lsfun"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>About Me</h1>
+<p>一个程序员只会写代码是不够的，他还应该拥有一个分享的博客。<br>——王小波<br></p>
+<p>iOS 开发工程师，现就职于 YY Inc.<br></p>
+<p><a href="http://like.lessfun.com">大众点赞：沉迷的大多数</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/09/21/ios-10-replaykit-live-and-broadcast-extension/">iOS 10 ReplayKit Live 与 Broadcast UI/Upload Extension</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/08/05/reliable-timer-in-ios/">更可靠和高精度的 iOS 定时器</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/29/swift-create-qiniu-upload-token/">使用Swift语言在iOS客户端生成七牛的上传Token</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/25/ios-record-screen-in-background/">非越狱 iOS 在后台截屏、录制屏幕的相关实现</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/18/lslog-xcode-plugin-to-filter-and-colorize-debugging-console/">使用LSLog XCode插件来过滤Log及修改Log的文本颜色</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tinymind">@tinymind</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tinymind',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/app/'>App (3)</a></li>
+<li class='category'><a href='/blog/categories/bitcoin/'>Bitcoin (2)</a></li>
+<li class='category'><a href='/blog/categories/book/'>Book (1)</a></li>
+<li class='category'><a href='/blog/categories/c-/'>C++ (2)</a></li>
+<li class='category'><a href='/blog/categories/financial/'>Financial (1)</a></li>
+<li class='category'><a href='/blog/categories/github/'>Github (1)</a></li>
+<li class='category'><a href='/blog/categories/godaddy/'>Godaddy (1)</a></li>
+<li class='category'><a href='/blog/categories/http/'>Http (1)</a></li>
+<li class='category'><a href='/blog/categories/mac/'>Mac (3)</a></li>
+<li class='category'><a href='/blog/categories/marktext/'>MarkText (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (4)</a></li>
+<li class='category'><a href='/blog/categories/php/'>PHP (1)</a></li>
+<li class='category'><a href='/blog/categories/passcalc/'>PassCalc (1)</a></li>
+<li class='category'><a href='/blog/categories/plugin/'>Plugin (1)</a></li>
+<li class='category'><a href='/blog/categories/svn/'>SVN (1)</a></li>
+<li class='category'><a href='/blog/categories/swift/'>Swift (1)</a></li>
+<li class='category'><a href='/blog/categories/xcode/'>XCode (2)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (20)</a></li>
+
+  </ul>
+</section>
+
+
+
+<section>
+<h1>Recent Comments</h1>
+<ul class="ds-recent-comments" data-num-items="10" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="20">
+</ul>
+<!--多说js加载开始，一个页面只需要加载一次 -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lsfun"};
+(function() {
+var ds = document.createElement('script');
+ds.type = 'text/javascript';
+ds.async = true;ds.src = 'http://static.duoshuo.com/embed.js';
+ds.charset = 'UTF-8';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
+<!--多说js加载结束，一个页面只需要加载一次 -->
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - lslin -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2016-08-29T15:19:08+08:00</updated>
+  <updated>2016-09-21T16:39:30+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,341 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 10 ReplayKit Live 与 Broadcast UI/Upload Extension]]></title>
+    <link href="http://blog.lessfun.com/blog/2016/09/21/ios-10-replaykit-live-and-broadcast-extension/"/>
+    <updated>2016-09-21T11:47:55+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2016/09/21/ios-10-replaykit-live-and-broadcast-extension</id>
+    <content type="html"><![CDATA[<p>在 iOS 8 及以前，第三方 App 如果想要全局录屏，只能使用私有 API，详见<a href="http://blog.lessfun.com/blog/2015/12/25/ios-record-screen-in-background/">非越狱后台录屏</a>。</p>
+
+<p>升级到 iOS 9 后，官方新增了 ReplayKit，并且禁用了录屏的私有 API。ReplayKit 并不算是完美的录屏方案，如果想要把梦幻西游的游戏过程录制下来，需要梦幻西游这个应用本身添加 ReplayKit 的支持，然后再把录制的视频分享出去。对于不支持 ReplayKit 的游戏，怎么录制？答案是，没有办法。试想，又有多少个游戏会内置 ReplayKit 呢？</p>
+
+<p>iOS 10 在 iOS 9 的 ReplayKit 保存录屏视频的基础上，增加了视频流实时直播功能（streaming live），官方介绍见 <a href="http://devstreaming.apple.com/videos/wwdc/2016/601nsio90cd7ylwimk9/601/601_go_live_with_replaykit.pdf">Go Live with ReplayKit</a>。下面详细说说这个流程。</p>
+
+<!--more-->
+
+
+<h2>1. ReplayKit Live 概述</h2>
+
+<p>从录制到直播，整体流程如下：</p>
+
+<ol>
+<li>被录制端需引入 ReplayKit，发起广播请求。</li>
+<li>广播端需要实现 Broadcast UI 和 Broadcast Upload 两个 <a href="https://developer.apple.com/library/content/documentation/General/Conceptual/ExtensibilityPG/index.html#//apple_ref/doc/uid/TP40014214-CH20-SW1">App Extension</a>，以便出现在被录制端的 App 列表。</li>
+<li>被录制端选定广播端 App 后，开始直播。</li>
+</ol>
+
+
+<p>其中，<code>被录制端</code>可以是任意一个 App，如梦幻西游，<code>广播端</code>是支持 ReplayKit Live 的直播平台，如虎牙直播。</p>
+
+<p><img src="http://blog.lessfun.com/images/2016/09/replaykit_workflow.png" alt="ReplayKit WorkFlow" /></p>
+
+<h2>2. 被录制端（游戏或应用）的实现</h2>
+
+<p>被录制端需要在原有功能的基础上，增加一个唤起广播的入口。代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;ReplayKit/ReplayKit.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nf">onLiveButtonPressed:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">RPBroadcastActivityViewController</span> <span class="nl">loadBroadcastActivityViewControllerWithHandler:</span><span class="o">^</span><span class="p">(</span><span class="n">RPBroadcastActivityViewController</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">broadcastActivityViewController</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">self</span><span class="p">.</span><span class="n">broadcastAVC</span> <span class="o">=</span> <span class="n">broadcastActivityViewController</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">self</span><span class="p">.</span><span class="n">broadcastAVC</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">self</span> <span class="nl">presentViewController:</span><span class="n">self</span><span class="p">.</span><span class="n">broadcastAVC</span> <span class="nl">animated:</span><span class="n">YES</span> <span class="nl">completion:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#pragma mark - RPBroadcastActivityViewControllerDelegate</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">broadcastActivityViewController:</span><span class="p">(</span><span class="n">RPBroadcastActivityViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">broadcastActivityViewController</span> <span class="nf">didFinishWithBroadcastController:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">RPBroadcastController</span> <span class="o">*</span><span class="p">)</span><span class="nv">broadcastController</span> <span class="nf">error:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">NSError</span> <span class="o">*</span><span class="p">)</span><span class="nv">error</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">broadcastAVC</span> <span class="nl">dismissViewControllerAnimated:</span><span class="n">YES</span> <span class="nl">completion:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">broadcastController</span> <span class="o">=</span> <span class="n">broadcastController</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">broadcastController</span> <span class="nl">startBroadcastWithHandler:</span><span class="o">^</span><span class="p">(</span><span class="n">NSError</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">self</span><span class="p">.</span><span class="n">liveButton</span><span class="p">.</span><span class="n">selected</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;startBroadcastWithHandler error: %@&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如下图的右上角就是开始广播的入口按钮。</p>
+
+<p><img src="http://blog.lessfun.com/images/2016/09/replaykit_demo_init.png" alt="ReplayKit Demo Init" /></p>
+
+<p>如果手机内没有支持广播的 App，会弹框提示到 App Store 查找一个。</p>
+
+<p><img src="http://blog.lessfun.com/images/2016/09/replaykit_demo_choose.png" alt="ReplayKit Demo Choose" /></p>
+
+<p>如果已经安装支持广播的 App，则会列出，点击后会打开广播端的 Broadcast UI。</p>
+
+<p><img src="http://blog.lessfun.com/images/2016/09/replaykit_demo_list.png" alt="ReplayKit Demo List" /></p>
+
+<p>下面要说的就是怎么实现一个支持广播的 App。</p>
+
+<h2>3. 广播端（直播平台）的实现</h2>
+
+<p>很多直播 App 本身已经支持通过摄像头进行视频流上传、直播，新增对 ReplayKit Live 的支持，只需要创建两个扩展的 target，分别是 Broadcast UI Extension 和 Broadcast Upload Extension，在XCode 8 中内置了这两个模板。</p>
+
+<h3>3.1 Broadcast UI</h3>
+
+<p>Broadcast UI 负责广播前的一些初始化工作，比如，让用户填写直播平台的账号、密码、直播标题。从被录制端唤起广播请求并选定广播平台后，会显示 Broadcast UI 界面。</p>
+
+<p>核心代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;ReplayKit/ReplayKit.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">BroadcastViewController</span> : <span class="nc">UIViewController</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nl">onCancelButtonPressed:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">sender</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="n">userDidCancelSetup</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nl">onOKButtonPressed:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">sender</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">accountTextField</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">length</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>        <span class="o">||</span> <span class="n">self</span><span class="p">.</span><span class="n">passwordTextField</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">length</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>        <span class="o">||</span> <span class="n">self</span><span class="p">.</span><span class="n">channelIDTextField</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="n">userDidFinishSetup</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#pragma mark - Private</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Called when the user has finished interacting with the view controller and a broadcast stream can start</span>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">userDidFinishSetup</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;userDidFinishSetup&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Broadcast url that will be returned to the application</span>
+</span><span class='line'>    <span class="n">NSURL</span> <span class="o">*</span><span class="n">broadcastURL</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="s">@&quot;http://broadcastURL_example/stream1&quot;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Service specific broadcast data example which will be supplied to the process extension during broadcast</span>
+</span><span class='line'>    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">setupInfo</span> <span class="o">=</span> <span class="err">@</span><span class="p">{</span><span class="s">@&quot;account&quot;</span> <span class="o">:</span> <span class="n">self</span><span class="p">.</span><span class="n">accountTextField</span><span class="p">.</span><span class="n">text</span><span class="p">,</span>
+</span><span class='line'>                                <span class="s">@&quot;password&quot;</span> <span class="o">:</span> <span class="n">self</span><span class="p">.</span><span class="n">passwordTextField</span><span class="p">.</span><span class="n">text</span><span class="p">,</span>
+</span><span class='line'>                                <span class="s">@&quot;channelID&quot;</span> <span class="o">:</span> <span class="err">@</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">channelIDTextField</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">integerValue</span><span class="p">)};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Set broadcast settings</span>
+</span><span class='line'>    <span class="n">RPBroadcastConfiguration</span> <span class="o">*</span><span class="n">broadcastConfig</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RPBroadcastConfiguration</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">broadcastConfig</span><span class="p">.</span><span class="n">clipDuration</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">;</span> <span class="c1">// deliver movie clips every 5 seconds</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Tell ReplayKit that the extension is finished setting up and can begin broadcasting</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">extensionContext</span> <span class="nl">completeRequestWithBroadcastURL:</span><span class="n">broadcastURL</span> <span class="nl">broadcastConfiguration:</span><span class="n">broadcastConfig</span> <span class="nl">setupInfo:</span><span class="n">setupInfo</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">userDidCancelSetup</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Tell ReplayKit that the extension was cancelled by the user</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">extensionContext</span> <span class="nl">cancelRequestWithError:</span><span class="p">[</span><span class="n">NSError</span> <span class="nl">errorWithDomain:</span><span class="s">@&quot;YourAppDomain&quot;</span> <span class="nl">code:</span><span class="o">-</span><span class="mi">1</span>     <span class="nl">userInfo:</span><span class="nb">nil</span><span class="p">]];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>效果：</p>
+
+<p><img src="http://blog.lessfun.com/images/2016/09/replaykit_demo_broadcast_ui.png" alt="ReplayKit Demo List" /></p>
+
+<p>如果用户点击 <code>OK</code>，则会回调到第二部分中的<code>RPBroadcastActivityViewControllerDelegate</code>，开始直播会调用 Broadcast Upload 扩展。</p>
+
+<h3>3.2 Broadcast Upload</h3>
+
+<p>第二部分调用<code>startBroadcastWithHandler</code>，会跑到<code>Broadcast Upload</code>，本扩展的作用是接收并处理 Broadcast UI 传过来的用户信息，以及处理 RPBroadcastController 传过来的音视频流数据，如编码、上传。</p>
+
+<p>核心代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;ReplayKit/ReplayKit.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">SampleHandler</span> : <span class="nc">RPBroadcastSampleHandler</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//  To handle samples with a subclass of RPBroadcastSampleHandler set the following in the extension&#39;s Info.plist file:</span>
+</span><span class='line'><span class="c1">//  - RPBroadcastProcessMode should be set to RPBroadcastProcessModeSampleBuffer</span>
+</span><span class='line'><span class="c1">//  - NSExtensionPrincipalClass should be set to this class</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">SampleHandler</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">broadcastStartedWithSetupInfo:</span><span class="p">(</span><span class="n">NSDictionary</span><span class="o">&lt;</span><span class="n">NSString</span> <span class="o">*</span><span class="p">,</span><span class="n">NSObject</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">setupInfo</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// User has requested to start the broadcast. Setup info from the UI extension will be supplied.</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;broadcastStartedWithSetupInfo: %@&quot;</span><span class="p">,</span> <span class="n">setupInfo</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">ReplayKitUploader</span> <span class="n">sharedObject</span><span class="p">]</span> <span class="nl">setupWithInfo:</span><span class="n">setupInfo</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">broadcastPaused</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// User has requested to pause the broadcast. Samples will stop being delivered.</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">broadcastResumed</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// User has requested to resume the broadcast. Samples delivery will resume.</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">broadcastFinished</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// User has requested to finish the broadcast.</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">processSampleBuffer:</span><span class="p">(</span><span class="n">CMSampleBufferRef</span><span class="p">)</span><span class="nv">sampleBuffer</span> <span class="nf">withType:</span><span class="p">(</span><span class="n">RPSampleBufferType</span><span class="p">)</span><span class="nv">sampleBufferType</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">ReplayKitUploader</span> <span class="n">sharedObject</span><span class="p">]</span> <span class="nl">handleSampleBuffer:</span><span class="n">sampleBuffer</span> <span class="nl">withType:</span><span class="n">sampleBufferType</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3.3 注意事项</h3>
+
+<p><code>ReplayKitUploader</code> 是自定义的一个类，使用了单例模式，负责广播服务的登录、编码、上传功能。使用单例，而不是直接在 SampleHandler 里面处理，是因为 SampleHandler 并不是 Broadcast Upload Extension 里的唯一一个实例，实际上，Upload Extension 会不断地创建很多个 SampleHandler 来处理 CMSampleBufferRef，而我们为了保存一些内部状态，必须使用一个固定的类实例来实现。</p>
+
+<h2>4. App 与 Extension 的代码共用</h2>
+
+<p>iOS 10 新增了很多种 Extension，包括本文提到的两种 Broadcast Extension。主 App 与 Extension 属于不同的两个进程，代码逻辑也是分离的，而实际情况中，主 App 与 Extension 往往会包含相同的逻辑，需要共用代码。</p>
+
+<p>主 App 与 Extension 属于两个不同的 target，共用代码，有以下几种方式：</p>
+
+<ul>
+<li>一份代码创建两个副本，分别加到 App 和 Extension 两个 target 中。这种方法简单粗暴而有效，只是，如果需要改动逻辑，则需要改两份代码，想象一下，假如这种改动很频繁，世界上又有几个程序员能受得了？</li>
+<li>抽离公共代码，放到独立的 framework，然后两个 target 都依赖该 framework，这是标准而方便的做法。</li>
+<li>使用 CocoaPods，只需要在 Podfile 中分别写两个 target 所依赖的 pod 即可，最简洁。</li>
+</ul>
+
+
+<h2>5. 结论</h2>
+
+<p>在 iOS 环境中，想要共享设备屏幕，无论是录播还是直播，都注定了没有直接方便的方案。ReplayKit Live 是目前最标准的做法，只是，使用 ReplayKit 有两个前提，应用本身支持 ReplayKit，直播平台支持 Broadcast Extension。这两个前提，后者比较容易实现，而前者，就需要靠各个应用开发商的自觉了。</p>
+
+<blockquote class='post_original_block'>
+            原文作者：
+            <a href='http://blog.lessfun.com'>lslin</a><br/>
+            原文链接：
+            <a href='http://blog.lessfun.com/blog/2016/09/21/ios-10-replaykit-live-and-broadcast-extension/'>http://blog.lessfun.com/blog/2016/09/21/ios-10-replaykit-live-and-broadcast-extension/</a><br/>
+            版权声明：自由转载-非商用-非衍生-保持署名 | 
+            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+            </blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[更可靠和高精度的 iOS 定时器]]></title>
@@ -3232,101 +3567,6 @@ If a timer’s firing time occurs during a long callout or while the run loop is
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
             <a href='http://blog.lessfun.com/blog/2014/09/11/invalid-binary-the-binary-is-missing-architectures-arm64/'>http://blog.lessfun.com/blog/2014/09/11/invalid-binary-the-binary-is-missing-architectures-arm64/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名 | 
-            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
-            </blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[从储蓄罐到实现财务自由]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/08/28/to-achieve-financial-freedom/"/>
-    <updated>2014-08-28T18:24:14+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/08/28/to-achieve-financial-freedom</id>
-    <content type="html"><![CDATA[<p>博多·舍费尔的《小狗钱钱》和《财务自由之路》这两本理财入门书在各大社区、论坛都可以看到很多人推荐，口碑良好，最近抽时间看完，虽然有干货，能给人很大的启发，但是废话太多，读者很浪费时间。</p>
-
-<p>其实两本书的内容，可以稍作总结如下：</p>
-
-<!--more-->
-
-
-<h3>财务自由之路</h3>
-
-<p>这本书讲的是道理，而不是具体方法。作者也说了，遵循本书的思想，可以在七年内赚到一百万，美元。但是，如果只是纸上谈兵，则你仍然是一无所有。</p>
-
-<h4>1. 得正视金钱，树立正确的金钱观。</h4>
-
-<p>不要认为金钱是万恶之源，有钱可耻，贫穷光荣。我们想生活得更好，想让身边的人生活得更好，想让社会进步到更美好，这些都需要钱，需要我们去创造财富。</p>
-
-<h4>2. 要有目标、有理想，并付诸行动，逐步实现计划。</h4>
-
-<p>比如，七年赚一百万，这就是一个目标，但是不能设了目标就置身度外，月月月光。百万富翁不是一天变成的，每个月都花光，不可能几年后就积累了一百万。也不要认为先花钱才能赚到钱，不会理财，你月入几万，也会月花几万，到头来还是月光，所以需要制定详细的储蓄计划。</p>
-
-<h4>3. 在储蓄的基础上进行投资</h4>
-
-<p>第2点所说的储蓄，不要仅仅是存在银行，那样子跑不过通货膨胀，财富会贬值。更好的投资方法是购买股票，如果没有精力或不够专业，还可以选择股票型资金，这两项是收益率较高的，达到12%不是问题。</p>
-
-<h4>4. 「王者之路」选股原则</h4>
-
-<p>炒股时，股票数量有限制，至少购买5只不同行业的股票，可以分散风险；但是不要超过10只，避免精力不足。没有必要精读每家公司的财务报表，但是需要了解公司的收支情况，以及在社会上的名声。如果不知道应该选择什么股票，可以参照「王者之路」的原则，也就是，在不同的行业里选择最领先的公司。</p>
-
-<h4>5. 买卖股票的原则</h4>
-
-<p>买入时，需要保留50%的现金，避免价格下跌后没有余力补仓。只有在买入之后，价格下跌了30%，并且时间过去半年以后，才进行补仓，补仓时也不要满仓。</p>
-
-<h3>小狗钱钱</h3>
-
-<p>这本书以故事的形式，通过小狗和小女孩的口吻，向大家传递从小学会理财的重要性，除了描述新式不同之外，本书的思想可以在《财务自由之路》找到。</p>
-
-<h4>1. 要自信，有计划，付诸行动。</h4>
-
-<p>自信可以通过每天记录「成功日记」获得，每天睡前简单描述当天的收获。<br/>
-计划可以通过存钱罐进行区分，每个存钱罐上表明实现该计划所需要的本钱，存够之后才去实施。<br/>
-行动就不用多说了，总得想办法填充钱罐。</p>
-
-<h4>2. 开始储蓄，获得利息。</h4>
-
-<p>更好的方法是，用银行存款代替存钱罐，毕竟在银行有利息收入，而放在罐子里，只会慢慢贬值。<br/>
-很多人都有错误的观念，认为想赚钱，必须得学会花钱，不会花钱的人，永远也赚不了大钱。这种观念在知乎上尤为常见，但是，这不适合于普通大众。对于一些土豪、富二代、官二代来说，会花钱，通人脉，自然财源滚滚；但是对于普通白领，你就算每个月把所有工资都拿出去请人吃喝玩乐，交的也是酒肉朋友，并不是说你请土豪吃一顿小肥羊，人家就会给你带来价值几千万的投资项目。<br/>
-求人不如求己，我们都知道用钱赚钱才是人生赢家，但是怎样才能用钱赚钱？自然得是有钱。怎样才能有钱？自然得靠自己存钱。</p>
-
-<h4>3. 要有盈余，不要月光。</h4>
-
-<p>每个月月光，只会让你觉得生活越来越绝望。<br/>
-对于年轻人，目前是钱少，时间多；以后则是钱多，时间少。而贷款刚好可以让这两者互补，将以后的钱预支到现在，先享受，再还款。<br/>
-但是贷款有利息，所以很多人贷款之后又恨不得立刻就把钱还清。这样一来，贷款的意义又在哪里呢？还不如选择还款周期长的，减轻自己的压力。</p>
-
-<h4>4. 用本钱去投资。</h4>
-
-<p>制定明确的存钱计划并严格执行，过一段时间之后，就有了可以用于投资的本钱。银行定存的利息是很低的，跑不赢通货膨胀，所以得投资收益率更高的项目，比如基金，每天能稳定地获得固定收益。</p>
-
-<h4>5. 股票利润最大，也可以投资股票资金。</h4>
-
-<p>在所有投资类型中，股票的收益是最大的。但是难度、风险也最大，如果不想让自己亲自炒股，可以委托专业人士——股票基金经理进行操作，也就是买入股票基金。</p>
-
-<h3>实际操作</h3>
-
-<p>以上就是两本书的中心思想，但很多人都是听过很多赚钱的道理，依然过不好这一生。<br/>
-普通人没法一夜暴富，至少能尝试坚持做到以下几点：</p>
-
-<ol>
-<li>开源节流。增加赚钱的渠道，减少不必要的支出。比如，找份兼职，业余投资之类，同时不要花太多不必要的钱在吃喝玩乐上。</li>
-<li>制定计划。比如，每个月定存10%的工资，坚持30年，用作自己的退休基金；减去必要开支之后，30%的工资用作下蛋的金鹅；30%的工资用于实现短期的机会。</li>
-<li>持之以恒。雷打不动地慢慢实现自己的每月计划，三十年后，你且看你。</li>
-</ol>
-
-
-<h4>附两本书的下载链接：</h4>
-
-<p><a href="http://dl.vmall.com/c00vwwc6iw">财务自由之路</a><br/>
-<a href="http://xuduoshu.com/view/53d862298650ca24f38720b6">小狗钱钱</a></p>
-
-<blockquote class='post_original_block'>
-            原文作者：
-            <a href='http://blog.lessfun.com'>lslin</a><br/>
-            原文链接：
-            <a href='http://blog.lessfun.com/blog/2014/08/28/to-achieve-financial-freedom/'>http://blog.lessfun.com/blog/2014/08/28/to-achieve-financial-freedom/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>
