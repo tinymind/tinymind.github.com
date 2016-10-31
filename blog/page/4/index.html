@@ -87,6 +87,57 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/">通过简单的方法适应iOS7中的UIViewController，同时兼容iOS6</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-10T15:07:24+08:00" pubdate data-updated="true">2014-01-10, Fri</time>
+        
+		
+          | <a href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>设置view从导航栏下方开始布局</h3>
+
+<p>在iOS6及以前的版本中，UIViewController的高度和位置都是从导航栏下方开始的。但是在iOS7中，UIViewController不再提供wantsFullScreenLayout属性，UIViewController创建后默认就是Full Screen的，因此如果带导航栏的应用界面中的部分控件会与导航栏重叠在一起。</p>
+
+<p>我们的应用大都要兼容低于iOS7的版本，所以必须解决这种不兼容的现象。
+思路是，还是按照iOS6的布局方式，因为被导航栏覆盖部分界面实在看不出有什么好处。所以，我们需要判断iOS版本，如果是iOS6，一切照旧，如果是iOS7，则设置view从导航栏下方开始布局。</p>
+
+<p>简单的方法，在ViewDidLoad里面增加几句代码即可，如下：</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/01/10/simple-way-to-adjust-viewcontroller-to-fit-ios7/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/12/13/some-feeling-about-bitcoin-trading/">比特币交易的一点感想</a></h1>
     
     
@@ -429,6 +480,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/10/28/make-a-custom-syntax-highlighting-for-sublime-text/">为 Sublime Text 自定义 Log 语法高亮</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/09/21/ios-10-replaykit-live-and-broadcast-extension/">iOS 10 ReplayKit Live 与 Broadcast UI/Upload Extension</a>
       </li>
     
@@ -442,10 +497,6 @@
     
       <li class="post">
         <a href="/blog/2015/12/25/ios-record-screen-in-background/">非越狱 iOS 在后台截屏、录制屏幕的相关实现</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/18/lslog-xcode-plugin-to-filter-and-colorize-debugging-console/">使用LSLog XCode插件来过滤Log及修改Log的文本颜色</a>
       </li>
     
   </ul>
@@ -498,6 +549,7 @@
 <li class='category'><a href='/blog/categories/passcalc/'>PassCalc (1)</a></li>
 <li class='category'><a href='/blog/categories/plugin/'>Plugin (1)</a></li>
 <li class='category'><a href='/blog/categories/svn/'>SVN (1)</a></li>
+<li class='category'><a href='/blog/categories/sublimetext/'>SublimeText (1)</a></li>
 <li class='category'><a href='/blog/categories/swift/'>Swift (1)</a></li>
 <li class='category'><a href='/blog/categories/xcode/'>XCode (2)</a></li>
 <li class='category'><a href='/blog/categories/ios/'>iOS (20)</a></li>
