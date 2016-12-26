@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>在程序运行时获取被调用的DLL的本地文件路径 - 浮生猎趣</title>
+  <title>iOS App 本地化的自动翻译脚本 - 浮生猎趣</title>
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="在程序运行时获取被调用的DLL文件路径">
-  <meta name="keywords" content="DLL, GetModuleFileName, IMAGE_DOS_HEADER">
+  <meta name="description" content="利用百度翻译 API，把 iOS App 的语言文件 xx.strings 翻译成多国语言。">
+  <meta name="keywords" content="iOS, App, strings, translate, multi-language">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime">
+  <link rel="canonical" href="http://blog.lessfun.com/blog/2016/12/26/ios-app-strings-translator">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
@@ -84,7 +84,7 @@
   
   <header>
     
-      <h1 class="entry-title">在程序运行时获取被调用的DLL的本地文件路径</h1>
+      <h1 class="entry-title">iOS App 本地化的自动翻译脚本</h1>
     
     
       <p class="meta">
@@ -100,7 +100,7 @@
   
 
 
-<time datetime="2014-03-18T17:42:46+08:00" pubdate data-updated="true">2014-03-18, Tue</time>
+<time datetime="2016-12-26T18:00:03+08:00" pubdate data-updated="true">2016-12-26, Mon</time>
         
 		
           | <a href="#comments">Comments</a>
@@ -110,44 +110,59 @@
   </header>
 
 
-<div class="entry-content"><p>很多时候，DLL都是被别的进程所调用，所以在运行时，下面方法获取到的实际上是EXE所在的文件路径：</p>
+<div class="entry-content"><p>写 App 的激情与动力，往往在于核心功能的实现，至于那些 UI 细节的微调、多国家的语言文件，岂是尔等大牛需要做的事？</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">QCoreApplication</span><span class="o">::</span><span class="n">applicationFilePath</span><span class="p">();</span><span class="c1">//Qt</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>但是，一款出色的产品，往往不只有出色的核心功能，它的产品细节、用户体验也是趋于完善近乎完美的。大牛的你，虽然不想干这些脏活累活，然而，牛在江湖身不由己，你有三个选择：</p>
+
+<ol>
+<li>咬咬牙，自己上。</li>
+<li>招个临时工 or 实习生，让他干。</li>
+<li>写个脚本，自动完成。</li>
+</ol>
 
 
-<p>但是我们实际上想要获得的是DLL本身的路径，因为运行的EXE与被调用的DLL不一定在同一个目录，比如，当把abc.dll注入到notepad.exe进程，很明显abc.dll是不在notepad所在的目录的。在dll代码中调用上述语句，返回的实际上是notepad的EXE路径。</p>
+<p>现在要说的 App 本地化，就是一个典型的又粗又脏又累的活：</p>
 
-<p>那么，我们要获得abc.dll真实路径，有两个方法。</p>
+<ol>
+<li>没有任何技术含量。</li>
+<li>需要大量重复劳动。</li>
+<li>每个 App 都需要做一遍。</li>
+</ol>
+
+
+<p>身为一名程序员，看到上述三个烦死人的特征，除了累觉不爱之外，还有没有别的什么想法呢？</p>
 
 <!--more-->
 
 
-<h4>方法一：</h4>
+<p>利用脚本自动完成啊！脚本天生就是干这些事的。</p>
 
-<p>在DLL的入口函数附近，声明以下变量，并定义函数：</p>
+<p>脚本已经写好了：<a href="https://github.com/tinymind/AppStringsTranslator">AppStringsTranslator</a></p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">EXTERN_C</span> <span class="n">IMAGE_DOS_HEADER</span> <span class="n">__ImageBase</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">VOID</span> <span class="n">CALLBACK</span> <span class="n">abcAPCProc</span><span class="p">(</span><span class="n">ULONG_PTR</span> <span class="n">dwParam</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>      <span class="n">WCHAR</span> <span class="n">path</span><span class="p">[</span><span class="n">MAX_PATH</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-</span><span class='line'>      <span class="o">::</span><span class="n">GetModuleFileName</span><span class="p">((</span><span class="n">HINSTANCE</span><span class="p">)</span><span class="o">&amp;</span><span class="n">__ImageBase</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">MAX_PATH</span><span class="p">);</span>
-</span><span class='line'>      <span class="c1">//path就是当前dll的文件路径</span>
-</span><span class='line'>  <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<h3>原理</h3>
+
+<ol>
+<li>扫描 App 的 <code>xx.strings</code> 文件，遍历每一行。</li>
+<li>如果该行格式为 <code>"xx" = "xxx";</code>，则把等号左右的<code>key</code> 和 <code>value</code>提取出来，保存到 <code>keys</code> 和 <code>values</code> 两个数组中。</li>
+<li>如果该行不是 key/value 格式，则把整行加到 <code>keys</code>，而往 <code>values</code> 里加一个空字符串。</li>
+<li>利用百度翻译的 API，翻译 <code>values</code> 里的每个元素。</li>
+<li>把 <code>keys</code> 和翻译结果按照同样的格式写入到新的 <code>xx_toLang.strings</code> 文件。</li>
+</ol>
 
 
-<p>然后，需要在导出函数里调用一下上面的函数：</p>
+<p>第 3 步的目的是，保留原来的语言文件里的注释和空行。</p>
+
+<h3>用法</h3>
+
+<ol>
+<li>修改 <code>AppStringsTranslator.py</code>，填上你自己的百度 <code>AppKey/SecretKey</code>，见<a href="http://api.fanyi.baidu.com/api/trans/product/desktop?req=developer">这里</a>。</li>
+<li>在终端执行脚本，eg: <code>python AppStringsTranslator.py</code>。</li>
+<li>输入语言文件名称，eg: <code>Localizable.strings</code>。</li>
+<li>输入源文件的语言简写，eg: <code>zh</code>。</li>
+<li>输入需要翻译成的语言列表，以空格区分。eg: <code>en cht jp kor</code>。</li>
+<li>等待完成。</li>
+</ol>
+
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -162,25 +177,29 @@
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="n">DWORD</span> <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="kr">__stdcall</span> <span class="n">showABC</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>      <span class="n">HANDLE</span> <span class="n">hThread</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">DWORD</span> <span class="n">dwRes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">hThread</span> <span class="o">=</span> <span class="o">::</span><span class="n">OpenThread</span><span class="p">(</span><span class="n">THREAD_SET_CONTEXT</span><span class="p">,</span>
-</span><span class='line'>          <span class="n">FALSE</span><span class="p">,</span> <span class="n">getMainThreadId</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
-</span><span class='line'>      <span class="n">DW_ASSERT</span><span class="p">(</span><span class="nb">NULL</span> <span class="o">!=</span> <span class="n">hThread</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">dwRes</span> <span class="o">=</span> <span class="o">::</span><span class="n">QueueUserAPC</span><span class="p">(</span><span class="n">abcAPCProc</span><span class="p">,</span>
-</span><span class='line'>          <span class="n">hThread</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</span><span class='line'>      <span class="o">::</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">hThread</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">hThread</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>      <span class="k">return</span> <span class="n">dwRes</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt;&gt; LSiMac:AppStringsTranslator <span class="nv">$ </span>python AppStringsTranslator.py
+</span><span class='line'>&gt;&gt; Enter a fileName: Localizable.strings
+</span><span class='line'>&gt;&gt; Supports languages:
+</span><span class='line'><span class="o">[</span><span class="s1">&#39;auto&#39;</span>, <span class="s1">&#39;zh&#39;</span>, <span class="s1">&#39;en&#39;</span>, <span class="s1">&#39;yue&#39;</span>, <span class="s1">&#39;wyw&#39;</span>, <span class="s1">&#39;jp&#39;</span>, <span class="s1">&#39;kor&#39;</span>, <span class="s1">&#39;fra&#39;</span>, <span class="s1">&#39;spa&#39;</span>, <span class="s1">&#39;th&#39;</span>, <span class="s1">&#39;ara&#39;</span>, <span class="s1">&#39;ru&#39;</span>, <span class="s1">&#39;pt&#39;</span>, <span class="s1">&#39;de&#39;</span>, <span class="s1">&#39;it&#39;</span>, <span class="s1">&#39;el&#39;</span>, <span class="s1">&#39;nl&#39;</span>, <span class="s1">&#39;pl&#39;</span>, <span class="s1">&#39;bul&#39;</span>, <span class="s1">&#39;est&#39;</span>, <span class="s1">&#39;dan&#39;</span>, <span class="s1">&#39;fin&#39;</span>, <span class="s1">&#39;cs&#39;</span>, <span class="s1">&#39;rom&#39;</span>, <span class="s1">&#39;slo&#39;</span>, <span class="s1">&#39;swe&#39;</span>, <span class="s1">&#39;hu&#39;</span>, <span class="s1">&#39;cht&#39;</span>, <span class="s1">&#39;vie&#39;</span><span class="o">]</span>
+</span><span class='line'>&gt;&gt; Enter from language: zh
+</span><span class='line'>&gt;&gt; Enter to language list, split by space: cht en jp kor
+</span><span class='line'>&gt;&gt; Start
+</span><span class='line'>Translating cht to fileName: Localizable_cht.strings
+</span><span class='line'>Finished translating to cht
+</span><span class='line'>Translating en to fileName: Localizable_en.strings
+</span><span class='line'>Finished translating to en
+</span><span class='line'>Translating jp to fileName: Localizable_jp.strings
+</span><span class='line'>Finished translating to jp
+</span><span class='line'>Translating kor to fileName: Localizable_kor.strings
+</span><span class='line'>Finished translating to kor
+</span><span class='line'>All <span class="k">done</span>!
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>方法二：</h4>
-
-<p>定义以下函数：</p>
+<h3>支持的语言</h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -192,38 +211,77 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">HMODULE</span> <span class="n">GetCurrentModule</span><span class="p">()</span>
-</span><span class='line'>  <span class="p">{</span> <span class="c1">// NB: XP+ solution!</span>
-</span><span class='line'>      <span class="n">HMODULE</span> <span class="n">hModule</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">GetModuleHandleEx</span><span class="p">(</span>
-</span><span class='line'>          <span class="n">GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS</span><span class="p">,</span>
-</span><span class='line'>          <span class="p">(</span><span class="n">LPCTSTR</span><span class="p">)</span><span class="n">GetCurrentModule</span><span class="p">,</span>
-</span><span class='line'>          <span class="o">&amp;</span><span class="n">hModule</span><span class="p">);</span>
-</span><span class='line'>  
-</span><span class='line'>      <span class="k">return</span> <span class="n">hModule</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>语言简写               名称
+</span><span class='line'>auto                自动检测<span class="o">(</span>可以作为源语言，但不能是目标语言<span class="o">)</span>
+</span><span class='line'>zh                  中文
+</span><span class='line'>en                  英语
+</span><span class='line'>yue                 粤语
+</span><span class='line'>wyw                 文言文
+</span><span class='line'>jp                  日语
+</span><span class='line'>kor                 韩语
+</span><span class='line'>fra                 法语
+</span><span class='line'>spa                 西班牙语
+</span><span class='line'>th                  泰语
+</span><span class='line'>ara                 阿拉伯语
+</span><span class='line'>ru                  俄语
+</span><span class='line'>pt                  葡萄牙语
+</span><span class='line'>de                  德语
+</span><span class='line'>it                  意大利语
+</span><span class='line'>el                  希腊语
+</span><span class='line'>nl                  荷兰语
+</span><span class='line'>pl                  波兰语
+</span><span class='line'>bul                 保加利亚语
+</span><span class='line'>est                 爱沙尼亚语
+</span><span class='line'>dan                 丹麦语
+</span><span class='line'>fin                 芬兰语
+</span><span class='line'>cs                  捷克语
+</span><span class='line'>rom                 罗马尼亚语
+</span><span class='line'>slo                 斯洛文尼亚语
+</span><span class='line'>swe                 瑞典语
+</span><span class='line'>hu                  匈牙利语
+</span><span class='line'>cht                 繁体中文
+</span><span class='line'>vie                 越南语
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>调用上面函数，获取当前局部，然后就可以使用<code>GetModuleFileName</code>方法获取DLL路径：</p>
+<h3>无法脚本化的情况</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="n">WCHAR</span> <span class="n">path</span><span class="p">[</span><span class="n">MAX_PATH</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-</span><span class='line'>  <span class="n">HMODULE</span> <span class="n">hm</span> <span class="o">=</span> <span class="n">GetCurrentModule</span><span class="p">();</span>
-</span><span class='line'>  <span class="o">::</span><span class="n">GetModuleFileName</span><span class="p">(</span><span class="n">hm</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">MAX_PATH</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>有时候，我们会在语言文件里添加一些特殊的字符，比如 <code>%@ %d %lld</code> 之类的格式化占位符，这些字符是不需要被翻译的。但是利用脚本，是没有办法智能识别哪些字符需要保留，以及保留到哪里的，这种情况还是需要开发者自己去处理。</p>
 
+<h3>参考和说明</h3>
 
-<blockquote class='post_original_block'>
-            原文作者：
-            <a href='http://blog.lessfun.com'>lslin</a><br/>
-            原文链接：
-            <a href='http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime/'>http://blog.lessfun.com/blog/2014/03/18/get-dll-path-at-runtime/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名 | 
-            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
-            </blockquote>
+<ol>
+<li><a href="http://api.fanyi.baidu.com/api/trans/product/apidoc">百度翻译 API</a></li>
+<li>百度翻译不是完全免费的，不过每个月有一定的免费调用次数，还是完全可以满足 App 开发这种小数据量的。</li>
+<li>可以修改脚本，改变翻译后的文件存放方式。<blockquote class='post_original_block'>
+         原文作者：
+         <a href='http://blog.lessfun.com'>lslin</a><br/>
+         原文链接：
+         <a href='http://blog.lessfun.com/blog/2016/12/26/ios-app-strings-translator/'><a href="http://blog.lessfun.com/blog/2016/12/26/ios-app-strings-translator/">http://blog.lessfun.com/blog/2016/12/26/ios-app-strings-translator/</a></a><br/>
+         版权声明：自由转载-非商用-非衍生-保持署名 |
+         <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+         </blockquote></li>
+</ol>
 
 </div>
 
@@ -247,12 +305,12 @@
   
 
 
-<time datetime="2014-03-18T17:42:46+08:00" pubdate data-updated="true">2014-03-18, Tue</time>
+<time datetime="2016-12-26T18:00:03+08:00" pubdate data-updated="true">2016-12-26, Mon</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+    <a class='category' href='/blog/categories/python/'>Python</a>
   
 </span>
 
@@ -268,10 +326,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/01/15/using-uitabbarcontroller-inside-uinavigationcontroller/" title="Previous Post: 在UINavigationController中使用UITabBarController，处理Two-stage rotation错误">&laquo; 在UINavigationController中使用UITabBarController，处理Two-stage rotation错误</a>
+        <a class="basic-alignment left" href="/blog/2016/10/28/make-a-custom-syntax-highlighting-for-sublime-text/" title="Previous Post: 为 Sublime Text 自定义 Log 语法高亮">&laquo; 为 Sublime Text 自定义 Log 语法高亮</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/04/01/using-qiniu-c-sdk-in-cpp/" title="Next Post: 在C++中使用七牛C-SDK，给QINIU_ACCESS_KEY和QINIU_SECRET_KEY赋值失败的解决方法">在C++中使用七牛C-SDK，给QINIU_ACCESS_KEY和QINIU_SECRET_KEY赋值失败的解决方法 &raquo;</a>
       
     </p>
   </footer>
@@ -281,7 +337,7 @@
   <section>
     <h1>发表评论</h1>
     <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
-	<div class="ds-thread" data-title="在程序运行时获取被调用的DLL的本地文件路径"></div>
+	<div class="ds-thread" data-title="iOS App 本地化的自动翻译脚本"></div>
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"lsfun"};
 	(function() {

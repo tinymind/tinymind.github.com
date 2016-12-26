@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2016-10-31T13:23:38+08:00</updated>
+  <updated>2016-12-26T18:41:00+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -12,6 +12,187 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS App 本地化的自动翻译脚本]]></title>
+    <link href="http://blog.lessfun.com/blog/2016/12/26/ios-app-strings-translator/"/>
+    <updated>2016-12-26T18:00:03+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2016/12/26/ios-app-strings-translator</id>
+    <content type="html"><![CDATA[<p>写 App 的激情与动力，往往在于核心功能的实现，至于那些 UI 细节的微调、多国家的语言文件，岂是尔等大牛需要做的事？</p>
+
+<p>但是，一款出色的产品，往往不只有出色的核心功能，它的产品细节、用户体验也是趋于完善近乎完美的。大牛的你，虽然不想干这些脏活累活，然而，牛在江湖身不由己，你有三个选择：</p>
+
+<ol>
+<li>咬咬牙，自己上。</li>
+<li>招个临时工 or 实习生，让他干。</li>
+<li>写个脚本，自动完成。</li>
+</ol>
+
+
+<p>现在要说的 App 本地化，就是一个典型的又粗又脏又累的活：</p>
+
+<ol>
+<li>没有任何技术含量。</li>
+<li>需要大量重复劳动。</li>
+<li>每个 App 都需要做一遍。</li>
+</ol>
+
+
+<p>身为一名程序员，看到上述三个烦死人的特征，除了累觉不爱之外，还有没有别的什么想法呢？</p>
+
+<!--more-->
+
+
+<p>利用脚本自动完成啊！脚本天生就是干这些事的。</p>
+
+<p>脚本已经写好了：<a href="https://github.com/tinymind/AppStringsTranslator">AppStringsTranslator</a></p>
+
+<h3>原理</h3>
+
+<ol>
+<li>扫描 App 的 <code>xx.strings</code> 文件，遍历每一行。</li>
+<li>如果该行格式为 <code>"xx" = "xxx";</code>，则把等号左右的<code>key</code> 和 <code>value</code>提取出来，保存到 <code>keys</code> 和 <code>values</code> 两个数组中。</li>
+<li>如果该行不是 key/value 格式，则把整行加到 <code>keys</code>，而往 <code>values</code> 里加一个空字符串。</li>
+<li>利用百度翻译的 API，翻译 <code>values</code> 里的每个元素。</li>
+<li>把 <code>keys</code> 和翻译结果按照同样的格式写入到新的 <code>xx_toLang.strings</code> 文件。</li>
+</ol>
+
+
+<p>第 3 步的目的是，保留原来的语言文件里的注释和空行。</p>
+
+<h3>用法</h3>
+
+<ol>
+<li>修改 <code>AppStringsTranslator.py</code>，填上你自己的百度 <code>AppKey/SecretKey</code>，见<a href="http://api.fanyi.baidu.com/api/trans/product/desktop?req=developer">这里</a>。</li>
+<li>在终端执行脚本，eg: <code>python AppStringsTranslator.py</code>。</li>
+<li>输入语言文件名称，eg: <code>Localizable.strings</code>。</li>
+<li>输入源文件的语言简写，eg: <code>zh</code>。</li>
+<li>输入需要翻译成的语言列表，以空格区分。eg: <code>en cht jp kor</code>。</li>
+<li>等待完成。</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt;&gt; LSiMac:AppStringsTranslator <span class="nv">$ </span>python AppStringsTranslator.py
+</span><span class='line'>&gt;&gt; Enter a fileName: Localizable.strings
+</span><span class='line'>&gt;&gt; Supports languages:
+</span><span class='line'><span class="o">[</span><span class="s1">&#39;auto&#39;</span>, <span class="s1">&#39;zh&#39;</span>, <span class="s1">&#39;en&#39;</span>, <span class="s1">&#39;yue&#39;</span>, <span class="s1">&#39;wyw&#39;</span>, <span class="s1">&#39;jp&#39;</span>, <span class="s1">&#39;kor&#39;</span>, <span class="s1">&#39;fra&#39;</span>, <span class="s1">&#39;spa&#39;</span>, <span class="s1">&#39;th&#39;</span>, <span class="s1">&#39;ara&#39;</span>, <span class="s1">&#39;ru&#39;</span>, <span class="s1">&#39;pt&#39;</span>, <span class="s1">&#39;de&#39;</span>, <span class="s1">&#39;it&#39;</span>, <span class="s1">&#39;el&#39;</span>, <span class="s1">&#39;nl&#39;</span>, <span class="s1">&#39;pl&#39;</span>, <span class="s1">&#39;bul&#39;</span>, <span class="s1">&#39;est&#39;</span>, <span class="s1">&#39;dan&#39;</span>, <span class="s1">&#39;fin&#39;</span>, <span class="s1">&#39;cs&#39;</span>, <span class="s1">&#39;rom&#39;</span>, <span class="s1">&#39;slo&#39;</span>, <span class="s1">&#39;swe&#39;</span>, <span class="s1">&#39;hu&#39;</span>, <span class="s1">&#39;cht&#39;</span>, <span class="s1">&#39;vie&#39;</span><span class="o">]</span>
+</span><span class='line'>&gt;&gt; Enter from language: zh
+</span><span class='line'>&gt;&gt; Enter to language list, split by space: cht en jp kor
+</span><span class='line'>&gt;&gt; Start
+</span><span class='line'>Translating cht to fileName: Localizable_cht.strings
+</span><span class='line'>Finished translating to cht
+</span><span class='line'>Translating en to fileName: Localizable_en.strings
+</span><span class='line'>Finished translating to en
+</span><span class='line'>Translating jp to fileName: Localizable_jp.strings
+</span><span class='line'>Finished translating to jp
+</span><span class='line'>Translating kor to fileName: Localizable_kor.strings
+</span><span class='line'>Finished translating to kor
+</span><span class='line'>All <span class="k">done</span>!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>支持的语言</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>语言简写               名称
+</span><span class='line'>auto                自动检测<span class="o">(</span>可以作为源语言，但不能是目标语言<span class="o">)</span>
+</span><span class='line'>zh                  中文
+</span><span class='line'>en                  英语
+</span><span class='line'>yue                 粤语
+</span><span class='line'>wyw                 文言文
+</span><span class='line'>jp                  日语
+</span><span class='line'>kor                 韩语
+</span><span class='line'>fra                 法语
+</span><span class='line'>spa                 西班牙语
+</span><span class='line'>th                  泰语
+</span><span class='line'>ara                 阿拉伯语
+</span><span class='line'>ru                  俄语
+</span><span class='line'>pt                  葡萄牙语
+</span><span class='line'>de                  德语
+</span><span class='line'>it                  意大利语
+</span><span class='line'>el                  希腊语
+</span><span class='line'>nl                  荷兰语
+</span><span class='line'>pl                  波兰语
+</span><span class='line'>bul                 保加利亚语
+</span><span class='line'>est                 爱沙尼亚语
+</span><span class='line'>dan                 丹麦语
+</span><span class='line'>fin                 芬兰语
+</span><span class='line'>cs                  捷克语
+</span><span class='line'>rom                 罗马尼亚语
+</span><span class='line'>slo                 斯洛文尼亚语
+</span><span class='line'>swe                 瑞典语
+</span><span class='line'>hu                  匈牙利语
+</span><span class='line'>cht                 繁体中文
+</span><span class='line'>vie                 越南语
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>无法脚本化的情况</h3>
+
+<p>有时候，我们会在语言文件里添加一些特殊的字符，比如 <code>%@ %d %lld</code> 之类的格式化占位符，这些字符是不需要被翻译的。但是利用脚本，是没有办法智能识别哪些字符需要保留，以及保留到哪里的，这种情况还是需要开发者自己去处理。</p>
+
+<h3>参考和说明</h3>
+
+<ol>
+<li><a href="http://api.fanyi.baidu.com/api/trans/product/apidoc">百度翻译 API</a></li>
+<li>百度翻译不是完全免费的，不过每个月有一定的免费调用次数，还是完全可以满足 App 开发这种小数据量的。</li>
+<li>可以修改脚本，改变翻译后的文件存放方式。<blockquote class='post_original_block'>
+         原文作者：
+         <a href='http://blog.lessfun.com'>lslin</a><br/>
+         原文链接：
+         <a href='http://blog.lessfun.com/blog/2016/12/26/ios-app-strings-translator/'><a href="http://blog.lessfun.com/blog/2016/12/26/ios-app-strings-translator/">http://blog.lessfun.com/blog/2016/12/26/ios-app-strings-translator/</a></a><br/>
+         版权声明：自由转载-非商用-非衍生-保持署名 |
+         <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
+         </blockquote></li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[为 Sublime Text 自定义 Log 语法高亮]]></title>
@@ -3685,67 +3866,6 @@ If a timer’s firing time occurs during a long callout or while the run loop is
             <a href='http://blog.lessfun.com'>lslin</a><br/>
             原文链接：
             <a href='http://blog.lessfun.com/blog/2014/09/18/xcode-not-load-all-headers-in-prefix-pch/'>http://blog.lessfun.com/blog/2014/09/18/xcode-not-load-all-headers-in-prefix-pch/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名 | 
-            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
-            </blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[让Octopress博客侧边栏的多说评论显示文章标题]]></title>
-    <link href="http://blog.lessfun.com/blog/2014/09/14/show-article-title-in-duoshuo-comment/"/>
-    <updated>2014-09-14T16:02:58+08:00</updated>
-    <id>http://blog.lessfun.com/blog/2014/09/14/show-article-title-in-duoshuo-comment</id>
-    <content type="html"><![CDATA[<p>基于Octopress的博客搭建，在<a href="http://blog.lessfun.com/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/">用Octopress在Github搭建博客，并绑定独立域名</a>里已经介绍过了，并且介绍了在侧边栏集成多说评论的方法。</p>
-
-<p>但是，有一处陷阱，一直坑了我好久，那就是，多说的最近评论里，被评论的文章标题与链接大多数时候是空的，但是偶尔又能正常显示，如图：<br/>
-<img src="http://blog.lessfun.com/images/2014/09/recent_comment_title.png" alt="多说最近评论" /></p>
-
-<!--more-->
-
-
-<p>一直以来，我都以为这是多说的Bug，默默期待着它有朝一日会自动修复。安静地等待了大半年之后……这个Bug依然深深地存在我的博客里。虽然用户评论不多，但是偶尔难得有一条新评论，但是我却不知道评论的是哪一篇文章，得从头到尾慢慢遍历所有文章才能找出来，这种感觉实在是太不好受了！！！</p>
-
-<p>我忍不住了，那么明显的Bug，多说不可能会那么久都不修复，一定是我的配置出了问题！于是，我检查了三遍<code>_config.yml</code>的内容：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>duoshuo_asides_title: 1 <span class="c">#显示评论的文章标题</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>配置是没问题的啊！！！<br/>
-估计靠个人力量是解决不了这个问题的了，于是我用上了万能的谷歌，在<a href="http://yrzhll.com/blog/2012/12/12/comment/">蝶姐的博客</a>中找到了原因与解决方法。</p>
-
-<h3>问题原因</h3>
-
-<p>多说默认没有传递文章标题，需要用户手动传递。</p>
-
-<h3>解决方法</h3>
-
-<p>修改<code>source/_includes/post/duoshuo.html</code>：</p>
-
-<p>将：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'> <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;ds-thread&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>改为：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'> <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;ds-thread&quot;</span> <span class="na">data-title=</span><span class="s">&quot;{ { page.title } }&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>rake genrate</code>重新生成一下，Done。</p>
-
-<blockquote class='post_original_block'>
-            原文作者：
-            <a href='http://blog.lessfun.com'>lslin</a><br/>
-            原文链接：
-            <a href='http://blog.lessfun.com/blog/2014/09/14/show-article-title-in-duoshuo-comment/'>http://blog.lessfun.com/blog/2014/09/14/show-article-title-in-duoshuo-comment/</a><br/>
             版权声明：自由转载-非商用-非衍生-保持署名 | 
             <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
             </blockquote>

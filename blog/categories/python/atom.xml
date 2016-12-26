@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Python | 浮生猎趣]]></title>
+  <link href="http://blog.lessfun.com/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://blog.lessfun.com/"/>
+  <updated>2016-12-26T18:41:00+08:00</updated>
+  <id>http://blog.lessfun.com/</id>
+  <author>
+    <name><![CDATA[lslin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[iOS App 本地化的自动翻译脚本]]></title>
+    <link href="http://blog.lessfun.com/blog/2016/12/26/ios-app-strings-translator/"/>
+    <updated>2016-12-26T18:00:03+08:00</updated>
+    <id>http://blog.lessfun.com/blog/2016/12/26/ios-app-strings-translator</id>
+    <content type="html"><![CDATA[<p>写 App 的激情与动力，往往在于核心功能的实现，至于那些 UI 细节的微调、多国家的语言文件，岂是尔等大牛需要做的事？</p>
+
+<p>但是，一款出色的产品，往往不只有出色的核心功能，它的产品细节、用户体验也是趋于完善近乎完美的。大牛的你，虽然不想干这些脏活累活，然而，牛在江湖身不由己，你有三个选择：</p>
+
+<ol>
+<li>咬咬牙，自己上。</li>
+<li>招个临时工 or 实习生，让他干。</li>
+<li>写个脚本，自动完成。</li>
+</ol>
+
+
+<p>现在要说的 App 本地化，就是一个典型的又粗又脏又累的活：</p>
+
+<ol>
+<li>没有任何技术含量。</li>
+<li>需要大量重复劳动。</li>
+<li>每个 App 都需要做一遍。</li>
+</ol>
+
+
+<p>身为一名程序员，看到上述三个烦死人的特征，除了累觉不爱之外，还有没有别的什么想法呢？</p>
+
+<!--more-->
+
+
+<p>利用脚本自动完成啊！脚本天生就是干这些事的。</p>
+
+<p>脚本已经写好了：<a href="https://github.com/tinymind/AppStringsTranslator">AppStringsTranslator</a></p>
+
+<h3>原理</h3>
+
+<ol>
+<li>扫描 App 的 <code>xx.strings</code> 文件，遍历每一行。</li>
+<li>如果该行格式为 <code>"xx" = "xxx";</code>，则把等号左右的<code>key</code> 和 <code>value</code>提取出来，保存到 <code>keys</code> 和 <code>values</code> 两个数组中。</li>
+<li>如果该行不是 key/value 格式，则把整行加到 <code>keys</code>，而往 <code>values</code> 里加一个空字符串。</li>
+<li>利用百度翻译的 API，翻译 <code>values</code> 里的每个元素。</li>
+<li>把 <code>keys</code> 和翻译结果按照同样的格式写入到新的 <code>xx_toLang.strings</code> 文件。</li>
+</ol>
+
+
+<p>第 3 步的目的是，保留原来的语言文件里的注释和空行。</p>
+
+<h3>用法</h3>
+
+<ol>
+<li>修改 <code>AppStringsTranslator.py</code>，填上你自己的百度 <code>AppKey/SecretKey</code>，见<a href="http://api.fanyi.baidu.com/api/trans/product/desktop?req=developer">这里</a>。</li>
+<li>在终端执行脚本，eg: <code>python AppStringsTranslator.py</code>。</li>
+<li>输入语言文件名称，eg: <code>Localizable.strings</code>。</li>
+<li>输入源文件的语言简写，eg: <code>zh</code>。</li>
+<li>输入需要翻译成的语言列表，以空格区分。eg: <code>en cht jp kor</code>。</li>
+<li>等待完成。</li>
+</ol>
+
+
+<p>``` bash</p>
+
+<blockquote><blockquote><p>LSiMac:AppStringsTranslator $ python AppStringsTranslator.py
+Enter a fileName: Localizable.strings
+Supports languages:
+[&lsquo;auto&rsquo;, &lsquo;zh&rsquo;, &lsquo;en&rsquo;, &lsquo;yue&rsquo;, &lsquo;wyw&rsquo;, &lsquo;jp&rsquo;, &lsquo;kor&rsquo;, &lsquo;fra&rsquo;, &lsquo;spa&rsquo;, &lsquo;th&rsquo;, &lsquo;ara&rsquo;, &lsquo;ru&rsquo;, &lsquo;pt&rsquo;, &lsquo;de&rsquo;, &lsquo;it&rsquo;, &lsquo;el&rsquo;, &lsquo;nl&rsquo;, &lsquo;pl&rsquo;, &lsquo;bul&rsquo;, &lsquo;est&rsquo;, &lsquo;dan&rsquo;, &lsquo;fin&rsquo;, &lsquo;cs&rsquo;, &lsquo;rom&rsquo;, &lsquo;slo&rsquo;, &lsquo;swe&rsquo;, &lsquo;hu&rsquo;, &lsquo;cht&rsquo;, &lsquo;vie&rsquo;]
+Enter from language: zh
+Enter to language list, split by space: cht en jp kor
+Start
+Translating cht to fileName: Localizable_cht.strings
+Finished translating to cht
+Translating en to fileName: Localizable_en.strings
+Finished translating to en
+Translating jp to fileName: Localizable_jp.strings
+Finished translating to jp
+Translating kor to fileName: Localizable_kor.strings
+Finished translating to kor
+All done!</p></blockquote></blockquote>
+
+<p>```</p>
+
+<h3>支持的语言</h3>
+
+<p><code>bash
+语言简写               名称
+auto                自动检测(可以作为源语言，但不能是目标语言)
+zh                  中文
+en                  英语
+yue                 粤语
+wyw                 文言文
+jp                  日语
+kor                 韩语
+fra                 法语
+spa                 西班牙语
+th                  泰语
+ara                 阿拉伯语
+ru                  俄语
+pt                  葡萄牙语
+de                  德语
+it                  意大利语
+el                  希腊语
+nl                  荷兰语
+pl                  波兰语
+bul                 保加利亚语
+est                 爱沙尼亚语
+dan                 丹麦语
+fin                 芬兰语
+cs                  捷克语
+rom                 罗马尼亚语
+slo                 斯洛文尼亚语
+swe                 瑞典语
+hu                  匈牙利语
+cht                 繁体中文
+vie                 越南语
+</code></p>
+
+<h3>无法脚本化的情况</h3>
+
+<p>有时候，我们会在语言文件里添加一些特殊的字符，比如 <code>%@ %d %lld</code> 之类的格式化占位符，这些字符是不需要被翻译的。但是利用脚本，是没有办法智能识别哪些字符需要保留，以及保留到哪里的，这种情况还是需要开发者自己去处理。</p>
+
+<h3>参考和说明</h3>
+
+<ol>
+<li><a href="http://api.fanyi.baidu.com/api/trans/product/apidoc">百度翻译 API</a></li>
+<li>百度翻译不是完全免费的，不过每个月有一定的免费调用次数，还是完全可以满足 App 开发这种小数据量的。</li>
+<li>可以修改脚本，改变翻译后的文件存放方式。</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

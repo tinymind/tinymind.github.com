@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>让Octopress博客侧边栏的多说评论显示文章标题 - 浮生猎趣</title>
+  <title>Category: Python - 浮生猎趣</title>
   <meta name="author" content="lslin">
 
   
-  <meta name="description" content="Octopress博客侧边栏的多说最近评论不显示文章标题的解决方法，需要自己传标题参数。">
-  <meta name="keywords" content="Octopress, 多说, 评论, 标题">
+  <meta name="description" content="Category: Python">
+  <meta name="keywords" content="internet, developer, c++, ios, lslin">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.lessfun.com/blog/2014/09/14/show-article-title-in-duoshuo-comment">
+  <link rel="canonical" href="http://blog.lessfun.comblog/categories/python">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="浮生猎趣" type="application/atom+xml">
@@ -80,160 +80,36 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">让Octopress博客侧边栏的多说评论显示文章标题</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-14T16:02:58+08:00" pubdate data-updated="true">2014-09-14, Sun</time>
-        
-		
-          | <a href="#comments">Comments</a>
-        
-      </p>
+    <h1 class="entry-title">Category: Python</h1>
     
   </header>
-
-
-<div class="entry-content"><p>基于Octopress的博客搭建，在<a href="/blog/2013/11/27/create-blog-in-github-page-using-octopress-and-binding-domain/">用Octopress在Github搭建博客，并绑定独立域名</a>里已经介绍过了，并且介绍了在侧边栏集成多说评论的方法。</p>
-
-<p>但是，有一处陷阱，一直坑了我好久，那就是，多说的最近评论里，被评论的文章标题与链接大多数时候是空的，但是偶尔又能正常显示，如图：<br/>
-<img src="/images/2014/09/recent_comment_title.png" alt="多说最近评论" /></p>
-
-<!--more-->
-
-
-<p>一直以来，我都以为这是多说的Bug，默默期待着它有朝一日会自动修复。安静地等待了大半年之后……这个Bug依然深深地存在我的博客里。虽然用户评论不多，但是偶尔难得有一条新评论，但是我却不知道评论的是哪一篇文章，得从头到尾慢慢遍历所有文章才能找出来，这种感觉实在是太不好受了！！！</p>
-
-<p>我忍不住了，那么明显的Bug，多说不可能会那么久都不修复，一定是我的配置出了问题！于是，我检查了三遍<code>_config.yml</code>的内容：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>duoshuo_asides_title: 1 <span class="c">#显示评论的文章标题</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>配置是没问题的啊！！！<br/>
-估计靠个人力量是解决不了这个问题的了，于是我用上了万能的谷歌，在<a href="http://yrzhll.com/blog/2012/12/12/comment/">蝶姐的博客</a>中找到了原因与解决方法。</p>
-
-<h3>问题原因</h3>
-
-<p>多说默认没有传递文章标题，需要用户手动传递。</p>
-
-<h3>解决方法</h3>
-
-<p>修改<code>source/_includes/post/duoshuo.html</code>：</p>
-
-<p>将：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'> <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;ds-thread&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>改为：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'> <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;ds-thread&quot;</span> <span class="na">data-title=</span><span class="s">&quot;{ { page.title } }&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>rake genrate</code>重新生成一下，Done。</p>
-
-<blockquote class='post_original_block'>
-            原文作者：
-            <a href='http://blog.lessfun.com'>lslin</a><br/>
-            原文链接：
-            <a href='http://blog.lessfun.com/blog/2014/09/14/show-article-title-in-duoshuo-comment/'>http://blog.lessfun.com/blog/2014/09/14/show-article-title-in-duoshuo-comment/</a><br/>
-            版权声明：自由转载-非商用-非衍生-保持署名 | 
-            <a href='http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh'>Creative Commons BY-NC-ND 3.0</a>
-            </blockquote>
-
-</div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">lslin</span></span>
-
-      
-
-
-
-
-
+  <div id="blog-archives" class="category">
 
 
 
   
+  <h2>2016</h2>
 
-
-<time datetime="2014-09-14T16:02:58+08:00" pubdate data-updated="true">2014-09-14, Sun</time>
-      
-
-<span class="categories">
+<article>
   
-    <a class='category' href='/blog/categories/octopress/'>Octopress</a>
-  
-</span>
+<h1><a href="/blog/2016/12/26/ios-app-strings-translator/">iOS App 本地化的自动翻译脚本</a></h1>
+<time datetime="2016-12-26T18:00:03+08:00" pubdate><span class='month'>Dec</span> <span class='day'>26</span> <span class='year'>2016</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/python/'>Python</a></span>
+</footer>
 
 
-    </p>
-    
-      <div class="sharing">
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2014/09/11/invalid-binary-the-binary-is-missing-architectures-arm64/" title="Previous Post: Invalid binary, the binary is missing architectures[arm64] - iTunes Connect的Bug">&laquo; Invalid binary, the binary is missing architectures[arm64] - iTunes Connect的Bug</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2014/09/18/xcode-not-load-all-headers-in-prefix-pch/" title="Next Post: XCode无法正确import预编译文件.pch里的头文件">XCode无法正确import预编译文件.pch里的头文件 &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
-
-  <section>
-    <h1>发表评论</h1>
-    <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
-	<div class="ds-thread" data-title="让Octopress博客侧边栏的多说评论显示文章标题"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"lsfun"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = 'http://static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		|| document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- Duoshuo Comment END -->
 </div>
-  </section>
+
+  
+</article>
 
 </div>
 
