@@ -4,11 +4,11 @@
 
 url: http://blog.lessfun.com
 title: 浮生猎趣
-subtitle: ls *.fun >> 罗列一切乐趣
+subtitle: ls *.fun
 author: lslin
 simple_search: http://google.com/search
 description: list all funs, lslin blog, 记录编程/理财/生活/思维的乐趣
-keywords: internet, developer, c++, ios, lslin
+keywords: developer, c++, ios, objective-c
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in

@@ -29,7 +29,7 @@ sudo port install py35-numpy py35-scipy py35-matplotlib py35-ipython +notebook p
 
 #### 1.3 测试
 
-```
+``` py
 $ python
 >>> import numpy as np
 >>> np.test('full')
@@ -63,7 +63,7 @@ Data1  |  Data2  |  Data3
 
 知道了规则，不难用 Python 写出大概这样的代码：
 
-```
+``` py
 def main(input_file_path):
   input_file = open(input_file_path);
 
@@ -102,7 +102,7 @@ def main(input_file_path):
 
 ### 3. 绘制图表
 
-```
+``` py
 import numpy as np
 import matplotlib.pyplot as plt
 
