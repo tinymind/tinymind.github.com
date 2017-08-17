@@ -102,7 +102,8 @@
 
 <time datetime="2014-09-24T13:59:29+08:00" pubdate data-updated="true">2014-09-24, Wed</time>
         
-		
+		    
+        
           | <a href="#comments">Comments</a>
         
       </p>
@@ -350,23 +351,25 @@
 </article>
 
 
+
   <section>
     <h1>发表评论</h1>
-    <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
-	<div class="ds-thread" data-title="App适配iOS8遇到的兼容问题：键盘方向与StatusBar方向不一致，阻止锁屏失效，OpenGL崩溃"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"lsfun"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = 'http://static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		|| document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- Duoshuo Comment END -->
-</div>
+    <div id="comments" aria-live="polite"><!-- Gitment Comment BEGIN -->
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: 'tinymind',
+  repo: 'tinymind.github.io',
+  oauth: {
+    client_id: '7ff29a8fde2aa82f3f3c',
+    client_secret: '168d83168d3a177797838e8297bfaa10992f8c6e',
+  },
+})
+gitment.render('container')
+</script>
+<!-- Gitment Comment END --></div>
   </section>
 
 </div>
@@ -463,23 +466,6 @@ var duoshuoQuery = {short_name:"lsfun"};
 
 
 
-<section>
-<h1>Recent Comments</h1>
-<ul class="ds-recent-comments" data-num-items="10" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="20">
-</ul>
-<!--多说js加载开始，一个页面只需要加载一次 -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"lsfun"};
-(function() {
-var ds = document.createElement('script');
-ds.type = 'text/javascript';
-ds.async = true;ds.src = 'http://static.duoshuo.com/embed.js';
-ds.charset = 'UTF-8';
-(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-})();
-</script>
-<!--多说js加载结束，一个页面只需要加载一次 -->
-</section>
 
   
 </aside>
