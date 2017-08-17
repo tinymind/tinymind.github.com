@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | 浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2017-07-25T11:44:56+08:00</updated>
+  <updated>2017-08-16T14:11:58+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -38,7 +38,7 @@ sudo port install py35-numpy py35-scipy py35-matplotlib py35-ipython +notebook p
 
 <h4>1.3 测试</h4>
 
-<p>```
+<p>``` py
 $ python</p>
 
 <blockquote><blockquote><blockquote><p>import numpy as np
@@ -91,7 +91,7 @@ scipy.test()
 
 <p>知道了规则，不难用 Python 写出大概这样的代码：</p>
 
-<p>```
+<p>``` py
 def main(input_file_path):
   input_file = open(input_file_path);</p>
 
@@ -132,7 +132,7 @@ datas.append(data);
 
 <h3>3. 绘制图表</h3>
 
-<p>```
+<p>``` py
 import numpy as np
 import matplotlib.pyplot as plt</p>
 

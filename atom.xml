@@ -4,7 +4,7 @@
   <title><![CDATA[浮生猎趣]]></title>
   <link href="http://blog.lessfun.com/atom.xml" rel="self"/>
   <link href="http://blog.lessfun.com/"/>
-  <updated>2017-07-25T11:44:56+08:00</updated>
+  <updated>2017-08-16T14:11:58+08:00</updated>
   <id>http://blog.lessfun.com/</id>
   <author>
     <name><![CDATA[lslin]]></name>
@@ -38,16 +38,17 @@
 
 <h4>1.3 测试</h4>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ python
-</span><span class='line'>&gt;&gt;&gt; import numpy as np
-</span><span class='line'>&gt;&gt;&gt; np.test('full')
-</span><span class='line'>&gt;&gt;&gt; import scipy
-</span><span class='line'>&gt;&gt;&gt; scipy.test()</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="err">$</span> <span class="n">python</span>
+</span><span class='line'><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+</span><span class='line'><span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s">&#39;full&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">scipy</span>
+</span><span class='line'><span class="o">&gt;&gt;&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>参考 <a href="http://www.jianshu.com/p/21bb9d06cf79">[Mac] Python Numpy Scipy Matplotlib 快速安装</a>。</p>
@@ -61,12 +62,13 @@
 
 <p>如前所述，CSV 文件其实就是文本文件，常规格式如下：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>"Header1","Header2","Header3"
-</span><span class='line'>"Data1","Data2","Data3"
-</span><span class='line'>"Data1","Data2","Data3"</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="s">&quot;Header1&quot;</span><span class="p">,</span><span class="s">&quot;Header2&quot;</span><span class="p">,</span><span class="s">&quot;Header3&quot;</span>
+</span><span class='line'><span class="s">&quot;Data1&quot;</span><span class="p">,</span><span class="s">&quot;Data2&quot;</span><span class="p">,</span><span class="s">&quot;Data3&quot;</span>
+</span><span class='line'><span class="s">&quot;Data1&quot;</span><span class="p">,</span><span class="s">&quot;Data2&quot;</span><span class="p">,</span><span class="s">&quot;Data3&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>通过 Numbers 打开，看起来是这样的：</p>
@@ -96,7 +98,7 @@
 
 <p>知道了规则，不难用 Python 写出大概这样的代码：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -128,45 +130,46 @@
 <span class='line-number'>30</span>
 <span class='line-number'>31</span>
 <span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def main(input_file_path):
-</span><span class='line'>  input_file = open(input_file_path);
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">):</span>
+</span><span class='line'>  <span class="n">input_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>  # skip header
-</span><span class='line'>  input_file.readline();
+</span><span class='line'>  <span class="c"># skip header</span>
+</span><span class='line'>  <span class="n">input_file</span><span class="o">.</span><span class="n">readline</span><span class="p">();</span>
 </span><span class='line'>
-</span><span class='line'>  datas = [];
+</span><span class='line'>  <span class="n">datas</span> <span class="o">=</span> <span class="p">[];</span>
 </span><span class='line'>
-</span><span class='line'>  key_index_table = {
-</span><span class='line'>  "Header1": 0,
-</span><span class='line'>  "Header2": 1,
-</span><span class='line'>  "Header3": 2};
+</span><span class='line'>  <span class="n">key_index_table</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s">&quot;Header1&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>  <span class="s">&quot;Header2&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>  <span class="s">&quot;Header3&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">};</span>
 </span><span class='line'>
-</span><span class='line'>  count = 0;
-</span><span class='line'>  max_count = 10000;
-</span><span class='line'>  while count &lt; max_count:
-</span><span class='line'>    count += 1;
-</span><span class='line'>    line = input_file.readline();
-</span><span class='line'>    if not line:
-</span><span class='line'>      break;
-</span><span class='line'>   
-</span><span class='line'>    values = line.split(",");
+</span><span class='line'>  <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">max_count</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="n">max_count</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">line</span> <span class="o">=</span> <span class="n">input_file</span><span class="o">.</span><span class="n">readline</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+</span><span class='line'>      <span class="k">break</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>    data = {};
-</span><span class='line'>    for key in key_index_table:
-</span><span class='line'>      value = values[key_index_table[key]];
-</span><span class='line'>      value = value[1:-1]; # remove quotation mark
-</span><span class='line'>      data[key] = int(value);
+</span><span class='line'>    <span class="n">values</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;,&quot;</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>    datas.append(data);
+</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">key_index_table</span><span class="p">:</span>
+</span><span class='line'>      <span class="n">value</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">key_index_table</span><span class="p">[</span><span class="n">key</span><span class="p">]];</span>
+</span><span class='line'>      <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span> <span class="c"># remove quotation mark</span>
+</span><span class='line'>      <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>  drawTable(datas);  </span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>    <span class="n">datas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">drawTable</span><span class="p">(</span><span class="n">datas</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>所有的数据都读到了 datas 数组中，下面是对这组数据进行绘制。</p>
 
 <h3>3. 绘制图表</h3>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -228,68 +231,69 @@
 <span class='line-number'>60</span>
 <span class='line-number'>61</span>
 <span class='line-number'>62</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>import numpy as np
-</span><span class='line'>import matplotlib.pyplot as plt
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </span><span class='line'>
-</span><span class='line'>def drawTable(datas):
+</span><span class='line'><span class="k">def</span> <span class="nf">drawTable</span><span class="p">(</span><span class="n">datas</span><span class="p">):</span>
 </span><span class='line'>
-</span><span class='line'>  data1_list = [];
-</span><span class='line'>  data2_list = [];
-</span><span class='line'>  data3_list = [];
+</span><span class='line'>  <span class="n">data1_list</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>  <span class="n">data2_list</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>  <span class="n">data3_list</span> <span class="o">=</span> <span class="p">[];</span>
 </span><span class='line'>
-</span><span class='line'>  avg_data1 = 0;
-</span><span class='line'>  avg_data2 = 0;
-</span><span class='line'>  avg_data3 = 0;
-</span><span class='line'>  less_than_1000_count = 0;
-</span><span class='line'>  total_count = len(datas);
+</span><span class='line'>  <span class="n">avg_data1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">avg_data2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">avg_data3</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">less_than_1000_count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">total_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">datas</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>  for data in datas:
-</span><span class='line'>    data1 = sample["Header1"];
-</span><span class='line'>    data1_list.append(data1);
-</span><span class='line'>    avg_data1 += data1;
+</span><span class='line'>  <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">data1</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s">&quot;Header1&quot;</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">data1_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">avg_data1</span> <span class="o">+=</span> <span class="n">data1</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>    data2 = sample["Header2"] - data1;
-</span><span class='line'>    data2_list.append(data2);
-</span><span class='line'>    avg_data2 += data2;
+</span><span class='line'>    <span class="n">data2</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s">&quot;Header2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">data1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">data2_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">avg_data2</span> <span class="o">+=</span> <span class="n">data2</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>    data3 = sample["Header3"] - data2;
-</span><span class='line'>    data3_list.append(data3);
-</span><span class='line'>    avg_data3 += data3;
-</span><span class='line'>    
-</span><span class='line'>    if sample["Header3"] &lt;= 1000:
-</span><span class='line'>      less_than_1000_count += 1;
+</span><span class='line'>    <span class="n">data3</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s">&quot;Header3&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">data2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">data3_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">avg_data3</span> <span class="o">+=</span> <span class="n">data3</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>  avg_data1 /= len(data1_list);
-</span><span class='line'>  avg_data2 /= len(data2_list);
-</span><span class='line'>  avg_data3 /= len(data3_list);
-</span><span class='line'>    
-</span><span class='line'>  data1_np_array = np.array(data1_list);
-</span><span class='line'>  data2_np_array = np.array(data2_list);
-</span><span class='line'>  data3_np_array = np.array(data3_list);
+</span><span class='line'>    <span class="k">if</span> <span class="n">sample</span><span class="p">[</span><span class="s">&quot;Header3&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1000</span><span class="p">:</span>
+</span><span class='line'>      <span class="n">less_than_1000_count</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>  idx = np.arange(total_count) * 2;  
-</span><span class='line'>  width = 0.5;
+</span><span class='line'>  <span class="n">avg_data1</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data1_list</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">avg_data2</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data2_list</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">avg_data3</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data3_list</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>  plt.figure(figsize=(10, 5));
-</span><span class='line'>  plt.subplots_adjust(hspace = 0.3);
+</span><span class='line'>  <span class="n">data1_np_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data1_list</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">data2_np_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data2_list</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">data3_np_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data3_list</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>  fig = plt.subplot(2, 1, 1);
-</span><span class='line'>  fig.set_title("Load Time");
+</span><span class='line'>  <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">total_count</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">width</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>  fig.bar(idx, data1_list, width, color = 'red', label = "Header1: " + str(avg_data1));
-</span><span class='line'>  fig.bar(idx, data2_list, width, bottom = data1_np_array, color = 'blue', label = 'Header2: ' + str(avg_data2));
-</span><span class='line'>  fig.bar(idx, data3_list, width, bottom = data1_np_array + data2_np_array, color = 'yellow', label = 'Header3: ' + str(avg_data3));
+</span><span class='line'>  <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">));</span>
+</span><span class='line'>  <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>  fig.plot(idx, data3_list, color = 'purple', label = 'Total: ' + str(avg_total_time)  + "(" + str(int(round(100 * less_than_1000_count / len(total_time)))) + "%&lt;=1000" + ")");
+</span><span class='line'>  <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">fig</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&quot;Load Time&quot;</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>  fig.set_xticks(idx);
-</span><span class='line'>  fig.set_xticklabels(line_index, rotation = 0, fontsize = "small");
+</span><span class='line'>  <span class="n">fig</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">data1_list</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&quot;Header1: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">avg_data1</span><span class="p">));</span>
+</span><span class='line'>  <span class="n">fig</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">data2_list</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="n">data1_np_array</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Header2: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">avg_data2</span><span class="p">));</span>
+</span><span class='line'>  <span class="n">fig</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">data3_list</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="n">data1_np_array</span> <span class="o">+</span> <span class="n">data2_np_array</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;yellow&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Header3: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">avg_data3</span><span class="p">));</span>
 </span><span class='line'>
-</span><span class='line'>  fig.set_xlabel("sample");
-</span><span class='line'>  fig.set_ylabel("time");
-</span><span class='line'>  fig.legend(loc = "upper right", prop = {"size": 8});
+</span><span class='line'>  <span class="n">fig</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">data3_list</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;purple&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Total: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">avg_total_time</span><span class="p">)</span>  <span class="o">+</span> <span class="s">&quot;(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">less_than_1000_count</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">total_time</span><span class="p">))))</span> <span class="o">+</span> <span class="s">&quot;%&lt;=1000&quot;</span> <span class="o">+</span> <span class="s">&quot;)&quot;</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>  plt.show();</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>  <span class="n">fig</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">idx</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">fig</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">line_index</span><span class="p">,</span> <span class="n">rotation</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="s">&quot;small&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">fig</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&quot;sample&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">fig</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;time&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="s">&quot;upper right&quot;</span><span class="p">,</span> <span class="n">prop</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;size&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>效果如图：</p>
