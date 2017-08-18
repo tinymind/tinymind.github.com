@@ -32,9 +32,11 @@
   fill: #000;
 }
 
-.gitment-container .gitment-spinner-icon {
+.gitment-spinner-icon {
   fill: #333;
+}
 
+.gitment-container .gitment-spinner-icon {
   -webkit-animation: gitment-spin 1s steps(12) infinite;
   animation: gitment-spin 1s steps(12) infinite;
 }
@@ -183,7 +185,7 @@ a.gitment-header-issue-link:hover {
 .gitment-comment-header {
   margin: 12px 15px;
   color: #aaa;
-  background-color: #666;
+  background-color: #525658;
   border-radius: 3px;
 }
 
@@ -196,7 +198,7 @@ a.gitment-header-issue-link:hover {
 a.gitment-comment-name,
 a.gitment-comment-name:visited {
   font-weight: 600;
-  color: #000;
+  color: #fff;
 }
 
 .gitment-editor-tabs {
