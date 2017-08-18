@@ -28,9 +28,15 @@
   display: none;
 }
 
-.gitment-container .gitment-spinner-icon {
-  fill: #333;
+.gitment-container {
+  fill: #000;
+}
 
+.gitment-spinner-icon {
+  fill: #333;
+}
+
+.gitment-container .gitment-spinner-icon {
   -webkit-animation: gitment-spin 1s steps(12) infinite;
   animation: gitment-spin 1s steps(12) infinite;
 }
@@ -64,6 +70,7 @@
 
 .gitment-comment-like-btn {
   float: right;
+  color: #fff;
 }
 
 .gitment-comment-like-btn.liked {
@@ -172,13 +179,13 @@ a.gitment-header-issue-link:hover {
   margin-top: 1px;
   margin-left: 2px;
   border-width: 7px;
-  border-right-color: #fff;
+  border-right-color: #aaa;
 }
 
 .gitment-comment-header {
   margin: 12px 15px;
-  color: #666;
-  background-color: #fff;
+  color: #aaa;
+  background-color: #525658;
   border-radius: 3px;
 }
 
@@ -191,7 +198,7 @@ a.gitment-header-issue-link:hover {
 a.gitment-comment-name,
 a.gitment-comment-name:visited {
   font-weight: 600;
-  color: #666;
+  color: #fff;
 }
 
 .gitment-editor-tabs {
@@ -334,7 +341,7 @@ a.gitment-editor-logout-link:hover {
   min-height: 150px;
 
   padding: 16px;
-  background-color: transparent;
+  background-color: #fff;
 
   width: 100%;
   font-size: 14px;
@@ -383,6 +390,7 @@ a.gitment-editor-footer-tip:hover {
 
 .gitment-comments-page-item:hover {
   background-color: #f5f5f5;
+  color: #ccc;
 }
 
 .gitment-comments-page-item.gitment-selected {
