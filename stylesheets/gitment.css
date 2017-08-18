@@ -28,6 +28,10 @@
   display: none;
 }
 
+.gitment-container {
+  fill: #000;
+}
+
 .gitment-container .gitment-spinner-icon {
   fill: #333;
 
@@ -178,8 +182,8 @@ a.gitment-header-issue-link:hover {
 
 .gitment-comment-header {
   margin: 12px 15px;
-  color: #666;
-  background-color: #aaa;
+  color: #aaa;
+  background-color: #666;
   border-radius: 3px;
 }
 
@@ -192,7 +196,7 @@ a.gitment-header-issue-link:hover {
 a.gitment-comment-name,
 a.gitment-comment-name:visited {
   font-weight: 600;
-  color: #bbb;
+  color: #000;
 }
 
 .gitment-editor-tabs {
